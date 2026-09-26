@@ -1,0 +1,725 @@
+{
+  "checks": [
+    {
+      "check": "unique_games",
+      "violations": 0
+    },
+    {
+      "check": "unique_players",
+      "violations": 0
+    },
+    {
+      "check": "unique_pbp_plays",
+      "violations": 0
+    },
+    {
+      "check": "unique_player_stats",
+      "violations": 0
+    },
+    {
+      "check": "unique_labels",
+      "violations": 0
+    },
+    {
+      "check": "valid_label_ids",
+      "violations": 0
+    },
+    {
+      "check": "valid_game_team",
+      "violations": 0
+    },
+    {
+      "check": "stats_team_opponent",
+      "violations": 0
+    },
+    {
+      "check": "valid_pbp_game",
+      "violations": 0
+    },
+    {
+      "check": "pbp_game_metadata",
+      "violations": 0
+    },
+    {
+      "check": "unrounded_stats_counts",
+      "violations": 0
+    },
+    {
+      "check": "valid_pbp_kicking_team",
+      "violations": 0
+    },
+    {
+      "check": "valid_touchdown_team",
+      "violations": 0
+    },
+    {
+      "check": "valid_counts",
+      "violations": 0
+    },
+    {
+      "check": "canonical_only_agreement",
+      "violations": 0
+    },
+    {
+      "check": "pregame_not_inferred",
+      "violations": 0
+    },
+    {
+      "check": "td_counted_once",
+      "violations": 0
+    },
+    {
+      "check": "team_xpa_matches_events",
+      "violations": 0
+    },
+    {
+      "check": "td_components_complete",
+      "violations": 0
+    }
+  ],
+  "counts": {
+    "observations": 6083,
+    "kickers": 122,
+    "games_with_labels": 3028,
+    "usable_statistical_labels": 6083,
+    "zeros": 714,
+    "quarantined": 0,
+    "kickoff_only_rows": 90,
+    "multiple_participant_rows": 74,
+    "multiple_placekicker_rows": 20
+  },
+  "game_count": 3028,
+  "regular_season_games": 2895,
+  "postseason_games": 133,
+  "target_season_rows": 5535,
+  "missing_team_stats": 10,
+  "team_numeric_discrepancies": 0,
+  "team_game_count": 6056,
+  "season_counts": [
+    {
+      "season": 2015,
+      "observations": 548,
+      "games": 267,
+      "kickers": 41,
+      "zeros": 65,
+      "quarantined": 0
+    },
+    {
+      "season": 2016,
+      "observations": 537,
+      "games": 267,
+      "kickers": 37,
+      "zeros": 50,
+      "quarantined": 0
+    },
+    {
+      "season": 2017,
+      "observations": 535,
+      "games": 267,
+      "kickers": 44,
+      "zeros": 63,
+      "quarantined": 0
+    },
+    {
+      "season": 2018,
+      "observations": 534,
+      "games": 267,
+      "kickers": 42,
+      "zeros": 69,
+      "quarantined": 0
+    },
+    {
+      "season": 2019,
+      "observations": 536,
+      "games": 267,
+      "kickers": 43,
+      "zeros": 72,
+      "quarantined": 0
+    },
+    {
+      "season": 2020,
+      "observations": 539,
+      "games": 269,
+      "kickers": 47,
+      "zeros": 51,
+      "quarantined": 0
+    },
+    {
+      "season": 2021,
+      "observations": 570,
+      "games": 285,
+      "kickers": 49,
+      "zeros": 73,
+      "quarantined": 0
+    },
+    {
+      "season": 2022,
+      "observations": 572,
+      "games": 284,
+      "kickers": 46,
+      "zeros": 64,
+      "quarantined": 0
+    },
+    {
+      "season": 2023,
+      "observations": 571,
+      "games": 285,
+      "kickers": 41,
+      "zeros": 80,
+      "quarantined": 0
+    },
+    {
+      "season": 2024,
+      "observations": 571,
+      "games": 285,
+      "kickers": 45,
+      "zeros": 67,
+      "quarantined": 0
+    },
+    {
+      "season": 2025,
+      "observations": 570,
+      "games": 285,
+      "kickers": 43,
+      "zeros": 60,
+      "quarantined": 0
+    }
+  ],
+  "xpm_distribution": [
+    {
+      "xpm": 0,
+      "observations": 714
+    },
+    {
+      "xpm": 1,
+      "observations": 1410
+    },
+    {
+      "xpm": 2,
+      "observations": 1642
+    },
+    {
+      "xpm": 3,
+      "observations": 1237
+    },
+    {
+      "xpm": 4,
+      "observations": 680
+    },
+    {
+      "xpm": 5,
+      "observations": 271
+    },
+    {
+      "xpm": 6,
+      "observations": 109
+    },
+    {
+      "xpm": 7,
+      "observations": 14
+    },
+    {
+      "xpm": 8,
+      "observations": 4
+    },
+    {
+      "xpm": 9,
+      "observations": 1
+    },
+    {
+      "xpm": 10,
+      "observations": 1
+    }
+  ],
+  "label_status": [
+    {
+      "label_status": "agreed",
+      "observations": 6083
+    }
+  ],
+  "zero_basis": [
+    {
+      "zero_context": "all_pat_failed_or_blocked",
+      "observations": 125
+    },
+    {
+      "zero_context": "other_player_took_team_pat",
+      "observations": 32
+    },
+    {
+      "zero_context": "team_only_two_point_tries",
+      "observations": 195
+    },
+    {
+      "zero_context": "team_without_recorded_try",
+      "observations": 362
+    }
+  ],
+  "multiple_participant_teams": [
+    {
+      "game_id": "2015_01_IND_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_02_NE_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_03_BUF_MIA",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_04_NYG_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_05_BUF_TEN",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Billy Cundiff, Dan Carpenter"
+    },
+    {
+      "game_id": "2015_07_BUF_JAX",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_09_MIA_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_10_BUF_NYJ",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_11_BUF_NE",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_12_BUF_KC",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_13_HOU_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_14_BUF_PHI",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_15_BUF_WAS",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_16_DAL_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2015_17_NYJ_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2016_01_BUF_BAL",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2016_03_ARI_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2016_12_JAX_BUF",
+      "team": "BUF",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Dan Carpenter, Jordan Gay"
+    },
+    {
+      "game_id": "2017_07_DAL_SF",
+      "team": "DAL",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Dan Bailey, Jeff Heath"
+    },
+    {
+      "game_id": "2017_12_LAC_DAL",
+      "team": "LAC",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Nick Novak, Drew Kaser"
+    },
+    {
+      "game_id": "2018_19_LAC_NE",
+      "team": "LAC",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Nick Rose, Mike Badgley"
+    },
+    {
+      "game_id": "2019_13_TEN_IND",
+      "team": "TEN",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Ryan Succop, Ryan Santoso"
+    },
+    {
+      "game_id": "2019_14_TEN_OAK",
+      "team": "TEN",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Ryan Succop, Ryan Santoso"
+    },
+    {
+      "game_id": "2019_15_HOU_TEN",
+      "team": "TEN",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Ryan Succop, Ryan Santoso"
+    },
+    {
+      "game_id": "2020_16_CLE_NYJ",
+      "team": "CLE",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Cody Parkey, Jamie Gillan"
+    },
+    {
+      "game_id": "2021_05_MIA_TB",
+      "team": "TB",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Ryan Succop, Bradley Pinion"
+    },
+    {
+      "game_id": "2022_01_KC_ARI",
+      "team": "KC",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Harrison Butker, Justin Reid"
+    },
+    {
+      "game_id": "2022_05_SF_CAR",
+      "team": "SF",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Robbie Gould, Mitch Wishnowsky"
+    },
+    {
+      "game_id": "2022_08_ARI_MIN",
+      "team": "ARI",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Matt Prater, Rodrigo Blankenship"
+    },
+    {
+      "game_id": "2022_10_DAL_GB",
+      "team": "GB",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Mason Crosby, Ramiz Ahmed"
+    },
+    {
+      "game_id": "2022_13_BUF_NE",
+      "team": "NE",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Nick Folk, Tristan Vizcaino"
+    },
+    {
+      "game_id": "2022_16_CIN_NE",
+      "team": "NE",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Nick Folk, Tristan Vizcaino"
+    },
+    {
+      "game_id": "2023_09_TB_HOU",
+      "team": "HOU",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Ka'imi Fairbairn, Dare Ogunbowale"
+    },
+    {
+      "game_id": "2023_15_NYG_NO",
+      "team": "NYG",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Randy Bullock, Jamie Gillan"
+    },
+    {
+      "game_id": "2024_02_NYG_WAS",
+      "team": "NYG",
+      "players": 2,
+      "placekickers": 1,
+      "names": "Graham Gano, Jamie Gillan"
+    },
+    {
+      "game_id": "2024_05_ARI_SF",
+      "team": "SF",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Mitch Wishnowsky, Jake Moody"
+    },
+    {
+      "game_id": "2025_03_KC_NYG",
+      "team": "NYG",
+      "players": 2,
+      "placekickers": 2,
+      "names": "Graham Gano, Jamie Gillan"
+    }
+  ],
+  "team_games_without_candidate": [
+    {
+      "game_id": "2015_14_ATL_CAR",
+      "team": "ATL",
+      "team_xpa": 0,
+      "touchdowns": 0
+    },
+    {
+      "game_id": "2017_07_JAX_IND",
+      "team": "IND",
+      "team_xpa": 0,
+      "touchdowns": 0
+    },
+    {
+      "game_id": "2018_13_IND_JAX",
+      "team": "IND",
+      "team_xpa": 0,
+      "touchdowns": 0
+    },
+    {
+      "game_id": "2019_01_ATL_MIN",
+      "team": "ATL",
+      "team_xpa": 0,
+      "touchdowns": 2
+    },
+    {
+      "game_id": "2021_15_CAR_BUF",
+      "team": "CAR",
+      "team_xpa": 0,
+      "touchdowns": 2
+    },
+    {
+      "game_id": "2022_05_DET_NE",
+      "team": "DET",
+      "team_xpa": 0,
+      "touchdowns": 0
+    },
+    {
+      "game_id": "2022_19_DAL_TB",
+      "team": "TB",
+      "team_xpa": 0,
+      "touchdowns": 2
+    },
+    {
+      "game_id": "2023_17_CAR_JAX",
+      "team": "CAR",
+      "team_xpa": 0,
+      "touchdowns": 0
+    },
+    {
+      "game_id": "2024_17_NYJ_BUF",
+      "team": "NYJ",
+      "team_xpa": 0,
+      "touchdowns": 2
+    },
+    {
+      "game_id": "2025_18_NYJ_BUF",
+      "team": "NYJ",
+      "team_xpa": 0,
+      "touchdowns": 1
+    }
+  ],
+  "coverage_failures": [],
+  "quarantined_labels": [],
+  "team_reconciliation": [
+    {
+      "game_id": "2015_14_ATL_CAR",
+      "team": "ATL",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2017_07_JAX_IND",
+      "team": "IND",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2018_13_IND_JAX",
+      "team": "IND",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2019_01_ATL_MIN",
+      "team": "ATL",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2021_15_CAR_BUF",
+      "team": "CAR",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2022_05_DET_NE",
+      "team": "DET",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2022_19_DAL_TB",
+      "team": "TB",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2023_17_CAR_JAX",
+      "team": "CAR",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2024_17_NYJ_BUF",
+      "team": "NYJ",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    },
+    {
+      "game_id": "2025_18_NYJ_BUF",
+      "team": "NYJ",
+      "team_xpa": 0,
+      "team_xpm": 0,
+      "stats_xpa": null,
+      "stats_xpm": null
+    }
+  ],
+  "nullified_pat_rows": 21,
+  "nullified_kickoff_rows": 57,
+  "valid_two_pt_no_play_rows": 29,
+  "missingness": [
+    {
+      "column": "game_id",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "player_id",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "kicker_name",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "opponent",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "stats_xpa",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "stats_xpm",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "pbp_xpa",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "pbp_xpm",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "xpa",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "xpm",
+      "nulls": 0,
+      "percent": 0.0
+    },
+    {
+      "column": "expected_kicker_id",
+      "nulls": 6083,
+      "percent": 100.0
+    }
+  ]
+}
