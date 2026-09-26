@@ -1,0 +1,2165 @@
+{
+  "policy": "C",
+  "cases_passed": 13,
+  "confirmed_out_or_inactive_cases": [
+    "2021_15_CAR_BUF:CAR",
+    "2025_06_CIN_GB:GB"
+  ],
+  "cases": [
+    {
+      "case": {
+        "game_id": "2015_04_HOU_ATL",
+        "team": "HOU",
+        "expected": "Randy Bullock",
+        "category": "INFERRED",
+        "finding": "Cambio de kicker: tres partidos previos señalan Bullock. C conserva la inferencia y falla frente a Novak. No había un feed completo de altas/bajas en la selección. El registro oficial de fichajes localizado después sirve como opción de mejora global, no como parche de este error."
+      },
+      "decision": {
+        "game_id": "2015_04_HOU_ATL",
+        "season": 2015,
+        "week": 4,
+        "game_type": "REG",
+        "team": "HOU",
+        "opponent": "ATL",
+        "kickoff_utc": "2015-10-04T17:00:00+00:00",
+        "prediction_cutoff": "2015-10-04T16:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": false,
+        "expected_kicker_id": "00-0029421",
+        "expected_kicker_name": "Randy Bullock",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick"
+        ],
+        "expected_kicker_evidence_timestamp": "2015-09-28T17:00:00+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2015_03_TB_HOU:HOU",
+          "history:2015_02_HOU_CAR:HOU",
+          "history:2015_01_KC_HOU:HOU"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0029421",
+            "name": "Randy Bullock",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2015_03_TB_HOU"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "experimental_continuity_only",
+        "policy": "C",
+        "prior_consecutive_games": 3,
+        "prior_game_id": "2015_03_TB_HOU",
+        "previous_placekicker_ids": [
+          "00-0029421"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2015_03_TB_HOU",
+            "team": "HOU",
+            "season": 2015,
+            "kickoff_utc": "2015-09-27T17:00:00+00:00",
+            "reveal_at": "2015-09-28T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0029421"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_03_TB_HOU;team=HOU;counted PAT or FG",
+            "oracle_sha256": "048719dee58c9c2574817fde413ba944dcfa10946b911925d265c4a41209d721"
+          },
+          {
+            "game_id": "2015_02_HOU_CAR",
+            "team": "HOU",
+            "season": 2015,
+            "kickoff_utc": "2015-09-20T17:00:00+00:00",
+            "reveal_at": "2015-09-21T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0029421"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_02_HOU_CAR;team=HOU;counted PAT or FG",
+            "oracle_sha256": "b9eaa62f5f9fa3efabad86daeac0ac31688b995e98122692a2fa9f54af25b019"
+          },
+          {
+            "game_id": "2015_01_KC_HOU",
+            "team": "HOU",
+            "season": 2015,
+            "kickoff_utc": "2015-09-13T17:00:00+00:00",
+            "reveal_at": "2015-09-14T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0029421"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_01_KC_HOU;team=HOU;counted PAT or FG",
+            "oracle_sha256": "d68b08ca5ae2aac91e0d763c3ca0c7602f7b579ff596b767ef071fb0503513a3"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "development"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0023096"
+        ],
+        "actual_placekicker_names": [
+          "Nick Novak"
+        ],
+        "comparison": "mismatch",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "no_kicking_evidence"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2015_09_JAX_NYJ",
+        "team": "NYJ",
+        "expected": "Nick Folk",
+        "category": "INFERRED",
+        "finding": "Sustituto de otra posición: siete partidos previos señalan Folk; Quigley ejecutó los PAT/FG. La identidad esperada se conserva y el label individual queda NULL. Los eventos del partido se usan solamente para medir la discrepancia."
+      },
+      "decision": {
+        "game_id": "2015_09_JAX_NYJ",
+        "season": 2015,
+        "week": 9,
+        "game_type": "REG",
+        "team": "NYJ",
+        "opponent": "JAX",
+        "kickoff_utc": "2015-11-08T18:00:00+00:00",
+        "prediction_cutoff": "2015-11-08T17:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": false,
+        "expected_kicker_id": "00-0025565",
+        "expected_kicker_name": "Nick Folk",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick"
+        ],
+        "expected_kicker_evidence_timestamp": "2015-11-02T21:05:00+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2015_08_NYJ_OAK:NYJ",
+          "history:2015_07_NYJ_NE:NYJ",
+          "history:2015_06_WAS_NYJ:NYJ",
+          "history:2015_04_NYJ_MIA:NYJ",
+          "history:2015_03_PHI_NYJ:NYJ",
+          "history:2015_02_NYJ_IND:NYJ",
+          "history:2015_01_CLE_NYJ:NYJ"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0025565",
+            "name": "Nick Folk",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2015_08_NYJ_OAK"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "experimental_continuity_only",
+        "policy": "C",
+        "prior_consecutive_games": 7,
+        "prior_game_id": "2015_08_NYJ_OAK",
+        "previous_placekicker_ids": [
+          "00-0025565"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2015_08_NYJ_OAK",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-11-01T21:05:00+00:00",
+            "reveal_at": "2015-11-02T21:05:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_08_NYJ_OAK;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "83a5fd6fb716d7b143f7c10e94d15c55805bd995f093593af89be7beb0222eb6"
+          },
+          {
+            "game_id": "2015_07_NYJ_NE",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-10-25T17:00:00+00:00",
+            "reveal_at": "2015-10-26T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_07_NYJ_NE;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "fc24278d58d2603c460bb681bb96cf54947f1ee6616f011925e82192f238a61e"
+          },
+          {
+            "game_id": "2015_06_WAS_NYJ",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-10-18T17:00:00+00:00",
+            "reveal_at": "2015-10-19T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_06_WAS_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "f6fdbc694d62f8e21c1196fa356843149a387036c5b7fa9dd634f016f50d0a74"
+          },
+          {
+            "game_id": "2015_04_NYJ_MIA",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-10-04T13:30:00+00:00",
+            "reveal_at": "2015-10-05T13:30:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_04_NYJ_MIA;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "040d00776204231f0e54077d9c169b8fab42a4b3c9e97f19e1f51f87384ffd01"
+          },
+          {
+            "game_id": "2015_03_PHI_NYJ",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-09-27T17:00:00+00:00",
+            "reveal_at": "2015-09-28T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_03_PHI_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "2964394c375d8deefc5268158f6cc01feaec7a0a08dc3226745c5fae7ea9689c"
+          },
+          {
+            "game_id": "2015_02_NYJ_IND",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-09-22T00:30:00+00:00",
+            "reveal_at": "2015-09-23T00:30:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_02_NYJ_IND;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "1673212f2f83209e02ee38aa2aa6a2624c63aecaeb1550592879ac88edd75357"
+          },
+          {
+            "game_id": "2015_01_CLE_NYJ",
+            "team": "NYJ",
+            "season": 2015,
+            "kickoff_utc": "2015-09-13T17:00:00+00:00",
+            "reveal_at": "2015-09-14T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet",
+            "locator": "game_id=2015_01_CLE_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "6db49290c241ab28f6a332fdf46e2963a2377a68418a4b76890e871c3e61484f"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "development"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0029493"
+        ],
+        "actual_placekicker_names": [
+          "Ryan Quigley"
+        ],
+        "comparison": "mismatch",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "no_kicking_evidence"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2019_02_LAC_DET",
+        "team": "LAC",
+        "expected": null,
+        "category": "UNKNOWN",
+        "finding": "Asignación oficial de patadas a Ty Long, pero la copia del artículo fue modificada en 2023. Solo hay un partido previo de Long en esa temporada: no alcanza la regla de dos. No se rescata la identidad usando el resultado real."
+      },
+      "decision": {
+        "game_id": "2019_02_LAC_DET",
+        "season": 2019,
+        "week": 2,
+        "game_type": "REG",
+        "team": "LAC",
+        "opponent": "DET",
+        "kickoff_utc": "2019-09-15T17:00:00+00:00",
+        "prediction_cutoff": "2019-09-15T16:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": null,
+        "expected_kicker_name": null,
+        "expected_kicker_confidence": "UNKNOWN",
+        "expected_kicker_source": [],
+        "expected_kicker_evidence_type": [],
+        "expected_kicker_evidence_timestamp": null,
+        "expected_kicker_evidence_ids": [],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0031543",
+            "name": "Ty Long",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2019_01_IND_LAC"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "insufficient_same_season_continuity",
+        "inference_subtype": null,
+        "policy": "C",
+        "prior_consecutive_games": 1,
+        "prior_game_id": "2019_01_IND_LAC",
+        "previous_placekicker_ids": [
+          "00-0031543"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2019_01_IND_LAC",
+            "team": "LAC",
+            "season": 2019,
+            "kickoff_utc": "2019-09-08T20:05:00+00:00",
+            "reveal_at": "2019-09-09T20:05:00+00:00",
+            "placekicker_ids": [
+              "00-0031543"
+            ],
+            "source_sha256": [
+              "60c3067017db2d28a78f66a79b657268be8578d9a5288e6a827efdcd7fe42540"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2019.parquet",
+            "locator": "game_id=2019_01_IND_LAC;team=LAC;counted PAT or FG",
+            "oracle_sha256": "894481594027fd4254ba04357852f924f13cb14d87f4d8679600484cd81f5716"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "development"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0031543"
+        ],
+        "actual_placekicker_names": [
+          "Ty Long"
+        ],
+        "comparison": "expected_unknown",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "unknown_identity"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2021_15_CAR_BUF",
+        "team": "CAR",
+        "expected": "Zane Gonzalez",
+        "category": "INFERRED",
+        "finding": "C espera Gonzalez por doce juegos previos. La noticia de su baja en warmups se publicó a 17:09Z, después del cutoff de 17:00Z; excluirla es correcto incluso aunque preceda al kickoff. La evaluación confirma baja y ausencia de patadas. No se convierte el label ausente a cero."
+      },
+      "decision": {
+        "game_id": "2021_15_CAR_BUF",
+        "season": 2021,
+        "week": 15,
+        "game_type": "REG",
+        "team": "CAR",
+        "opponent": "BUF",
+        "kickoff_utc": "2021-12-19T18:00:00+00:00",
+        "prediction_cutoff": "2021-12-19T17:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0033862",
+        "expected_kicker_name": "Zane Gonzalez",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick"
+        ],
+        "expected_kicker_evidence_timestamp": "2021-12-13T18:00:00+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2021_14_ATL_CAR:CAR",
+          "history:2021_12_CAR_MIA:CAR",
+          "history:2021_11_WAS_CAR:CAR",
+          "history:2021_10_CAR_ARI:CAR",
+          "history:2021_09_NE_CAR:CAR",
+          "history:2021_08_CAR_ATL:CAR",
+          "history:2021_07_CAR_NYG:CAR",
+          "history:2021_06_MIN_CAR:CAR",
+          "history:2021_05_PHI_CAR:CAR",
+          "history:2021_04_CAR_DAL:CAR",
+          "history:2021_03_CAR_HOU:CAR",
+          "history:2021_02_NO_CAR:CAR"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0033862",
+            "name": "Zane Gonzalez",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2021_14_ATL_CAR"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "experimental_continuity_only",
+        "policy": "C",
+        "prior_consecutive_games": 12,
+        "prior_game_id": "2021_14_ATL_CAR",
+        "previous_placekicker_ids": [
+          "00-0033862"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2021_14_ATL_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-12-12T18:00:00+00:00",
+            "reveal_at": "2021-12-13T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_14_ATL_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "3f5b27079c13f6caabc0d9daeea80024de4f69117d801bc61075639377d5999f"
+          },
+          {
+            "game_id": "2021_12_CAR_MIA",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-11-28T18:00:00+00:00",
+            "reveal_at": "2021-11-29T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_12_CAR_MIA;team=CAR;counted PAT or FG",
+            "oracle_sha256": "1cdb87fd56b6009a533c489a0b9d4e6c26ecfd8d2f5817f2fd01188aed44047d"
+          },
+          {
+            "game_id": "2021_11_WAS_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-11-21T18:00:00+00:00",
+            "reveal_at": "2021-11-22T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_11_WAS_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "42a97a0c1eee44a931b3add2d88a51f419f95aa606329bbe9439f1f2f1e7ee14"
+          },
+          {
+            "game_id": "2021_10_CAR_ARI",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-11-14T21:05:00+00:00",
+            "reveal_at": "2021-11-15T21:05:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_10_CAR_ARI;team=CAR;counted PAT or FG",
+            "oracle_sha256": "3ef68f96dedec329f5cb9958b5a643243b48dfc6f9093c3d56a6448c1e810182"
+          },
+          {
+            "game_id": "2021_09_NE_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-11-07T18:00:00+00:00",
+            "reveal_at": "2021-11-08T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_09_NE_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "0ddc295d5af87174954af67a982374b40a66932fda84ba0d0e357af198c97fc0"
+          },
+          {
+            "game_id": "2021_08_CAR_ATL",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-10-31T17:00:00+00:00",
+            "reveal_at": "2021-11-01T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_08_CAR_ATL;team=CAR;counted PAT or FG",
+            "oracle_sha256": "23506c29a6c7408d0d655b6ef320c86bd4741b59dd04744eaecd461076c42e7c"
+          },
+          {
+            "game_id": "2021_07_CAR_NYG",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-10-24T17:00:00+00:00",
+            "reveal_at": "2021-10-25T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_07_CAR_NYG;team=CAR;counted PAT or FG",
+            "oracle_sha256": "4974c6bf8fd1d5dbedff49a0e2e2e916e748a3293687e536fda1fdab101cb5fe"
+          },
+          {
+            "game_id": "2021_06_MIN_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-10-17T17:00:00+00:00",
+            "reveal_at": "2021-10-18T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_06_MIN_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "c55cd0336a36f315430b14fc68fc9f0c15e4c4c49ce6e43d9624a254623c3191"
+          },
+          {
+            "game_id": "2021_05_PHI_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-10-10T17:00:00+00:00",
+            "reveal_at": "2021-10-11T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_05_PHI_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "4574069a281aa866a918c10a6f56f0d065419a687d7c35cf8295f87fec38423f"
+          },
+          {
+            "game_id": "2021_04_CAR_DAL",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-10-03T17:00:00+00:00",
+            "reveal_at": "2021-10-04T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_04_CAR_DAL;team=CAR;counted PAT or FG",
+            "oracle_sha256": "2e97d339cf0f6538c6698e7b8413ed5889961b2311ec8646b386f2a634a6aa30"
+          },
+          {
+            "game_id": "2021_03_CAR_HOU",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-09-24T00:20:00+00:00",
+            "reveal_at": "2021-09-25T00:20:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_03_CAR_HOU;team=CAR;counted PAT or FG",
+            "oracle_sha256": "6a0eae1efe81dfdd78b0a673fa8ceeb9cc286c8d1a3e7b305a6f15cf8079912f"
+          },
+          {
+            "game_id": "2021_02_NO_CAR",
+            "team": "CAR",
+            "season": 2021,
+            "kickoff_utc": "2021-09-19T17:00:00+00:00",
+            "reveal_at": "2021-09-20T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0033862"
+            ],
+            "source_sha256": [
+              "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet",
+            "locator": "game_id=2021_02_NO_CAR;team=CAR;counted PAT or FG",
+            "oracle_sha256": "8744b8796807fcee89f71f7d64373db5b1827537badabb809828844ed8fcfbf7"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "temporal_evaluation_with_known_audit_overlap"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [],
+        "actual_placekicker_names": [],
+        "comparison": "no_actual_placekick",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "no_kicking_evidence"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2024_02_NYG_WAS",
+        "team": "WAS",
+        "expected": "Austin Seibert",
+        "category": "STRONG",
+        "finding": "Alta de Seibert en roster activo y salida de York durante la semana, corroboradas con lista completa de inactivos gameday. La fuente positiva vence la continuidad de York. Cero XPA/XPM conservado; siete FG observados solo en evaluación."
+      },
+      "decision": {
+        "game_id": "2024_02_NYG_WAS",
+        "season": 2024,
+        "week": 2,
+        "game_type": "REG",
+        "team": "WAS",
+        "opponent": "NYG",
+        "kickoff_utc": "2024-09-15T17:00:00+00:00",
+        "prediction_cutoff": "2024-09-15T16:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0035145",
+        "expected_kicker_name": "Austin Seibert",
+        "expected_kicker_confidence": "STRONG",
+        "expected_kicker_source": [
+          "https://www.commanders.com/news/commanders-sign-k-austin-seibert-to-active-roster-add-t-anim-dankwah-to-practice-squad",
+          "https://www.commanders.com/news/inactives-commanders-vs-giants-week-2"
+        ],
+        "expected_kicker_evidence_type": [
+          "official_inactives",
+          "official_roster"
+        ],
+        "expected_kicker_evidence_timestamp": "2024-09-15T15:29:11.830000+00:00",
+        "expected_kicker_evidence_ids": [
+          "official:003",
+          "official:005"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0035145",
+            "name": "Austin Seibert",
+            "evidence_ids": [
+              "official:003"
+            ],
+            "rank": null,
+            "blocked": false,
+            "explicit_assignment": false,
+            "active_roster": true,
+            "not_inactive": true
+          },
+          {
+            "player_id": "00-0038097",
+            "name": "Cade York",
+            "evidence_ids": [
+              "official:004"
+            ],
+            "rank": null,
+            "blocked": true,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "official_confirmation",
+        "policy": "C",
+        "prior_consecutive_games": 1,
+        "prior_game_id": "2024_01_WAS_TB",
+        "previous_placekicker_ids": [
+          "00-0038097"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2024_01_WAS_TB",
+            "team": "WAS",
+            "season": 2024,
+            "kickoff_utc": "2024-09-08T20:25:00+00:00",
+            "reveal_at": "2024-09-09T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0038097"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_01_WAS_TB;team=WAS;counted PAT or FG",
+            "oracle_sha256": "aceea81f298a598378569d26531f1229aac563278aa6e592b949ec5dff681846"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": true,
+        "current_roster_verified": true,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "temporal_evaluation_with_known_audit_overlap"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0035145"
+        ],
+        "actual_placekicker_names": [
+          "Austin Seibert"
+        ],
+        "comparison": "exclusive_match",
+        "xpa": 0,
+        "xpm": 0,
+        "expected_observed_fga": 7,
+        "expected_observed_kickoffs": 7,
+        "expected_kicking_participation": "observed_kicking"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2024_02_NYG_WAS",
+        "team": "NYG",
+        "expected": null,
+        "category": "UNKNOWN",
+        "finding": "La nota que dice que Gano pateará tiene modificación a 16:54:57Z, posterior a T-60=16:00Z. Falta una segunda observación previa en la temporada. No se elige a Gillan por haber ejecutado el PAT real."
+      },
+      "decision": {
+        "game_id": "2024_02_NYG_WAS",
+        "season": 2024,
+        "week": 2,
+        "game_type": "REG",
+        "team": "NYG",
+        "opponent": "WAS",
+        "kickoff_utc": "2024-09-15T17:00:00+00:00",
+        "prediction_cutoff": "2024-09-15T16:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": null,
+        "expected_kicker_name": null,
+        "expected_kicker_confidence": "UNKNOWN",
+        "expected_kicker_source": [],
+        "expected_kicker_evidence_type": [],
+        "expected_kicker_evidence_timestamp": null,
+        "expected_kicker_evidence_ids": [],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0026858",
+            "name": "Graham Gano",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2024_01_MIN_NYG"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "insufficient_same_season_continuity",
+        "inference_subtype": null,
+        "policy": "C",
+        "prior_consecutive_games": 1,
+        "prior_game_id": "2024_01_MIN_NYG",
+        "previous_placekicker_ids": [
+          "00-0026858"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2024_01_MIN_NYG",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-09-08T17:00:00+00:00",
+            "reveal_at": "2024-09-09T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0026858"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_01_MIN_NYG;team=NYG;counted PAT or FG",
+            "oracle_sha256": "a979251e3180244dda3e808605d5dd5f87067b0776cf6f48034810bdc69d4488"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "temporal_evaluation_with_known_audit_overlap"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0035042"
+        ],
+        "actual_placekicker_names": [
+          "Jamie Gillan"
+        ],
+        "comparison": "expected_unknown",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "unknown_identity"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2024_09_WAS_NYG",
+        "team": "NYG",
+        "expected": "Jude McAtamney",
+        "category": "VERIFIED",
+        "finding": "Joseph out y luego IR; elevación oficial de McAtamney el sábado y confirmación de debut el domingo. Última modificación válida de la confirmación a 16:35:14Z, antes de cutoff=17:00Z. La evidencia explícita vence seis partidos previos de Joseph."
+      },
+      "decision": {
+        "game_id": "2024_09_WAS_NYG",
+        "season": 2024,
+        "week": 9,
+        "game_type": "REG",
+        "team": "NYG",
+        "opponent": "WAS",
+        "kickoff_utc": "2024-11-03T18:00:00+00:00",
+        "prediction_cutoff": "2024-11-03T17:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0039934",
+        "expected_kicker_name": "Jude McAtamney",
+        "expected_kicker_confidence": "VERIFIED",
+        "expected_kicker_source": [
+          "https://www.giants.com/news/nfl-week-9-inactives-who-s-in-who-s-out-for-commanders-at-giants",
+          "https://www.giants.com/news/tomon-fox-greg-joseph-jude-mcatamney-jakob-johnson-week-9-washington-commanders-roster-moves"
+        ],
+        "expected_kicker_evidence_type": [
+          "official_assignment",
+          "official_roster"
+        ],
+        "expected_kicker_evidence_timestamp": "2024-11-03T16:35:14.918000+00:00",
+        "expected_kicker_evidence_ids": [
+          "official:007",
+          "official:009"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0026858",
+            "name": "Graham Gano",
+            "evidence_ids": [
+              "official:010"
+            ],
+            "rank": null,
+            "blocked": true,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          },
+          {
+            "player_id": "00-0034450",
+            "name": "Greg Joseph",
+            "evidence_ids": [
+              "official:006",
+              "official:008"
+            ],
+            "rank": null,
+            "blocked": true,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          },
+          {
+            "player_id": "00-0039934",
+            "name": "Jude McAtamney",
+            "evidence_ids": [
+              "official:007",
+              "official:009"
+            ],
+            "rank": null,
+            "blocked": false,
+            "explicit_assignment": true,
+            "active_roster": true,
+            "not_inactive": false
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "official_confirmation",
+        "policy": "C",
+        "prior_consecutive_games": 6,
+        "prior_game_id": "2024_08_NYG_PIT",
+        "previous_placekicker_ids": [
+          "00-0034450"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2024_08_NYG_PIT",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-10-29T00:15:00+00:00",
+            "reveal_at": "2024-10-30T00:15:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_08_NYG_PIT;team=NYG;counted PAT or FG",
+            "oracle_sha256": "c03ac07a9f3accd8ad83ce860d8a30c0752b8258edafffaf25b61a53e2091faa"
+          },
+          {
+            "game_id": "2024_07_PHI_NYG",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-10-20T17:00:00+00:00",
+            "reveal_at": "2024-10-21T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_07_PHI_NYG;team=NYG;counted PAT or FG",
+            "oracle_sha256": "d2cd2108bb7f3c674209dbf1eb394c71b36fce37f9bc64e93d73d486bd3212f9"
+          },
+          {
+            "game_id": "2024_06_CIN_NYG",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-10-14T00:20:00+00:00",
+            "reveal_at": "2024-10-15T00:20:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_06_CIN_NYG;team=NYG;counted PAT or FG",
+            "oracle_sha256": "11969a250efb3ef6cc77f84d9b9cba39f97574e97956e6056ca4566af82c0a04"
+          },
+          {
+            "game_id": "2024_05_NYG_SEA",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-10-06T20:25:00+00:00",
+            "reveal_at": "2024-10-07T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_05_NYG_SEA;team=NYG;counted PAT or FG",
+            "oracle_sha256": "608cb4bfe363505b6dd2fbb163a0d471d68bb9b693f1f816aa3a3840bb628d8d"
+          },
+          {
+            "game_id": "2024_04_DAL_NYG",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-09-27T00:15:00+00:00",
+            "reveal_at": "2024-09-28T00:15:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_04_DAL_NYG;team=NYG;counted PAT or FG",
+            "oracle_sha256": "e3d4d0e1ecf171ce8d57ba0056fafa9aa5742d543d828212879276821b542fb2"
+          },
+          {
+            "game_id": "2024_03_NYG_CLE",
+            "team": "NYG",
+            "season": 2024,
+            "kickoff_utc": "2024-09-22T17:00:00+00:00",
+            "reveal_at": "2024-09-23T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034450"
+            ],
+            "source_sha256": [
+              "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet",
+            "locator": "game_id=2024_03_NYG_CLE;team=NYG;counted PAT or FG",
+            "oracle_sha256": "e2facd44d4c8d84261e58334e97668b60605e5d2ec5bbc601a7b4a14c859d23b"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": true,
+        "current_roster_verified": true,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "temporal_evaluation_with_known_audit_overlap"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0039934"
+        ],
+        "actual_placekicker_names": [
+          "Jude McAtamney"
+        ],
+        "comparison": "exclusive_match",
+        "xpa": 1,
+        "xpm": 1,
+        "expected_observed_fga": 1,
+        "expected_observed_kickoffs": 5,
+        "expected_kicking_participation": "observed_kicking"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_06_CIN_GB",
+        "team": "GB",
+        "expected": "Brandon McManus",
+        "category": "INFERRED",
+        "finding": "Dos kickers en depth chart: McManus rank 1, Havrisik rank 2. Cuatro partidos previos corroboran a McManus, incluyendo un bye. B y C fallan. La auditoría externa posterior encontró que McManus había sido declarado inactivo. Evidencia que falta integrar sistemáticamente, no error corregido con hindsight."
+      },
+      "decision": {
+        "game_id": "2025_06_CIN_GB",
+        "season": 2025,
+        "week": 6,
+        "game_type": "REG",
+        "team": "GB",
+        "opponent": "CIN",
+        "kickoff_utc": "2025-10-12T20:25:00+00:00",
+        "prediction_cutoff": "2025-10-12T19:25:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0029822",
+        "expected_kicker_name": "Brandon McManus",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2025.parquet",
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick",
+          "depth_snapshot"
+        ],
+        "expected_kicker_evidence_timestamp": "2025-10-12T07:13:37+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2025_04_GB_DAL:GB",
+          "history:2025_03_GB_CLE:GB",
+          "history:2025_02_WAS_GB:GB",
+          "history:2025_01_DET_GB:GB",
+          "depth:2025_06_CIN_GB:GB:16339:1"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0029822",
+            "name": "Brandon McManus",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_04_GB_DAL"
+          },
+          {
+            "player_id": "00-0038152",
+            "name": "Lucas Havrisik",
+            "evidence_ids": [
+              "depth:2025_06_CIN_GB:GB:4245661:2"
+            ],
+            "rank": 2,
+            "blocked": false,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "continuity_with_current_role",
+        "policy": "C",
+        "prior_consecutive_games": 4,
+        "prior_game_id": "2025_04_GB_DAL",
+        "previous_placekicker_ids": [
+          "00-0029822"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_04_GB_DAL",
+            "team": "GB",
+            "season": 2025,
+            "kickoff_utc": "2025-09-29T00:20:00+00:00",
+            "reveal_at": "2025-09-30T00:20:00+00:00",
+            "placekicker_ids": [
+              "00-0029822"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_04_GB_DAL;team=GB;counted PAT or FG",
+            "oracle_sha256": "f45a4a51ab30682f67e7cfa13d744976eddd81c70a75a558a985c1d8e337fddc"
+          },
+          {
+            "game_id": "2025_03_GB_CLE",
+            "team": "GB",
+            "season": 2025,
+            "kickoff_utc": "2025-09-21T17:00:00+00:00",
+            "reveal_at": "2025-09-22T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0029822"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_03_GB_CLE;team=GB;counted PAT or FG",
+            "oracle_sha256": "9193ff3bb985e31e5bf6352c14ef0195c5d83d8916df099fa0381b1aa3570fef"
+          },
+          {
+            "game_id": "2025_02_WAS_GB",
+            "team": "GB",
+            "season": 2025,
+            "kickoff_utc": "2025-09-12T00:15:00+00:00",
+            "reveal_at": "2025-09-13T00:15:00+00:00",
+            "placekicker_ids": [
+              "00-0029822"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_02_WAS_GB;team=GB;counted PAT or FG",
+            "oracle_sha256": "bdab16e808974a8fac3fd2d2a056582576bd5c43b306a151cba6a584908cb66a"
+          },
+          {
+            "game_id": "2025_01_DET_GB",
+            "team": "GB",
+            "season": 2025,
+            "kickoff_utc": "2025-09-07T20:25:00+00:00",
+            "reveal_at": "2025-09-08T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0029822"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_01_DET_GB;team=GB;counted PAT or FG",
+            "oracle_sha256": "a3398cb87dd3db644509156c01a710d3bee21df706c5f5242232dce07a7dc7ac"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0038152"
+        ],
+        "actual_placekicker_names": [
+          "Lucas Havrisik"
+        ],
+        "comparison": "mismatch",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "no_kicking_evidence"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_07_GB_ARI",
+        "team": "GB",
+        "expected": null,
+        "category": "AMBIGUOUS",
+        "finding": "El último juego revelado identifica Havrisik pero el snapshot sigue situando McManus primero. Se conservan ambos candidatos y la contradicción; no se selecciona al que sabemos retrospectivamente que pateó."
+      },
+      "decision": {
+        "game_id": "2025_07_GB_ARI",
+        "season": 2025,
+        "week": 7,
+        "game_type": "REG",
+        "team": "GB",
+        "opponent": "ARI",
+        "kickoff_utc": "2025-10-19T20:25:00+00:00",
+        "prediction_cutoff": "2025-10-19T19:25:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": null,
+        "expected_kicker_name": null,
+        "expected_kicker_confidence": "AMBIGUOUS",
+        "expected_kicker_source": [],
+        "expected_kicker_evidence_type": [],
+        "expected_kicker_evidence_timestamp": null,
+        "expected_kicker_evidence_ids": [],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0038152",
+            "name": "Lucas Havrisik",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_06_CIN_GB"
+          },
+          {
+            "player_id": "00-0029822",
+            "name": "Brandon McManus",
+            "evidence_ids": [
+              "depth:2025_07_GB_ARI:GB:16339:1"
+            ],
+            "rank": 1,
+            "blocked": false,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          },
+          {
+            "player_id": "00-0038152",
+            "name": "Lucas Havrisik",
+            "evidence_ids": [
+              "depth:2025_07_GB_ARI:GB:4245661:2"
+            ],
+            "rank": 2,
+            "blocked": false,
+            "explicit_assignment": false,
+            "active_roster": false,
+            "not_inactive": false
+          }
+        ],
+        "expected_kicker_ambiguous": true,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "history_conflicts_with_pregame_role",
+        "inference_subtype": null,
+        "policy": "C",
+        "prior_consecutive_games": 1,
+        "prior_game_id": "2025_06_CIN_GB",
+        "previous_placekicker_ids": [
+          "00-0038152"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_06_CIN_GB",
+            "team": "GB",
+            "season": 2025,
+            "kickoff_utc": "2025-10-12T20:25:00+00:00",
+            "reveal_at": "2025-10-13T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0038152"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_06_CIN_GB;team=GB;counted PAT or FG",
+            "oracle_sha256": "53df377340821016da9147110bbf53356a09123e787c0946926e266709885b61"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0038152"
+        ],
+        "actual_placekicker_names": [
+          "Lucas Havrisik"
+        ],
+        "comparison": "expected_unknown",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "unknown_identity"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_07_GB_ARI",
+        "team": "ARI",
+        "expected": "Chad Ryland",
+        "category": "INFERRED",
+        "finding": "El snapshot actual no tiene fila PK: el estudio inicial y B quedan UNKNOWN. C puede inferir Ryland por seis juegos previos, declarando que falta corroboración actual. No busca una fila PK en un snapshot futuro ni revive automáticamente una fila antigua."
+      },
+      "decision": {
+        "game_id": "2025_07_GB_ARI",
+        "season": 2025,
+        "week": 7,
+        "game_type": "REG",
+        "team": "ARI",
+        "opponent": "GB",
+        "kickoff_utc": "2025-10-19T20:25:00+00:00",
+        "prediction_cutoff": "2025-10-19T19:25:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0038567",
+        "expected_kicker_name": "Chad Ryland",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick"
+        ],
+        "expected_kicker_evidence_timestamp": "2025-10-13T17:00:00+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2025_06_ARI_IND:ARI",
+          "history:2025_05_TEN_ARI:ARI",
+          "history:2025_04_SEA_ARI:ARI",
+          "history:2025_03_ARI_SF:ARI",
+          "history:2025_02_CAR_ARI:ARI",
+          "history:2025_01_ARI_NO:ARI"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0038567",
+            "name": "Chad Ryland",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_06_ARI_IND"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "experimental_continuity_only",
+        "policy": "C",
+        "prior_consecutive_games": 6,
+        "prior_game_id": "2025_06_ARI_IND",
+        "previous_placekicker_ids": [
+          "00-0038567"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_06_ARI_IND",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-10-12T17:00:00+00:00",
+            "reveal_at": "2025-10-13T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_06_ARI_IND;team=ARI;counted PAT or FG",
+            "oracle_sha256": "1548588ffd12a54ada0efcc0d6293f00219ee0ab7254ecb06cf68481d0dc9ede"
+          },
+          {
+            "game_id": "2025_05_TEN_ARI",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-10-05T20:05:00+00:00",
+            "reveal_at": "2025-10-06T20:05:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_05_TEN_ARI;team=ARI;counted PAT or FG",
+            "oracle_sha256": "e3faf5538f920314e4d108daed15f0b17725c30688b32d1523cc71dc0266cff5"
+          },
+          {
+            "game_id": "2025_04_SEA_ARI",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-09-26T00:15:00+00:00",
+            "reveal_at": "2025-09-27T00:15:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_04_SEA_ARI;team=ARI;counted PAT or FG",
+            "oracle_sha256": "f47c6b8cb2227aed18b0b595fd49d9936f0946ddafa0a3234fe3d6ae44609f51"
+          },
+          {
+            "game_id": "2025_03_ARI_SF",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-09-21T20:25:00+00:00",
+            "reveal_at": "2025-09-22T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_03_ARI_SF;team=ARI;counted PAT or FG",
+            "oracle_sha256": "8b71f8fc61936d4d32fe0db6dc5a38ce7b343d28b8516e7249f01c27704820f7"
+          },
+          {
+            "game_id": "2025_02_CAR_ARI",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-09-14T20:05:00+00:00",
+            "reveal_at": "2025-09-15T20:05:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_02_CAR_ARI;team=ARI;counted PAT or FG",
+            "oracle_sha256": "7e8d496ff3cd53551142c1050eee9f25a59ef7244e100b7f6ea6146603b2d6b9"
+          },
+          {
+            "game_id": "2025_01_ARI_NO",
+            "team": "ARI",
+            "season": 2025,
+            "kickoff_utc": "2025-09-07T17:00:00+00:00",
+            "reveal_at": "2025-09-08T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0038567"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_01_ARI_NO;team=ARI;counted PAT or FG",
+            "oracle_sha256": "79e0a3e9fcea62228a3f43f4940721f89417d4c61c343773d3a9f6b19330c6a6"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0038567"
+        ],
+        "actual_placekicker_names": [
+          "Chad Ryland"
+        ],
+        "comparison": "exclusive_match",
+        "xpa": 2,
+        "xpm": 2,
+        "expected_observed_fga": 3,
+        "expected_observed_kickoffs": 6,
+        "expected_kicking_participation": "observed_kicking"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_07_LV_KC",
+        "team": "LV",
+        "expected": "Daniel Carlson",
+        "category": "INFERRED",
+        "finding": "Seis juegos anteriores y rol fresco. El equipo no tuvo PAT/FG; Carlson sí tiene kickoff y label reconciliado 0/0. La fila sobrevive, pero no entra al denominador de comparación con ejecutores reales de PAT/FG."
+      },
+      "decision": {
+        "game_id": "2025_07_LV_KC",
+        "season": 2025,
+        "week": 7,
+        "game_type": "REG",
+        "team": "LV",
+        "opponent": "KC",
+        "kickoff_utc": "2025-10-19T17:00:00+00:00",
+        "prediction_cutoff": "2025-10-19T16:00:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0034161",
+        "expected_kicker_name": "Daniel Carlson",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2025.parquet",
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick",
+          "depth_snapshot"
+        ],
+        "expected_kicker_evidence_timestamp": "2025-10-19T07:13:17+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2025_06_TEN_LV:LV",
+          "history:2025_05_LV_IND:LV",
+          "history:2025_04_CHI_LV:LV",
+          "history:2025_03_LV_WAS:LV",
+          "history:2025_02_LAC_LV:LV",
+          "history:2025_01_LV_NE:LV",
+          "depth:2025_07_LV_KC:LV:3051909:1"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0034161",
+            "name": "Daniel Carlson",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_06_TEN_LV"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "continuity_with_current_role",
+        "policy": "C",
+        "prior_consecutive_games": 6,
+        "prior_game_id": "2025_06_TEN_LV",
+        "previous_placekicker_ids": [
+          "00-0034161"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_06_TEN_LV",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-10-12T20:05:00+00:00",
+            "reveal_at": "2025-10-13T20:05:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_06_TEN_LV;team=LV;counted PAT or FG",
+            "oracle_sha256": "969d7272679db209b05d7682c1a2873633c48f8bccac31aceae7bcd084c08aa9"
+          },
+          {
+            "game_id": "2025_05_LV_IND",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-10-05T17:00:00+00:00",
+            "reveal_at": "2025-10-06T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_05_LV_IND;team=LV;counted PAT or FG",
+            "oracle_sha256": "5db4682833dfd153c4f7e77199f411f006a8fcc85a0135ef4ce9bd610621b736"
+          },
+          {
+            "game_id": "2025_04_CHI_LV",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-09-28T20:25:00+00:00",
+            "reveal_at": "2025-09-29T20:25:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_04_CHI_LV;team=LV;counted PAT or FG",
+            "oracle_sha256": "4fb89f5f9f8bcedb05052acdde9c4698c073ec026bb858c5130794f09f6a6304"
+          },
+          {
+            "game_id": "2025_03_LV_WAS",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-09-21T17:00:00+00:00",
+            "reveal_at": "2025-09-22T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_03_LV_WAS;team=LV;counted PAT or FG",
+            "oracle_sha256": "35a1f885b9c03343d92bbf81c60d58f9174bb6b7d025ded46210f9953d51b4ec"
+          },
+          {
+            "game_id": "2025_02_LAC_LV",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-09-16T02:00:00+00:00",
+            "reveal_at": "2025-09-17T02:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_02_LAC_LV;team=LV;counted PAT or FG",
+            "oracle_sha256": "ec010f36e838fc8c6795aae9d613806ccbba16189cb98b3d4a17ee3d9a450e32"
+          },
+          {
+            "game_id": "2025_01_LV_NE",
+            "team": "LV",
+            "season": 2025,
+            "kickoff_utc": "2025-09-07T17:00:00+00:00",
+            "reveal_at": "2025-09-08T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0034161"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_01_LV_NE;team=LV;counted PAT or FG",
+            "oracle_sha256": "df74dbfc61a09b3c7a339bdfe0b67ebc3d34fe22ca55f08e87c13da556c1e3cf"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [],
+        "actual_placekicker_names": [],
+        "comparison": "no_actual_placekick",
+        "xpa": 0,
+        "xpm": 0,
+        "expected_observed_fga": 0,
+        "expected_observed_kickoffs": 1,
+        "expected_kicking_participation": "observed_kicking"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_03_KC_NYG",
+        "team": "NYG",
+        "expected": "Graham Gano",
+        "category": "INFERRED",
+        "finding": "Dos juegos previos y snapshot coincidente. Se observan después Gano en FG y Gillan en PAT: expected pertenece al conjunto real, pero no hay igualdad de conjunto exacto. XPA/XPM de Gano=0/0 se conservan."
+      },
+      "decision": {
+        "game_id": "2025_03_KC_NYG",
+        "season": 2025,
+        "week": 3,
+        "game_type": "REG",
+        "team": "NYG",
+        "opponent": "KC",
+        "kickoff_utc": "2025-09-22T00:20:00+00:00",
+        "prediction_cutoff": "2025-09-21T23:20:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0026858",
+        "expected_kicker_name": "Graham Gano",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2025.parquet",
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick",
+          "depth_snapshot"
+        ],
+        "expected_kicker_evidence_timestamp": "2025-09-21T07:13:06+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2025_02_NYG_DAL:NYG",
+          "history:2025_01_NYG_WAS:NYG",
+          "depth:2025_03_KC_NYG:NYG:12460:1"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0026858",
+            "name": "Graham Gano",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_02_NYG_DAL"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "continuity_with_current_role",
+        "policy": "C",
+        "prior_consecutive_games": 2,
+        "prior_game_id": "2025_02_NYG_DAL",
+        "previous_placekicker_ids": [
+          "00-0026858"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_02_NYG_DAL",
+            "team": "NYG",
+            "season": 2025,
+            "kickoff_utc": "2025-09-14T17:00:00+00:00",
+            "reveal_at": "2025-09-15T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0026858"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_02_NYG_DAL;team=NYG;counted PAT or FG",
+            "oracle_sha256": "667e4bbcfcc6a7751ab61fe5cc2cf7ffa8e2cf250567f78e636785404ddb7757"
+          },
+          {
+            "game_id": "2025_01_NYG_WAS",
+            "team": "NYG",
+            "season": 2025,
+            "kickoff_utc": "2025-09-07T17:00:00+00:00",
+            "reveal_at": "2025-09-08T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0026858"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_01_NYG_WAS;team=NYG;counted PAT or FG",
+            "oracle_sha256": "2e63c2a1445358dc2ab3f5db7824b2a17cf6c5221f7e361a8312cdf52830c849"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [
+          "00-0026858",
+          "00-0035042"
+        ],
+        "actual_placekicker_names": [
+          "Graham Gano",
+          "Jamie Gillan"
+        ],
+        "comparison": "expected_among_multiple",
+        "xpa": 0,
+        "xpm": 0,
+        "expected_observed_fga": 1,
+        "expected_observed_kickoffs": 0,
+        "expected_kicking_participation": "observed_kicking"
+      },
+      "passed": true
+    },
+    {
+      "case": {
+        "game_id": "2025_18_NYJ_BUF",
+        "team": "NYJ",
+        "expected": "Nick Folk",
+        "category": "INFERRED",
+        "finding": "Dieciséis juegos previos y depth chart identifican Folk. No hay evidencia de patadas ni label individual validado. Se mantiene la identidad, XPA/XPM NULL y participación indeterminada. No tener intentos no prueba DNP."
+      },
+      "decision": {
+        "game_id": "2025_18_NYJ_BUF",
+        "season": 2025,
+        "week": 18,
+        "game_type": "REG",
+        "team": "NYJ",
+        "opponent": "BUF",
+        "kickoff_utc": "2026-01-04T21:25:00+00:00",
+        "prediction_cutoff": "2026-01-04T20:25:00+00:00",
+        "cutoff_basis": "historical_nflverse_scheduled_start_Eastern",
+        "target_season_eligible": true,
+        "expected_kicker_id": "00-0025565",
+        "expected_kicker_name": "Nick Folk",
+        "expected_kicker_confidence": "INFERRED",
+        "expected_kicker_source": [
+          "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2025.parquet",
+          "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet"
+        ],
+        "expected_kicker_evidence_type": [
+          "previous_game_placekick",
+          "depth_snapshot"
+        ],
+        "expected_kicker_evidence_timestamp": "2026-01-04T07:17:56+00:00",
+        "expected_kicker_evidence_ids": [
+          "history:2025_17_NE_NYJ:NYJ",
+          "history:2025_16_NYJ_NO:NYJ",
+          "history:2025_15_NYJ_JAX:NYJ",
+          "history:2025_14_MIA_NYJ:NYJ",
+          "history:2025_13_ATL_NYJ:NYJ",
+          "history:2025_12_NYJ_BAL:NYJ",
+          "history:2025_11_NYJ_NE:NYJ",
+          "history:2025_10_CLE_NYJ:NYJ",
+          "history:2025_08_NYJ_CIN:NYJ",
+          "history:2025_07_CAR_NYJ:NYJ",
+          "history:2025_06_DEN_NYJ:NYJ",
+          "history:2025_05_DAL_NYJ:NYJ",
+          "history:2025_04_NYJ_MIA:NYJ",
+          "history:2025_03_NYJ_TB:NYJ",
+          "history:2025_02_BUF_NYJ:NYJ",
+          "history:2025_01_PIT_NYJ:NYJ",
+          "depth:2025_18_NYJ_BUF:NYJ:10621:1"
+        ],
+        "expected_kicker_candidates": [
+          {
+            "player_id": "00-0025565",
+            "name": "Nick Folk",
+            "basis": "previous_game_placekick",
+            "source_game_id": "2025_17_NE_NYJ"
+          }
+        ],
+        "expected_kicker_ambiguous": false,
+        "pregame_identity_eligible": false,
+        "pregame_exclusion_reason": "policy_selection_pending_review",
+        "inference_subtype": "continuity_with_current_role",
+        "policy": "C",
+        "prior_consecutive_games": 16,
+        "prior_game_id": "2025_17_NE_NYJ",
+        "previous_placekicker_ids": [
+          "00-0025565"
+        ],
+        "history_evidence": [
+          {
+            "game_id": "2025_17_NE_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-12-28T18:00:00+00:00",
+            "reveal_at": "2025-12-29T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_17_NE_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "6e7a2efb8f4663610473a77a32aee2d5625700ec86d58785e746b05d7c454d8a"
+          },
+          {
+            "game_id": "2025_16_NYJ_NO",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-12-21T18:00:00+00:00",
+            "reveal_at": "2025-12-22T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_16_NYJ_NO;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "3161247249a98bdbbfbde4df6aad8f7dc32e186a479dfe771e5788d1dbd0e0c7"
+          },
+          {
+            "game_id": "2025_15_NYJ_JAX",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-12-14T18:00:00+00:00",
+            "reveal_at": "2025-12-15T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_15_NYJ_JAX;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "10b5ced64ea08b099ca1bd60ca167243872c80743fb2bbd82e507320d4f175ae"
+          },
+          {
+            "game_id": "2025_14_MIA_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-12-07T18:00:00+00:00",
+            "reveal_at": "2025-12-08T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_14_MIA_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "9ae5046c5dfd668153b24ff3c05a78300b494eb8c6f84a0218e276a31f8ac81c"
+          },
+          {
+            "game_id": "2025_13_ATL_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-11-30T18:00:00+00:00",
+            "reveal_at": "2025-12-01T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_13_ATL_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "e0bf570cdda456302a3965db4bd4dcbc4d0c00557de320d509159718507ee865"
+          },
+          {
+            "game_id": "2025_12_NYJ_BAL",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-11-23T18:00:00+00:00",
+            "reveal_at": "2025-11-24T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_12_NYJ_BAL;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "5d31fd2a5900fdb0585af79ed9ea7560cd8375eb345b086884f45ce5c4340637"
+          },
+          {
+            "game_id": "2025_11_NYJ_NE",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-11-14T01:15:00+00:00",
+            "reveal_at": "2025-11-15T01:15:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_11_NYJ_NE;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "0f0fa19058a8aed3de2b4f9a00505d1f632b71fbf80cc0a5c757021f93bc322a"
+          },
+          {
+            "game_id": "2025_10_CLE_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-11-09T18:00:00+00:00",
+            "reveal_at": "2025-11-10T18:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_10_CLE_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "b66a681de8ff6d1a90ef4ad3a9877d614f6b41da382709da1bf494afda926826"
+          },
+          {
+            "game_id": "2025_08_NYJ_CIN",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-10-26T17:00:00+00:00",
+            "reveal_at": "2025-10-27T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_08_NYJ_CIN;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "dffe8532f2e6aa5573b6b1e066cd940526c94b963850959c37fa11396fe99e59"
+          },
+          {
+            "game_id": "2025_07_CAR_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-10-19T17:00:00+00:00",
+            "reveal_at": "2025-10-20T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_07_CAR_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "801caede251e9904bcb727116091e1e47281fde821274839dbbacd346b768e51"
+          },
+          {
+            "game_id": "2025_06_DEN_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-10-12T13:30:00+00:00",
+            "reveal_at": "2025-10-13T13:30:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_06_DEN_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "8ed42d2af231671a27599753bdd98c1bf71f6f0c6457e7c56f7b664563a93ef1"
+          },
+          {
+            "game_id": "2025_05_DAL_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-10-05T17:00:00+00:00",
+            "reveal_at": "2025-10-06T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_05_DAL_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "03d823bbcd1d661c37f1f24f8251aa8d343a8695655fcf06825b43336a6eb179"
+          },
+          {
+            "game_id": "2025_04_NYJ_MIA",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-09-29T23:15:00+00:00",
+            "reveal_at": "2025-09-30T23:15:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_04_NYJ_MIA;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "32b05805dd07570a8c1ba3974823a86ebe93f208d8be4b4fe6f489ceff0c5d94"
+          },
+          {
+            "game_id": "2025_03_NYJ_TB",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-09-21T17:00:00+00:00",
+            "reveal_at": "2025-09-22T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_03_NYJ_TB;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "853282d2acdcc05f248372073764e3662016cd8f561038338f3dbdbf9de58bd4"
+          },
+          {
+            "game_id": "2025_02_BUF_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-09-14T17:00:00+00:00",
+            "reveal_at": "2025-09-15T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_02_BUF_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "6cb7196d0eb13729b9e371632c9fc16f9a5a7b408be69d88885b192b169374f7"
+          },
+          {
+            "game_id": "2025_01_PIT_NYJ",
+            "team": "NYJ",
+            "season": 2025,
+            "kickoff_utc": "2025-09-07T17:00:00+00:00",
+            "reveal_at": "2025-09-08T17:00:00+00:00",
+            "placekicker_ids": [
+              "00-0025565"
+            ],
+            "source_sha256": [
+              "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+            ],
+            "source_url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+            "locator": "game_id=2025_01_PIT_NYJ;team=NYJ;counted PAT or FG",
+            "oracle_sha256": "d3c06091a822b1e37ec47b40a15fb67dea01f2a9f85692ece57f4431abfd075b"
+          }
+        ],
+        "history_availability_basis": "game_event_plus_24h_assumption_not_publication_timestamp",
+        "current_availability_verified": false,
+        "current_roster_verified": false,
+        "transaction_feed_complete": false,
+        "injury_feed_complete": false,
+        "historical_evaluation_split": "previously_inspected_2025"
+      },
+      "evaluation": {
+        "actual_placekicker_ids": [],
+        "actual_placekicker_names": [],
+        "comparison": "no_actual_placekick",
+        "xpa": null,
+        "xpm": null,
+        "expected_observed_fga": null,
+        "expected_observed_kickoffs": null,
+        "expected_kicking_participation": "no_kicking_evidence"
+      },
+      "passed": true
+    }
+  ]
+}

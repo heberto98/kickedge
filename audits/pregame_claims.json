@@ -1,0 +1,241 @@
+{
+  "selection_note": "Casos dirigidos para auditar mecanismos; no muestra aleatoria. Claims anotados antes de comparar la cohorte 2025 con outcomes.",
+  "sources": [
+    {
+      "key": "long2019",
+      "url": "https://www.chargers.com/news/inactives-chargers-at-lions"
+    },
+    {
+      "key": "gano2024",
+      "url": "https://www.giants.com/news/nfl-week-2-injury-report-statuses-for-giants-vs-commanders"
+    },
+    {
+      "key": "seibert2024",
+      "url": "https://www.commanders.com/news/commanders-sign-k-austin-seibert-to-active-roster-add-t-anim-dankwah-to-practice-squad"
+    },
+    {
+      "key": "joseph2024",
+      "url": "https://www.giants.com/news/jude-mcatamney-greg-joseph-kicker-week-9-washington-commanders-tyrone-tracy"
+    },
+    {
+      "key": "elevation2024",
+      "url": "https://www.giants.com/news/tomon-fox-greg-joseph-jude-mcatamney-jakob-johnson-week-9-washington-commanders-roster-moves"
+    },
+    {
+      "key": "mcatamney2024",
+      "url": "https://www.giants.com/news/nfl-week-9-inactives-who-s-in-who-s-out-for-commanders-at-giants"
+    },
+    {
+      "key": "gonzalez_late2021",
+      "url": "https://www.panthers.com/news/panthers-kicker-zane-gonzalez-helped-off-field-in-pregame"
+    },
+    {
+      "key": "gonzalez_inactives2021",
+      "url": "https://www.panthers.com/news/dj-moore-active-for-panthers-against-the-bills"
+    },
+    {
+      "key": "gano2025w3",
+      "url": "https://www.giants.com/news/andrew-thomas-active-snf-chiefs-inactive-list-xavier-worthy-injury-status"
+    },
+    {
+      "key": "gano2025w8",
+      "url": "https://www.giants.com/news/nfl-week-8-inactives-who-s-in-who-s-out-eagles-injury-report-aj-brown"
+    },
+    {
+      "key": "seibert_inactives2024",
+      "url": "https://www.commanders.com/news/inactives-commanders-vs-giants-week-2"
+    }
+  ],
+  "claims": [
+    {
+      "source_key": "long2019",
+      "game_id": "2019_02_LAC_DET",
+      "team": "LAC",
+      "kind": "official_assignment",
+      "player_id": "00-0031543",
+      "name": "Ty Long",
+      "required_phrases": [
+        "Ty Long will handle the kicking duties"
+      ],
+      "interpretation": "Asignación explícita a un punter; rechazada si la versión fue modificada después del cutoff."
+    },
+    {
+      "source_key": "long2019",
+      "game_id": "2019_02_LAC_DET",
+      "team": "LAC",
+      "kind": "official_unavailable",
+      "player_id": "00-0034084",
+      "name": "Mike Badgley",
+      "required_phrases": [
+        "Michael Badgley"
+      ],
+      "interpretation": "Badgley inactivo, misma página; misma restricción temporal."
+    },
+    {
+      "source_key": "gano2024",
+      "game_id": "2024_02_NYG_WAS",
+      "team": "NYG",
+      "kind": "official_assignment",
+      "player_id": "00-0026858",
+      "name": "Graham Gano",
+      "required_phrases": [
+        "meaning he will kick on Sunday"
+      ],
+      "interpretation": "Gano con lesión inguinal sin designación de baja; la modificación a 16:54Z excede T-60."
+    },
+    {
+      "source_key": "seibert2024",
+      "game_id": "2024_02_NYG_WAS",
+      "team": "WAS",
+      "kind": "official_roster",
+      "player_id": "00-0035145",
+      "name": "Austin Seibert",
+      "required_phrases": [
+        "signed veteran kicker Austin Seibert to the active roster"
+      ],
+      "interpretation": "Firma como kicker activo durante la semana."
+    },
+    {
+      "source_key": "seibert2024",
+      "game_id": "2024_02_NYG_WAS",
+      "team": "WAS",
+      "kind": "official_unavailable",
+      "player_id": "00-0038097",
+      "name": "Cade York",
+      "required_phrases": [
+        "release Cade York"
+      ],
+      "interpretation": "Baja del kicker anterior; no seleccionar por continuidad."
+    },
+    {
+      "source_key": "seibert_inactives2024",
+      "game_id": "2024_02_NYG_WAS",
+      "team": "WAS",
+      "kind": "official_inactives",
+      "player_id": null,
+      "name": null,
+      "required_phrases": [
+        "following players as inactive"
+      ],
+      "interpretation": "Lista completa de inactivos; Seibert no figura, requiere roster positivo separado.",
+      "complete_list": true,
+      "inactive_ids": [],
+      "inactive_names": [
+        "Emmanuel Forbes Jr.",
+        "Sam Hartman",
+        "Darrick Forrest",
+        "Dominique Hampton",
+        "Jamin Davis",
+        "Chris Paul",
+        "Jamison Crowder"
+      ]
+    },
+    {
+      "source_key": "joseph2024",
+      "game_id": "2024_09_WAS_NYG",
+      "team": "NYG",
+      "kind": "official_unavailable",
+      "player_id": "00-0034450",
+      "name": "Greg Joseph",
+      "required_phrases": [
+        "declared Greg Joseph out"
+      ],
+      "interpretation": "Joseph declarado out por lesión abdominal."
+    },
+    {
+      "source_key": "elevation2024",
+      "game_id": "2024_09_WAS_NYG",
+      "team": "NYG",
+      "kind": "official_roster",
+      "player_id": "00-0039934",
+      "name": "Jude McAtamney",
+      "required_phrases": [
+        "Activated, from Practice Squad (Standard Elevation)",
+        "K Jude McAtamney"
+      ],
+      "interpretation": "Elevación oficial para este partido."
+    },
+    {
+      "source_key": "elevation2024",
+      "game_id": "2024_09_WAS_NYG",
+      "team": "NYG",
+      "kind": "official_unavailable",
+      "player_id": "00-0034450",
+      "name": "Greg Joseph",
+      "required_phrases": [
+        "Reserve/Injured",
+        "K Greg Joseph"
+      ],
+      "interpretation": "Joseph a reserva de lesionados."
+    },
+    {
+      "source_key": "mcatamney2024",
+      "game_id": "2024_09_WAS_NYG",
+      "team": "NYG",
+      "kind": "official_assignment",
+      "player_id": "00-0039934",
+      "name": "Jude McAtamney",
+      "required_phrases": [
+        "activated kicker Jude McAtamney",
+        "is set to make his NFL"
+      ],
+      "interpretation": "Confirmación gameday de debut del kicker elevado; Gano en IR y Joseph fuera."
+    },
+    {
+      "source_key": "mcatamney2024",
+      "game_id": "2024_09_WAS_NYG",
+      "team": "NYG",
+      "kind": "official_unavailable",
+      "player_id": "00-0026858",
+      "name": "Graham Gano",
+      "required_phrases": [
+        "remains on injured reserve"
+      ],
+      "interpretation": "Gano permanece en IR."
+    },
+    {
+      "source_key": "gonzalez_late2021",
+      "game_id": "2021_15_CAR_BUF",
+      "team": "CAR",
+      "kind": "official_unavailable",
+      "player_id": "00-0033862",
+      "name": "Zane Gonzalez",
+      "required_phrases": [
+        "He has been ruled out of the game"
+      ],
+      "interpretation": "Noticia de warmups publicada a 17:09Z, nueve minutos DESPUÉS del cutoff; rechazar."
+    },
+    {
+      "source_key": "gonzalez_inactives2021",
+      "game_id": "2021_15_CAR_BUF",
+      "team": "CAR",
+      "kind": "official_context",
+      "player_id": null,
+      "name": null,
+      "required_phrases": [],
+      "interpretation": "Sin evidencia positiva de roster/rol; además versión modificada en 2023. No asigna identidad."
+    },
+    {
+      "source_key": "gano2025w3",
+      "game_id": "2025_03_KC_NYG",
+      "team": "NYG",
+      "kind": "official_context",
+      "player_id": null,
+      "name": null,
+      "required_phrases": [],
+      "interpretation": "Inactivos no nombran Gano; la ausencia no prueba roster activo por sí sola. No aumenta categoría."
+    },
+    {
+      "source_key": "gano2025w8",
+      "game_id": "2025_08_NYG_PHI",
+      "team": "NYG",
+      "kind": "official_roster",
+      "player_id": "00-0026858",
+      "name": "Graham Gano",
+      "required_phrases": [
+        "was activated off injured reserve"
+      ],
+      "interpretation": "Retorno de IR, pero versión modificada después del partido: rechazar para selección."
+    }
+  ]
+}

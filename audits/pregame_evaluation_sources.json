@@ -1,0 +1,7 @@
+{
+  "purpose": "Evaluation only. Sources found after freezing the snapshot experiment; never passed to identity selection.",
+  "sources": [
+    {"key": "mcmanus_inactive2025w6", "url": "https://www.packers.com/news/packers-bengals-week-6-inactives-oct-12-2025"},
+    {"key": "mcmanus_inactive2025w7", "url": "https://www.packers.com/news/packers-cardinals-week-7-inactives-oct-19-2025"}
+  ]
+}

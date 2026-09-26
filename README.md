@@ -74,4 +74,51 @@ del `source_lock.json`, que contiene URL, archivo original, esquema y descarga U
 
 `target_season_eligible` marca solo 2016–2025 (2015 se reserva como historia inicial).
 `eligible_for_pregame_training` permanece **false para todas las filas**.
-Antes de features o ML falta definir y reconstruir una población prepartido as-of.
+Los archivos históricos conservan ese contrato. La investigación prepartido está
+separada en `kickedge/pregame/`, con las políticas comparadas que se describen abajo.
+
+## Reconstrucción prepartido y simulación secuencial
+
+La simulación congela expected kicker antes de revelar cada partido y utiliza sus
+resultados solamente como historia para juegos futuros. Compara confirmación
+oficial (A), continuidad corroborada (B) y continuidad experimental (C).
+La disponibilidad actual no se presenta como verificada cuando solo existe historia.
+
+```powershell
+.\.venv\Scripts\python.exe -m kickedge.pregame ingest
+.\.venv\Scripts\python.exe -m kickedge.pregame prepare-history
+.\.venv\Scripts\python.exe -m kickedge.pregame compare
+.\.venv\Scripts\python.exe -m kickedge.pregame audit
+.\.venv\Scripts\python.exe -m kickedge.pregame inspect --game 2024_09_WAS_NYG --team NYG --policy-name C
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+`ingest` cachea 33 activos adicionales de nflverse y las páginas oficiales registradas.
+`prepare-history` prepara el oracle por partido en un proceso separado.
+`compare` es offline, construye únicamente la evidencia e identidades iniciales y genera decisiones
+congeladas A/B/C, un log encadenado freeze/reveal, evaluación y reportes completos.
+No carga la evaluación del estudio inicial antes de simular. Para reproducir también
+los reportes independientes de aquel estudio, ejecute `python -m kickedge.pregame build`.
+`inspect` muestra la identidad, historia y aceptación/rechazo de evidencia **sin
+abrir los outcomes**. `audit` reproduce los 13 casos revisados.
+
+Salidas locales en `data/pregame/processed/` (estudio inicial) y
+`data/pregame/sequential/` (comparación). Cada carpeta tiene `latest.json`.
+La comparación incluye `identities_A/B/C.json`, `labels_A/B/C.json` y Parquet,
+`events.jsonl`, `freeze.json`, `metrics.json` y `build.json`.
+Los datos y caches continúan ignorados por Git.
+
+Para repetir con fuentes fijas, añada `--source-lock` con el `source_lock.json`
+del build pregame base, manteniendo código, política y dependencias congelados.
+El código del build base se copia a `pipeline_source/`; las fuentes oficiales pueden
+cambiar en origen, de modo que conservar los originales locales es necesario.
+
+Resultados y límites: [comparación A/B/C](reports/pregame_policy_comparison.md),
+[todas las discrepancias](reports/pregame_sequential_mismatches.md),
+[auditoría manual](reports/pregame_manual_audit.md),
+[metodología](docs/pregame_methodology.md),
+[diccionario](docs/pregame_dictionary.md) e
+[investigación de fuentes](docs/pregame_sources_research.md).
+La cobertura de C es amplia pero falla especialmente cuando cambia el kicker;
+no se ha aprobado una política de entrenamiento. Todas las filas de la comparación
+secuencial conservan `eligible_for_pregame_training=false`.

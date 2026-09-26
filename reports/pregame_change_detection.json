@@ -1,0 +1,332 @@
+{
+  "build_id": "e039ad65c95358716bc6",
+  "metrics": {
+    "baseline_build": "c721eeb55acb4eb9cb73",
+    "before": {
+      "team_games": 6056,
+      "identified": 4992,
+      "coverage_pct": 82.43064729194188,
+      "categories": {
+        "VERIFIED": 1,
+        "STRONG": 1,
+        "INFERRED": 4990,
+        "AMBIGUOUS": 37,
+        "UNKNOWN": 1027
+      },
+      "category_pct": {
+        "VERIFIED": 0.016512549537648614,
+        "STRONG": 0.016512549537648614,
+        "INFERRED": 82.39762219286658,
+        "AMBIGUOUS": 0.6109643328929987,
+        "UNKNOWN": 16.958388375165125
+      },
+      "sufficient_identity": 2,
+      "comparisons": {
+        "expected_unknown": 1064,
+        "exclusive_match": 4797,
+        "no_actual_placekick": 58,
+        "mismatch": 128,
+        "expected_among_multiple": 9
+      },
+      "comparable": 4934,
+      "membership_matches": 4806,
+      "membership_accuracy_pct": 97.40575597892176,
+      "exact_set_accuracy_pct": 97.2233481961897,
+      "multiple_actual": 10,
+      "known_without_kicking_evidence": 141,
+      "expected_xpm_zero": 543,
+      "expected_missing_label": 141,
+      "training_eligible": 0
+    },
+    "after": {
+      "team_games": 6056,
+      "identified": 5002,
+      "coverage_pct": 82.59577278731837,
+      "categories": {
+        "VERIFIED": 2,
+        "STRONG": 1,
+        "INFERRED": 4999,
+        "AMBIGUOUS": 28,
+        "UNKNOWN": 1026
+      },
+      "category_pct": {
+        "VERIFIED": 0.03302509907529723,
+        "STRONG": 0.016512549537648614,
+        "INFERRED": 82.54623513870541,
+        "AMBIGUOUS": 0.4623513870541612,
+        "UNKNOWN": 16.941875825627477
+      },
+      "sufficient_identity": 3,
+      "comparisons": {
+        "expected_unknown": 1054,
+        "exclusive_match": 4809,
+        "no_actual_placekick": 58,
+        "mismatch": 126,
+        "expected_among_multiple": 9
+      },
+      "comparable": 4944,
+      "membership_matches": 4818,
+      "membership_accuracy_pct": 97.45145631067962,
+      "exact_set_accuracy_pct": 97.26941747572816,
+      "multiple_actual": 10,
+      "known_without_kicking_evidence": 139,
+      "expected_xpm_zero": 544,
+      "expected_missing_label": 139,
+      "training_eligible": 0
+    },
+    "fixed_change_cohort": {
+      "total": 139,
+      "correct": 12,
+      "wrong": 124,
+      "abstained": 3,
+      "correct_pct_fixed_denominator": 8.633093525179856,
+      "accuracy_among_identified_pct": 8.823529411764707
+    },
+    "fixed_single_change_cohort": {
+      "total": 130,
+      "correct": 3,
+      "wrong": 124,
+      "abstained": 3,
+      "correct_pct_fixed_denominator": 2.3076923076923075,
+      "accuracy_among_identified_pct": 2.3622047244094486
+    },
+    "change_cases_flagged": 6,
+    "old_errors_corrected": 1,
+    "old_errors_abstained": 3,
+    "old_errors_remaining": 124,
+    "normal_correct_to_wrong": 0,
+    "normal_correct_to_abstention": 1,
+    "net_additional_correct_identities": 12,
+    "net_removed_errors": 2
+  },
+  "transitions": [
+    {
+      "game_id": "2025_02_SF_NO",
+      "team": "SF",
+      "before_id": null,
+      "after_id": "00-0034173",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0034173"
+      ]
+    },
+    {
+      "game_id": "2025_02_ATL_MIN",
+      "team": "ATL",
+      "before_id": null,
+      "after_id": "00-0037542",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0037542"
+      ]
+    },
+    {
+      "game_id": "2025_03_MIA_BUF",
+      "team": "MIA",
+      "before_id": null,
+      "after_id": "00-0034794",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "mismatch",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0036816"
+      ]
+    },
+    {
+      "game_id": "2025_06_PHI_NYG",
+      "team": "NYG",
+      "before_id": null,
+      "after_id": "00-0026858",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "mismatch",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0039934"
+      ]
+    },
+    {
+      "game_id": "2025_06_ARI_IND",
+      "team": "IND",
+      "before_id": null,
+      "after_id": "00-0034084",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0034084"
+      ]
+    },
+    {
+      "game_id": "2025_06_TEN_LV",
+      "team": "TEN",
+      "before_id": null,
+      "after_id": "00-0035189",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0035189"
+      ]
+    },
+    {
+      "game_id": "2025_06_CIN_GB",
+      "team": "GB",
+      "before_id": "00-0029822",
+      "after_id": "00-0038152",
+      "before_comparison": "mismatch",
+      "after_comparison": "exclusive_match",
+      "change_signal": "official_replacement",
+      "actual_ids": [
+        "00-0038152"
+      ]
+    },
+    {
+      "game_id": "2025_07_NE_TEN",
+      "team": "TEN",
+      "before_id": null,
+      "after_id": "00-0035192",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0035192"
+      ]
+    },
+    {
+      "game_id": "2025_08_NYG_PHI",
+      "team": "NYG",
+      "before_id": null,
+      "after_id": "00-0026858",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0026858"
+      ]
+    },
+    {
+      "game_id": "2025_10_ATL_IND",
+      "team": "ATL",
+      "before_id": null,
+      "after_id": "00-0033862",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0033862"
+      ]
+    },
+    {
+      "game_id": "2025_10_JAX_HOU",
+      "team": "HOU",
+      "before_id": "00-0032726",
+      "after_id": null,
+      "before_comparison": "mismatch",
+      "after_comparison": "expected_unknown",
+      "change_signal": "new_depth_candidate",
+      "actual_ids": [
+        "00-0035189"
+      ]
+    },
+    {
+      "game_id": "2025_10_NYG_CHI",
+      "team": "NYG",
+      "before_id": "00-0026858",
+      "after_id": null,
+      "before_comparison": "mismatch",
+      "after_comparison": "expected_unknown",
+      "change_signal": "new_depth_candidate",
+      "actual_ids": [
+        "00-0033702"
+      ]
+    },
+    {
+      "game_id": "2025_10_LA_SF",
+      "team": "LA",
+      "before_id": null,
+      "after_id": "00-0039498",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0039498"
+      ]
+    },
+    {
+      "game_id": "2025_13_NO_MIA",
+      "team": "NO",
+      "before_id": null,
+      "after_id": "00-0039229",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0039229"
+      ]
+    },
+    {
+      "game_id": "2025_13_DEN_WAS",
+      "team": "WAS",
+      "before_id": null,
+      "after_id": "00-0038562",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0038562"
+      ]
+    },
+    {
+      "game_id": "2025_14_IND_JAX",
+      "team": "IND",
+      "before_id": null,
+      "after_id": "00-0038905",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0038905"
+      ]
+    },
+    {
+      "game_id": "2025_16_BUF_CLE",
+      "team": "BUF",
+      "before_id": "00-0023853",
+      "after_id": null,
+      "before_comparison": "mismatch",
+      "after_comparison": "expected_unknown",
+      "change_signal": "new_depth_candidate",
+      "actual_ids": [
+        "00-0034084"
+      ]
+    },
+    {
+      "game_id": "2025_16_MIN_NYG",
+      "team": "NYG",
+      "before_id": null,
+      "after_id": "00-0040530",
+      "before_comparison": "expected_unknown",
+      "after_comparison": "exclusive_match",
+      "change_signal": "depth_starter_transition",
+      "actual_ids": [
+        "00-0040530"
+      ]
+    },
+    {
+      "game_id": "2025_17_ARI_CIN",
+      "team": "ARI",
+      "before_id": "00-0038567",
+      "after_id": null,
+      "before_comparison": "exclusive_match",
+      "after_comparison": "expected_unknown",
+      "change_signal": "new_depth_candidate",
+      "actual_ids": [
+        "00-0038567"
+      ]
+    }
+  ]
+}

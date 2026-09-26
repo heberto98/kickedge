@@ -1,0 +1,11 @@
+[policy]
+cutoff_minutes = 60
+depth_max_age_hours = 48
+official_max_age_hours = 168
+# Conservative recommendation for review, not a training run.
+eligible_categories = ["VERIFIED"]
+
+[sources]
+manifest = "data/pregame/manifests/sources.json"
+official_manifest = "data/pregame/manifests/official.json"
+claims = "audits/pregame_claims.json"

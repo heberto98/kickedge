@@ -1,0 +1,8 @@
+{
+  "purpose": "Development evidence reused from previously downloaded audit pages. Selected after prior errors were inspected; not independent validation.",
+  "claims": [
+    {"source_key": "mcmanus_inactive2025w6", "game_id": "2025_06_CIN_GB", "team": "GB", "kind": "official_unavailable", "player_id": "00-0029822", "name": "Brandon McManus", "required_phrases": ["Packers K Brandon McManus", "has been declared inactive and will not play"]},
+    {"source_key": "mcmanus_inactive2025w6", "game_id": "2025_06_CIN_GB", "team": "GB", "kind": "official_assignment", "player_id": "00-0038152", "name": "Lucas Havrisik", "required_phrases": ["K Lucas Havrisik, who was signed by Green Bay on Saturday, is the active kicker for the game."]},
+    {"source_key": "mcmanus_inactive2025w7", "game_id": "2025_07_GB_ARI", "team": "GB", "kind": "official_unavailable", "player_id": "00-0029822", "name": "Brandon McManus", "required_phrases": ["K Brandon McManus will miss his second straight game due to a quad injury.", "17 K Brandon McManus"]}
+  ]
+}

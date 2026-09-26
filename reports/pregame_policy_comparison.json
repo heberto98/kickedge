@@ -1,0 +1,2304 @@
+{
+  "A": {
+    "total": {
+      "team_games": 6056,
+      "identified": 2,
+      "coverage_pct": 0.03302509907529723,
+      "categories": {
+        "VERIFIED": 1,
+        "STRONG": 1,
+        "INFERRED": 0,
+        "AMBIGUOUS": 0,
+        "UNKNOWN": 6054
+      },
+      "category_pct": {
+        "VERIFIED": 0.016512549537648614,
+        "STRONG": 0.016512549537648614,
+        "INFERRED": 0.0,
+        "AMBIGUOUS": 0.0,
+        "UNKNOWN": 99.9669749009247
+      },
+      "sufficient_identity": 2,
+      "comparisons": {
+        "expected_unknown": 6054,
+        "exclusive_match": 2
+      },
+      "comparable": 2,
+      "membership_matches": 2,
+      "membership_accuracy_pct": 100.0,
+      "exact_set_accuracy_pct": 100.0,
+      "multiple_actual": 10,
+      "known_without_kicking_evidence": 0,
+      "expected_xpm_zero": 1,
+      "expected_missing_label": 0,
+      "training_eligible": 0,
+      "expected_xpa_zero": 1,
+      "multiple_pregame_candidates": 2
+    },
+    "seasons": {
+      "2015": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2016": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2017": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2018": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2019": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2020": {
+        "team_games": 538,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 538
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 538
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2021": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 570
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2022": {
+        "team_games": 568,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 568
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 568
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2023": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 570
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2024": {
+        "team_games": 570,
+        "identified": 2,
+        "coverage_pct": 0.3508771929824561,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 568
+        },
+        "category_pct": {
+          "VERIFIED": 0.17543859649122806,
+          "STRONG": 0.17543859649122806,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.64912280701755
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 568,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2025": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 570
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      }
+    },
+    "cohorts": {
+      "Week 1": {
+        "team_games": 350,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 350
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 350
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Resto": {
+        "team_games": 5706,
+        "identified": 2,
+        "coverage_pct": 0.03505082369435682,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 5704
+        },
+        "category_pct": {
+          "VERIFIED": 0.01752541184717841,
+          "STRONG": 0.01752541184717841,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.96494917630564
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 5704,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 2
+      },
+      "Cambio de ejecutor real": {
+        "team_games": 229,
+        "identified": 2,
+        "coverage_pct": 0.8733624454148472,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 227
+        },
+        "category_pct": {
+          "VERIFIED": 0.4366812227074236,
+          "STRONG": 0.4366812227074236,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.12663755458516
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 227,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 2
+      },
+      "Cambio real con único ejecutor actual": {
+        "team_games": 220,
+        "identified": 2,
+        "coverage_pct": 0.9090909090909091,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 218
+        },
+        "category_pct": {
+          "VERIFIED": 0.45454545454545453,
+          "STRONG": 0.45454545454545453,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.0909090909091
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 218,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 2
+      },
+      "Sin cambio de ejecutor real": {
+        "team_games": 5342,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 5342
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 5342
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Múltiples ejecutores reales": {
+        "team_games": 10,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 10
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 10
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Desarrollo 2015-2020": {
+        "team_games": 3208,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 3208
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 3208
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 3,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Evaluación temporal 2021-2024": {
+        "team_games": 2278,
+        "identified": 2,
+        "coverage_pct": 0.08779631255487269,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 2276
+        },
+        "category_pct": {
+          "VERIFIED": 0.043898156277436345,
+          "STRONG": 0.043898156277436345,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.91220368744513
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 2276,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 6,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 2
+      },
+      "2025 previamente inspeccionado": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 570
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Temporadas objetivo 2016-2025": {
+        "team_games": 5522,
+        "identified": 2,
+        "coverage_pct": 0.036218761318362915,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 5520
+        },
+        "category_pct": {
+          "VERIFIED": 0.018109380659181457,
+          "STRONG": 0.018109380659181457,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 99.96378123868163
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 5520,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 2
+      }
+    }
+  },
+  "B": {
+    "total": {
+      "team_games": 6056,
+      "identified": 447,
+      "coverage_pct": 7.38110964332893,
+      "categories": {
+        "VERIFIED": 1,
+        "STRONG": 1,
+        "INFERRED": 445,
+        "AMBIGUOUS": 37,
+        "UNKNOWN": 5572
+      },
+      "category_pct": {
+        "VERIFIED": 0.016512549537648614,
+        "STRONG": 0.016512549537648614,
+        "INFERRED": 7.3480845442536324,
+        "AMBIGUOUS": 0.6109643328929987,
+        "UNKNOWN": 92.00792602377807
+      },
+      "sufficient_identity": 2,
+      "comparisons": {
+        "expected_unknown": 5609,
+        "exclusive_match": 431,
+        "expected_among_multiple": 1,
+        "mismatch": 8,
+        "no_actual_placekick": 7
+      },
+      "comparable": 440,
+      "membership_matches": 432,
+      "membership_accuracy_pct": 98.18181818181819,
+      "exact_set_accuracy_pct": 97.95454545454545,
+      "multiple_actual": 10,
+      "known_without_kicking_evidence": 9,
+      "expected_xpm_zero": 47,
+      "expected_missing_label": 9,
+      "training_eligible": 0,
+      "expected_xpa_zero": 42,
+      "multiple_pregame_candidates": 87
+    },
+    "seasons": {
+      "2015": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2016": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2017": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 532
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.37453183520599254,
+          "UNKNOWN": 99.62546816479401
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2018": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2019": {
+        "team_games": 534,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 534
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 534
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2020": {
+        "team_games": 538,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 537
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.18587360594795538,
+          "UNKNOWN": 99.81412639405204
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 538
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2021": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 569
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.17543859649122806,
+          "UNKNOWN": 99.82456140350877
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2022": {
+        "team_games": 568,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 566
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.352112676056338,
+          "UNKNOWN": 99.64788732394366
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 568
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2023": {
+        "team_games": 570,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 568
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.3508771929824561,
+          "UNKNOWN": 99.64912280701755
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 570
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2024": {
+        "team_games": 570,
+        "identified": 2,
+        "coverage_pct": 0.3508771929824561,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 567
+        },
+        "category_pct": {
+          "VERIFIED": 0.17543859649122806,
+          "STRONG": 0.17543859649122806,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.17543859649122806,
+          "UNKNOWN": 99.47368421052632
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 568,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0
+      },
+      "2025": {
+        "team_games": 570,
+        "identified": 445,
+        "coverage_pct": 78.0701754385965,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 445,
+          "AMBIGUOUS": 28,
+          "UNKNOWN": 97
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 78.0701754385965,
+          "AMBIGUOUS": 4.912280701754386,
+          "UNKNOWN": 17.017543859649123
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 125,
+          "exclusive_match": 429,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 438,
+        "membership_matches": 430,
+        "membership_accuracy_pct": 98.17351598173516,
+        "exact_set_accuracy_pct": 97.94520547945206,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 46,
+        "expected_missing_label": 9,
+        "training_eligible": 0
+      }
+    },
+    "cohorts": {
+      "Week 1": {
+        "team_games": 350,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 350
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 350
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Resto": {
+        "team_games": 5706,
+        "identified": 447,
+        "coverage_pct": 7.833859095688749,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 445,
+          "AMBIGUOUS": 37,
+          "UNKNOWN": 5222
+        },
+        "category_pct": {
+          "VERIFIED": 0.01752541184717841,
+          "STRONG": 0.01752541184717841,
+          "INFERRED": 7.798808271994392,
+          "AMBIGUOUS": 0.6484402383456012,
+          "UNKNOWN": 91.51770066596565
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 5259,
+          "exclusive_match": 431,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 440,
+        "membership_matches": 432,
+        "membership_accuracy_pct": 98.18181818181819,
+        "exact_set_accuracy_pct": 97.95454545454545,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 47,
+        "expected_missing_label": 9,
+        "training_eligible": 0,
+        "expected_xpa_zero": 42,
+        "multiple_pregame_candidates": 87
+      },
+      "Cambio de ejecutor real": {
+        "team_games": 229,
+        "identified": 11,
+        "coverage_pct": 4.8034934497816595,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 9,
+          "AMBIGUOUS": 29,
+          "UNKNOWN": 189
+        },
+        "category_pct": {
+          "VERIFIED": 0.4366812227074236,
+          "STRONG": 0.4366812227074236,
+          "INFERRED": 3.930131004366812,
+          "AMBIGUOUS": 12.663755458515285,
+          "UNKNOWN": 82.53275109170306
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 218,
+          "exclusive_match": 2,
+          "expected_among_multiple": 1,
+          "mismatch": 8
+        },
+        "comparable": 11,
+        "membership_matches": 3,
+        "membership_accuracy_pct": 27.272727272727273,
+        "exact_set_accuracy_pct": 18.181818181818183,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 8,
+        "expected_xpm_zero": 2,
+        "expected_missing_label": 8,
+        "training_eligible": 0,
+        "expected_xpa_zero": 2,
+        "multiple_pregame_candidates": 36
+      },
+      "Cambio real con único ejecutor actual": {
+        "team_games": 220,
+        "identified": 10,
+        "coverage_pct": 4.545454545454546,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 8,
+          "AMBIGUOUS": 29,
+          "UNKNOWN": 181
+        },
+        "category_pct": {
+          "VERIFIED": 0.45454545454545453,
+          "STRONG": 0.45454545454545453,
+          "INFERRED": 3.6363636363636362,
+          "AMBIGUOUS": 13.181818181818182,
+          "UNKNOWN": 82.27272727272727
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 210,
+          "exclusive_match": 2,
+          "mismatch": 8
+        },
+        "comparable": 10,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 20.0,
+        "exact_set_accuracy_pct": 20.0,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 8,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 8,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 36
+      },
+      "Sin cambio de ejecutor real": {
+        "team_games": 5342,
+        "identified": 429,
+        "coverage_pct": 8.030700112317485,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 429,
+          "AMBIGUOUS": 8,
+          "UNKNOWN": 4905
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 8.030700112317485,
+          "AMBIGUOUS": 0.1497566454511419,
+          "UNKNOWN": 91.81954324223138
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 4913,
+          "exclusive_match": 429
+        },
+        "comparable": 429,
+        "membership_matches": 429,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 39,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 34,
+        "multiple_pregame_candidates": 51
+      },
+      "Múltiples ejecutores reales": {
+        "team_games": 10,
+        "identified": 1,
+        "coverage_pct": 10.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 1,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 9
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 10.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 90.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 9,
+          "expected_among_multiple": 1
+        },
+        "comparable": 1,
+        "membership_matches": 1,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 0.0,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 0
+      },
+      "Desarrollo 2015-2020": {
+        "team_games": 3208,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 3,
+          "UNKNOWN": 3205
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.09351620947630923,
+          "UNKNOWN": 99.9064837905237
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 3208
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 3,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 3
+      },
+      "Evaluación temporal 2021-2024": {
+        "team_games": 2278,
+        "identified": 2,
+        "coverage_pct": 0.08779631255487269,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 0,
+          "AMBIGUOUS": 6,
+          "UNKNOWN": 2270
+        },
+        "category_pct": {
+          "VERIFIED": 0.043898156277436345,
+          "STRONG": 0.043898156277436345,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.2633889376646181,
+          "UNKNOWN": 99.64881474978051
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 2276,
+          "exclusive_match": 2
+        },
+        "comparable": 2,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 6,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 8
+      },
+      "2025 previamente inspeccionado": {
+        "team_games": 570,
+        "identified": 445,
+        "coverage_pct": 78.0701754385965,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 445,
+          "AMBIGUOUS": 28,
+          "UNKNOWN": 97
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 78.0701754385965,
+          "AMBIGUOUS": 4.912280701754386,
+          "UNKNOWN": 17.017543859649123
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 125,
+          "exclusive_match": 429,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 438,
+        "membership_matches": 430,
+        "membership_accuracy_pct": 98.17351598173516,
+        "exact_set_accuracy_pct": 97.94520547945206,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 46,
+        "expected_missing_label": 9,
+        "training_eligible": 0,
+        "expected_xpa_zero": 41,
+        "multiple_pregame_candidates": 76
+      },
+      "Temporadas objetivo 2016-2025": {
+        "team_games": 5522,
+        "identified": 447,
+        "coverage_pct": 8.09489315465411,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 445,
+          "AMBIGUOUS": 37,
+          "UNKNOWN": 5038
+        },
+        "category_pct": {
+          "VERIFIED": 0.018109380659181457,
+          "STRONG": 0.018109380659181457,
+          "INFERRED": 8.058674393335748,
+          "AMBIGUOUS": 0.6700470843897138,
+          "UNKNOWN": 91.23505976095618
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 5075,
+          "exclusive_match": 431,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 440,
+        "membership_matches": 432,
+        "membership_accuracy_pct": 98.18181818181819,
+        "exact_set_accuracy_pct": 97.95454545454545,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 47,
+        "expected_missing_label": 9,
+        "training_eligible": 0,
+        "expected_xpa_zero": 42,
+        "multiple_pregame_candidates": 87
+      }
+    }
+  },
+  "C": {
+    "total": {
+      "team_games": 6056,
+      "identified": 4992,
+      "coverage_pct": 82.43064729194188,
+      "categories": {
+        "VERIFIED": 1,
+        "STRONG": 1,
+        "INFERRED": 4990,
+        "AMBIGUOUS": 37,
+        "UNKNOWN": 1027
+      },
+      "category_pct": {
+        "VERIFIED": 0.016512549537648614,
+        "STRONG": 0.016512549537648614,
+        "INFERRED": 82.39762219286658,
+        "AMBIGUOUS": 0.6109643328929987,
+        "UNKNOWN": 16.958388375165125
+      },
+      "sufficient_identity": 2,
+      "comparisons": {
+        "expected_unknown": 1064,
+        "exclusive_match": 4797,
+        "no_actual_placekick": 58,
+        "mismatch": 128,
+        "expected_among_multiple": 9
+      },
+      "comparable": 4934,
+      "membership_matches": 4806,
+      "membership_accuracy_pct": 97.40575597892176,
+      "exact_set_accuracy_pct": 97.2233481961897,
+      "multiple_actual": 10,
+      "known_without_kicking_evidence": 141,
+      "expected_xpm_zero": 543,
+      "expected_missing_label": 141,
+      "training_eligible": 0,
+      "expected_xpa_zero": 447,
+      "multiple_pregame_candidates": 87
+    },
+    "seasons": {
+      "2015": {
+        "team_games": 534,
+        "identified": 450,
+        "coverage_pct": 84.26966292134831,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 450,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 84
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 84.26966292134831,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 15.730337078651685
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 84,
+          "exclusive_match": 436,
+          "no_actual_placekick": 5,
+          "mismatch": 9
+        },
+        "comparable": 445,
+        "membership_matches": 436,
+        "membership_accuracy_pct": 97.97752808988764,
+        "exact_set_accuracy_pct": 97.97752808988764,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 10,
+        "expected_xpm_zero": 43,
+        "expected_missing_label": 10,
+        "training_eligible": 0
+      },
+      "2016": {
+        "team_games": 534,
+        "identified": 459,
+        "coverage_pct": 85.95505617977528,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 459,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 75
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 85.95505617977528,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 14.044943820224718
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 75,
+          "no_actual_placekick": 2,
+          "exclusive_match": 452,
+          "mismatch": 5
+        },
+        "comparable": 457,
+        "membership_matches": 452,
+        "membership_accuracy_pct": 98.90590809628009,
+        "exact_set_accuracy_pct": 98.90590809628009,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 5,
+        "expected_xpm_zero": 41,
+        "expected_missing_label": 5,
+        "training_eligible": 0
+      },
+      "2017": {
+        "team_games": 534,
+        "identified": 434,
+        "coverage_pct": 81.27340823970037,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 434,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 98
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 81.27340823970037,
+          "AMBIGUOUS": 0.37453183520599254,
+          "UNKNOWN": 18.352059925093634
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 100,
+          "exclusive_match": 411,
+          "no_actual_placekick": 10,
+          "mismatch": 11,
+          "expected_among_multiple": 2
+        },
+        "comparable": 424,
+        "membership_matches": 413,
+        "membership_accuracy_pct": 97.40566037735849,
+        "exact_set_accuracy_pct": 96.93396226415095,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 13,
+        "expected_xpm_zero": 46,
+        "expected_missing_label": 13,
+        "training_eligible": 0
+      },
+      "2018": {
+        "team_games": 534,
+        "identified": 438,
+        "coverage_pct": 82.02247191011236,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 438,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 96
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 82.02247191011236,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 17.97752808988764
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 96,
+          "mismatch": 14,
+          "exclusive_match": 416,
+          "no_actual_placekick": 8
+        },
+        "comparable": 430,
+        "membership_matches": 416,
+        "membership_accuracy_pct": 96.74418604651163,
+        "exact_set_accuracy_pct": 96.74418604651163,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 16,
+        "expected_xpm_zero": 55,
+        "expected_missing_label": 16,
+        "training_eligible": 0
+      },
+      "2019": {
+        "team_games": 534,
+        "identified": 445,
+        "coverage_pct": 83.33333333333333,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 445,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 89
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 83.33333333333333,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 16.666666666666668
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 89,
+          "exclusive_match": 429,
+          "no_actual_placekick": 4,
+          "mismatch": 12
+        },
+        "comparable": 441,
+        "membership_matches": 429,
+        "membership_accuracy_pct": 97.27891156462584,
+        "exact_set_accuracy_pct": 97.27891156462584,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 13,
+        "expected_xpm_zero": 54,
+        "expected_missing_label": 13,
+        "training_eligible": 0
+      },
+      "2020": {
+        "team_games": 538,
+        "identified": 446,
+        "coverage_pct": 82.8996282527881,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 446,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 91
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 82.8996282527881,
+          "AMBIGUOUS": 0.18587360594795538,
+          "UNKNOWN": 16.91449814126394
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 92,
+          "mismatch": 18,
+          "exclusive_match": 427,
+          "expected_among_multiple": 1
+        },
+        "comparable": 446,
+        "membership_matches": 428,
+        "membership_accuracy_pct": 95.96412556053812,
+        "exact_set_accuracy_pct": 95.73991031390135,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 18,
+        "expected_xpm_zero": 42,
+        "expected_missing_label": 18,
+        "training_eligible": 0
+      },
+      "2021": {
+        "team_games": 570,
+        "identified": 454,
+        "coverage_pct": 79.64912280701755,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 454,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 115
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 79.64912280701755,
+          "AMBIGUOUS": 0.17543859649122806,
+          "UNKNOWN": 20.17543859649123
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 116,
+          "exclusive_match": 428,
+          "mismatch": 19,
+          "no_actual_placekick": 6,
+          "expected_among_multiple": 1
+        },
+        "comparable": 448,
+        "membership_matches": 429,
+        "membership_accuracy_pct": 95.75892857142857,
+        "exact_set_accuracy_pct": 95.53571428571429,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 21,
+        "expected_xpm_zero": 51,
+        "expected_missing_label": 21,
+        "training_eligible": 0
+      },
+      "2022": {
+        "team_games": 568,
+        "identified": 471,
+        "coverage_pct": 82.9225352112676,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 471,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 95
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 82.9225352112676,
+          "AMBIGUOUS": 0.352112676056338,
+          "UNKNOWN": 16.725352112676056
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 97,
+          "exclusive_match": 455,
+          "no_actual_placekick": 3,
+          "mismatch": 12,
+          "expected_among_multiple": 1
+        },
+        "comparable": 468,
+        "membership_matches": 456,
+        "membership_accuracy_pct": 97.43589743589743,
+        "exact_set_accuracy_pct": 97.22222222222223,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 13,
+        "expected_xpm_zero": 49,
+        "expected_missing_label": 13,
+        "training_eligible": 0
+      },
+      "2023": {
+        "team_games": 570,
+        "identified": 478,
+        "coverage_pct": 83.85964912280701,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 478,
+          "AMBIGUOUS": 2,
+          "UNKNOWN": 90
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 83.85964912280701,
+          "AMBIGUOUS": 0.3508771929824561,
+          "UNKNOWN": 15.789473684210526
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 92,
+          "exclusive_match": 462,
+          "no_actual_placekick": 9,
+          "mismatch": 5,
+          "expected_among_multiple": 2
+        },
+        "comparable": 469,
+        "membership_matches": 464,
+        "membership_accuracy_pct": 98.93390191897655,
+        "exact_set_accuracy_pct": 98.50746268656717,
+        "multiple_actual": 2,
+        "known_without_kicking_evidence": 7,
+        "expected_xpm_zero": 64,
+        "expected_missing_label": 7,
+        "training_eligible": 0
+      },
+      "2024": {
+        "team_games": 570,
+        "identified": 471,
+        "coverage_pct": 82.63157894736842,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 469,
+          "AMBIGUOUS": 1,
+          "UNKNOWN": 98
+        },
+        "category_pct": {
+          "VERIFIED": 0.17543859649122806,
+          "STRONG": 0.17543859649122806,
+          "INFERRED": 82.28070175438596,
+          "AMBIGUOUS": 0.17543859649122806,
+          "UNKNOWN": 17.19298245614035
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 99,
+          "exclusive_match": 451,
+          "mismatch": 15,
+          "expected_among_multiple": 1,
+          "no_actual_placekick": 4
+        },
+        "comparable": 467,
+        "membership_matches": 452,
+        "membership_accuracy_pct": 96.78800856531049,
+        "exact_set_accuracy_pct": 96.57387580299786,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 16,
+        "expected_xpm_zero": 52,
+        "expected_missing_label": 16,
+        "training_eligible": 0
+      },
+      "2025": {
+        "team_games": 570,
+        "identified": 446,
+        "coverage_pct": 78.24561403508773,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 446,
+          "AMBIGUOUS": 28,
+          "UNKNOWN": 96
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 78.24561403508773,
+          "AMBIGUOUS": 4.912280701754386,
+          "UNKNOWN": 16.842105263157894
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 124,
+          "exclusive_match": 430,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 439,
+        "membership_matches": 431,
+        "membership_accuracy_pct": 98.17767653758543,
+        "exact_set_accuracy_pct": 97.9498861047836,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 46,
+        "expected_missing_label": 9,
+        "training_eligible": 0
+      }
+    },
+    "cohorts": {
+      "Week 1": {
+        "team_games": 350,
+        "identified": 0,
+        "coverage_pct": 0.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 0,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 350
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 0.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 100.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 350
+        },
+        "comparable": 0,
+        "membership_matches": 0,
+        "membership_accuracy_pct": null,
+        "exact_set_accuracy_pct": null,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 0,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 0,
+        "multiple_pregame_candidates": 0
+      },
+      "Resto": {
+        "team_games": 5706,
+        "identified": 4992,
+        "coverage_pct": 87.48685594111461,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 4990,
+          "AMBIGUOUS": 37,
+          "UNKNOWN": 677
+        },
+        "category_pct": {
+          "VERIFIED": 0.01752541184717841,
+          "STRONG": 0.01752541184717841,
+          "INFERRED": 87.45180511742026,
+          "AMBIGUOUS": 0.6484402383456012,
+          "UNKNOWN": 11.864703820539782
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 714,
+          "exclusive_match": 4797,
+          "no_actual_placekick": 58,
+          "mismatch": 128,
+          "expected_among_multiple": 9
+        },
+        "comparable": 4934,
+        "membership_matches": 4806,
+        "membership_accuracy_pct": 97.40575597892176,
+        "exact_set_accuracy_pct": 97.2233481961897,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 141,
+        "expected_xpm_zero": 543,
+        "expected_missing_label": 141,
+        "training_eligible": 0,
+        "expected_xpa_zero": 447,
+        "multiple_pregame_candidates": 87
+      },
+      "Cambio de ejecutor real": {
+        "team_games": 229,
+        "identified": 139,
+        "coverage_pct": 60.698689956331876,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 137,
+          "AMBIGUOUS": 29,
+          "UNKNOWN": 61
+        },
+        "category_pct": {
+          "VERIFIED": 0.4366812227074236,
+          "STRONG": 0.4366812227074236,
+          "INFERRED": 59.82532751091703,
+          "AMBIGUOUS": 12.663755458515285,
+          "UNKNOWN": 26.637554585152838
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 90,
+          "mismatch": 128,
+          "expected_among_multiple": 9,
+          "exclusive_match": 2
+        },
+        "comparable": 139,
+        "membership_matches": 11,
+        "membership_accuracy_pct": 7.913669064748201,
+        "exact_set_accuracy_pct": 1.4388489208633093,
+        "multiple_actual": 9,
+        "known_without_kicking_evidence": 128,
+        "expected_xpm_zero": 4,
+        "expected_missing_label": 128,
+        "training_eligible": 0,
+        "expected_xpa_zero": 3,
+        "multiple_pregame_candidates": 36
+      },
+      "Cambio real con único ejecutor actual": {
+        "team_games": 220,
+        "identified": 130,
+        "coverage_pct": 59.09090909090909,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 128,
+          "AMBIGUOUS": 29,
+          "UNKNOWN": 61
+        },
+        "category_pct": {
+          "VERIFIED": 0.45454545454545453,
+          "STRONG": 0.45454545454545453,
+          "INFERRED": 58.18181818181818,
+          "AMBIGUOUS": 13.181818181818182,
+          "UNKNOWN": 27.727272727272727
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 90,
+          "mismatch": 128,
+          "exclusive_match": 2
+        },
+        "comparable": 130,
+        "membership_matches": 2,
+        "membership_accuracy_pct": 1.5384615384615385,
+        "exact_set_accuracy_pct": 1.5384615384615385,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 128,
+        "expected_xpm_zero": 1,
+        "expected_missing_label": 128,
+        "training_eligible": 0,
+        "expected_xpa_zero": 1,
+        "multiple_pregame_candidates": 36
+      },
+      "Sin cambio de ejecutor real": {
+        "team_games": 5342,
+        "identified": 4795,
+        "coverage_pct": 89.76038936727818,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 4795,
+          "AMBIGUOUS": 8,
+          "UNKNOWN": 539
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 89.76038936727818,
+          "AMBIGUOUS": 0.1497566454511419,
+          "UNKNOWN": 10.089853987270684
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 547,
+          "exclusive_match": 4795
+        },
+        "comparable": 4795,
+        "membership_matches": 4795,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 100.0,
+        "multiple_actual": 0,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 494,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 399,
+        "multiple_pregame_candidates": 51
+      },
+      "Múltiples ejecutores reales": {
+        "team_games": 10,
+        "identified": 9,
+        "coverage_pct": 90.0,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 9,
+          "AMBIGUOUS": 0,
+          "UNKNOWN": 1
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 90.0,
+          "AMBIGUOUS": 0.0,
+          "UNKNOWN": 10.0
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_among_multiple": 9,
+          "expected_unknown": 1
+        },
+        "comparable": 9,
+        "membership_matches": 9,
+        "membership_accuracy_pct": 100.0,
+        "exact_set_accuracy_pct": 0.0,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 0,
+        "expected_xpm_zero": 3,
+        "expected_missing_label": 0,
+        "training_eligible": 0,
+        "expected_xpa_zero": 2,
+        "multiple_pregame_candidates": 0
+      },
+      "Desarrollo 2015-2020": {
+        "team_games": 3208,
+        "identified": 2672,
+        "coverage_pct": 83.29177057356608,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 2672,
+          "AMBIGUOUS": 3,
+          "UNKNOWN": 533
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 83.29177057356608,
+          "AMBIGUOUS": 0.09351620947630923,
+          "UNKNOWN": 16.614713216957608
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 536,
+          "exclusive_match": 2571,
+          "no_actual_placekick": 29,
+          "mismatch": 69,
+          "expected_among_multiple": 3
+        },
+        "comparable": 2643,
+        "membership_matches": 2574,
+        "membership_accuracy_pct": 97.38933030646992,
+        "exact_set_accuracy_pct": 97.27582292849036,
+        "multiple_actual": 3,
+        "known_without_kicking_evidence": 75,
+        "expected_xpm_zero": 281,
+        "expected_missing_label": 75,
+        "training_eligible": 0,
+        "expected_xpa_zero": 226,
+        "multiple_pregame_candidates": 3
+      },
+      "Evaluación temporal 2021-2024": {
+        "team_games": 2278,
+        "identified": 1874,
+        "coverage_pct": 82.26514486391572,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 1872,
+          "AMBIGUOUS": 6,
+          "UNKNOWN": 398
+        },
+        "category_pct": {
+          "VERIFIED": 0.043898156277436345,
+          "STRONG": 0.043898156277436345,
+          "INFERRED": 82.17734855136084,
+          "AMBIGUOUS": 0.2633889376646181,
+          "UNKNOWN": 17.471466198419666
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 404,
+          "exclusive_match": 1796,
+          "mismatch": 51,
+          "no_actual_placekick": 22,
+          "expected_among_multiple": 5
+        },
+        "comparable": 1852,
+        "membership_matches": 1801,
+        "membership_accuracy_pct": 97.2462203023758,
+        "exact_set_accuracy_pct": 96.97624190064795,
+        "multiple_actual": 6,
+        "known_without_kicking_evidence": 57,
+        "expected_xpm_zero": 216,
+        "expected_missing_label": 57,
+        "training_eligible": 0,
+        "expected_xpa_zero": 180,
+        "multiple_pregame_candidates": 8
+      },
+      "2025 previamente inspeccionado": {
+        "team_games": 570,
+        "identified": 446,
+        "coverage_pct": 78.24561403508773,
+        "categories": {
+          "VERIFIED": 0,
+          "STRONG": 0,
+          "INFERRED": 446,
+          "AMBIGUOUS": 28,
+          "UNKNOWN": 96
+        },
+        "category_pct": {
+          "VERIFIED": 0.0,
+          "STRONG": 0.0,
+          "INFERRED": 78.24561403508773,
+          "AMBIGUOUS": 4.912280701754386,
+          "UNKNOWN": 16.842105263157894
+        },
+        "sufficient_identity": 0,
+        "comparisons": {
+          "expected_unknown": 124,
+          "exclusive_match": 430,
+          "expected_among_multiple": 1,
+          "mismatch": 8,
+          "no_actual_placekick": 7
+        },
+        "comparable": 439,
+        "membership_matches": 431,
+        "membership_accuracy_pct": 98.17767653758543,
+        "exact_set_accuracy_pct": 97.9498861047836,
+        "multiple_actual": 1,
+        "known_without_kicking_evidence": 9,
+        "expected_xpm_zero": 46,
+        "expected_missing_label": 9,
+        "training_eligible": 0,
+        "expected_xpa_zero": 41,
+        "multiple_pregame_candidates": 76
+      },
+      "Temporadas objetivo 2016-2025": {
+        "team_games": 5522,
+        "identified": 4542,
+        "coverage_pct": 82.25280695400217,
+        "categories": {
+          "VERIFIED": 1,
+          "STRONG": 1,
+          "INFERRED": 4540,
+          "AMBIGUOUS": 37,
+          "UNKNOWN": 943
+        },
+        "category_pct": {
+          "VERIFIED": 0.018109380659181457,
+          "STRONG": 0.018109380659181457,
+          "INFERRED": 82.21658819268382,
+          "AMBIGUOUS": 0.6700470843897138,
+          "UNKNOWN": 17.077145961608114
+        },
+        "sufficient_identity": 2,
+        "comparisons": {
+          "expected_unknown": 980,
+          "no_actual_placekick": 53,
+          "exclusive_match": 4361,
+          "mismatch": 119,
+          "expected_among_multiple": 9
+        },
+        "comparable": 4489,
+        "membership_matches": 4370,
+        "membership_accuracy_pct": 97.34907551793272,
+        "exact_set_accuracy_pct": 97.14858543105369,
+        "multiple_actual": 10,
+        "known_without_kicking_evidence": 131,
+        "expected_xpm_zero": 500,
+        "expected_missing_label": 131,
+        "training_eligible": 0,
+        "expected_xpa_zero": 412,
+        "multiple_pregame_candidates": 87
+      }
+    }
+  }
+}
