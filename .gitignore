@@ -1,0 +1,55 @@
+# Historical downloads, derived datasets and local provenance snapshots
+/data/
+*.parquet
+*.arrow
+*.feather
+*.duckdb
+*.duckdb.wal
+*.sqlite
+*.sqlite3
+
+# Python environments, packaging and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+*.egg-info/
+/build/
+/dist/
+.coverage
+.coverage.*
+htmlcov/
+
+# Credentials and local environment configuration
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+secrets*.json
+credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local editor/agent state, temporary files and operating-system metadata
+.vscode/
+.idea/
+/.codex/
+/.agents/
+/tmp/
+/temp/
+*.log
+*.tmp
+*.part
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,14 @@
+[dataset]
+start_season = 2015
+end_season = 2025
+target_start_season = 2016
+game_types = ["REG", "WC", "DIV", "CON", "SB"]
+population = "postgame_observed_kicking_participants_v1"
+
+[paths]
+data_dir = "data"
+reports_dir = "reports"
+
+[download]
+timeout_seconds = 180
+retries = 3
