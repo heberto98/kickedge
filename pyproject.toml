@@ -18,6 +18,9 @@ kickedge = "kickedge.cli:main"
 [tool.setuptools.packages.find]
 include = ["kickedge*"]
 
+[tool.setuptools.package-data]
+"kickedge.features" = ["contract.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"

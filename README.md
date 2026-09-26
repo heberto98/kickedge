@@ -77,7 +77,20 @@ del `source_lock.json`, que contiene URL, archivo original, esquema y descarga U
 Los archivos históricos conservan ese contrato. La investigación prepartido está
 separada en `kickedge/pregame/`, con las políticas comparadas que se describen abajo.
 
-## Reconstrucción prepartido y simulación secuencial
+## Dirección actual: kicker indicado por el usuario
+
+KickEdge recibirá kicker, partido, línea XPM, lado Over/Under y cuota. El futuro
+modelo estimará XPM para ese kicker; no necesita predecir automáticamente su identidad.
+La observación histórica será kicker-game, definida por participación observada,
+con XPM exclusivamente como target y todas las features disponibles antes del cutoff.
+La participación y los flags postpartido no son inputs predictivos.
+
+Véanse la [decisión metodológica](docs/feature_dataset.md) y el
+[contrato de features](kickedge/features/contract.json). Solo existe el esqueleto:
+no se han calculado features nuevas, entrenado modelos ni aprobado una población.
+La investigación pregame/change detection siguiente se conserva como trabajo previo.
+
+## Investigación conservada: reconstrucción prepartido y simulación secuencial
 
 La simulación congela expected kicker antes de revelar cada partido y utiliza sus
 resultados solamente como historia para juegos futuros. Compara confirmación
