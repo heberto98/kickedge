@@ -11,7 +11,9 @@ from .config import Config
 from .ingest import sources, verify_source
 from .io import records, sha256_file, sql_literal, utc_now, write_json, write_parquet, parquet_info
 from .labels import reconcile
+from .report import render_quality
 from .transform import transform
+from .validate import validate, quality_summary
 
 TABLES = {
     "games": "game_id", "players": "player_id", "game_coverage": "game_id",
@@ -101,3 +103,86 @@ def create_labels(con, config):
         FROM labels GROUP BY ALL) l USING(game_id,team)
       LEFT JOIN (SELECT game_id,team,sum(stats_xpa) stats_team_xpa,sum(stats_xpm) stats_team_xpm
         FROM player_stats_kicking GROUP BY ALL) s USING(game_id,team)""")
+
+
+def build(config: Config, manifest_path: Path | None = None):
+    manifest_path = (manifest_path or config.data_dir / "manifests/sources.json").resolve()
+    with duckdb.connect() as con:
+        con.execute("SET threads=1")  # Stable ordering/serialization for these small derived tables.
+        manifest = load_sources(con, config, manifest_path)
+        identity = build_identity(config, manifest)
+        build_id = hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()[:20]
+        directory = config.data_dir / "processed" / build_id
+        print(f"Building {build_id}: checking originals, identities and outcomes", flush=True)
+        transform(con, config)
+        create_labels(con, config)
+        checks = validate(con)
+        quality = quality_summary(con, checks)
+        directory.mkdir(parents=True,exist_ok=True)
+        artifacts = []
+        for name, order in TABLES.items():
+            path = directory / f"{name}.parquet"
+            temporary = directory / f"{name}.pending.parquet"
+            write_parquet(con, f"SELECT * FROM {name} ORDER BY {order}", temporary)
+            digest = sha256_file(temporary)
+            if path.exists():
+                if sha256_file(path) != digest:
+                    temporary.unlink()
+                    raise ValueError(f"Reproducibility failure or modified output: {path}")
+                temporary.unlink()
+            else:
+                temporary.replace(path)
+            artifacts.append({"table":name,"path":path.relative_to(config.root).as_posix(),
+                              "sha256":digest,**parquet_info(path)})
+        text = render_quality(quality, build_id)
+        # Repeated builds preserve the original build metadata and immutable source lock.
+        if not (directory / 'build.json').exists():
+            source_copy=directory/'pipeline_source/kickedge'
+            source_copy.mkdir(parents=True,exist_ok=True)
+            for source in sorted(Path(__file__).parent.glob('*.py')):
+                (source_copy/source.name).write_bytes(source.read_bytes())
+            write_json(directory / 'source_lock.json',manifest)
+            write_json(directory / 'quality.json', quality)
+            (directory / 'quality.md').write_text(text, encoding='utf-8')
+            write_json(directory / 'build.json', {"build_id":build_id,"created_at":utc_now(),
+                "identity":identity,"source_manifest":str(manifest_path),"artifacts":artifacts})
+        else:
+            old_quality=json.loads((directory/'quality.json').read_text(encoding='utf-8'))
+            if old_quality != quality:
+                raise ValueError('Quality report changed for identical build identity')
+        config.reports_dir.mkdir(parents=True,exist_ok=True)
+        (config.reports_dir/'quality.md').write_text(text,encoding='utf-8')
+        write_json(config.reports_dir/'quality.json',quality)
+        write_json(config.data_dir / 'processed/latest.json', {"build_id":build_id,"path":directory.relative_to(config.root).as_posix()})
+        print(json.dumps({"build_id":build_id,"directory":str(directory),**quality['counts']},ensure_ascii=False),flush=True)
+        return directory
+
+
+def latest_build(config):
+    latest = json.loads((config.data_dir/'processed/latest.json').read_text(encoding='utf-8'))
+    return config.root/latest['path']
+
+
+def validate_existing(config):
+    directory=latest_build(config)
+    metadata=json.loads((directory/'build.json').read_text(encoding='utf-8'))
+    manifest=json.loads((directory/'source_lock.json').read_text(encoding='utf-8'))
+    if json.dumps(build_identity(config,manifest),sort_keys=True)!=json.dumps(metadata['identity'],sort_keys=True):
+        raise ValueError('Code, configuration or runtime changed. Run build for a new version before validate.')
+    for artifact in metadata['artifacts']:
+        if sha256_file(config.root/artifact['path'])!=artifact['sha256']:
+            raise ValueError(f"Modified output: {artifact['path']}")
+    result=build(config,directory/'source_lock.json')
+    if result!=directory:
+        raise ValueError('Rebuilt version does not match the selected build')
+    print('Reproducibility verified: identical Parquet hashes and quality report.')
+
+
+def inspect_label(config, game, team, player):
+    directory = latest_build(config)
+    with duckdb.connect() as con:
+        labels = records(con, "SELECT * FROM read_parquet(?) WHERE game_id=? AND team=? AND player_id=?", [str(directory/'historical_base.parquet'),game,team,player])
+        events = records(con, "SELECT play_id,order_sequence,description,counted_pat,made_pat,counted_fg,counted_kickoff,pbp_source_sha256 FROM read_parquet(?) WHERE game_id=? AND player_id=? ORDER BY order_sequence,play_id", [str(directory/'pbp_events.parquet'),game,player])
+    print(json.dumps({"build_id":directory.name,"labels":labels,"kicking_events":events},ensure_ascii=False,indent=2,default=str))
+    if not labels:
+        raise ValueError("No label matches that game/team/player ID")

@@ -1,0 +1,228 @@
+[
+  {
+    "game_id": "2015_03_CHI_SEA",
+    "category": "Cero y touchdown de special teams",
+    "labels": [
+      {
+        "team": "CHI",
+        "player_id": "00-0023252",
+        "xpa": 0,
+        "xpm": 0
+      },
+      {
+        "team": "SEA",
+        "player_id": "00-0025944",
+        "xpa": 2,
+        "xpm": 2
+      }
+    ],
+    "play_ids": [
+      1844,
+      1862,
+      2408,
+      2428
+    ],
+    "review_notes": "Robbie Gould figura con 0 XPA y 0 XPM explícitos y participó en el kickoff 1844, retornado por Tyler Lockett para TD de Seattle. Chicago no registró TD ni try. Hauschka convirtió los dos PAT de Seattle; el retorno se atribuye a SEA y cuenta una sola vez.",
+    "pbp_source_sha256": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+  },
+  {
+    "game_id": "2015_03_SF_ARI",
+    "category": "Touchdowns defensivos",
+    "labels": [
+      {
+        "team": "ARI",
+        "player_id": "00-0030896",
+        "xpa": 6,
+        "xpm": 6
+      }
+    ],
+    "play_ids": [
+      257,
+      287,
+      402,
+      430,
+      997,
+      1015,
+      1400,
+      1417,
+      2404,
+      2425,
+      3448,
+      3469
+    ],
+    "review_notes": "Arizona registró seis TD: cuatro ofensivos y dos retornos de intercepción, de Bethel y Mathieu (257 y 402). Catanzaro convirtió seis PAT. El equipo anotador se toma de td_team; no se suman TD de pase y recepción como eventos separados.",
+    "pbp_source_sha256": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+  },
+  {
+    "game_id": "2016_21_NE_ATL",
+    "category": "PAT fallado, 2PT, overtime y TD sin try",
+    "labels": [
+      {
+        "team": "NE",
+        "player_id": "00-0024333",
+        "xpa": 1,
+        "xpm": 0
+      },
+      {
+        "team": "ATL",
+        "player_id": "00-0020578",
+        "xpa": 4,
+        "xpm": 4
+      }
+    ],
+    "play_ids": [
+      2820,
+      3534,
+      4041,
+      4504
+    ],
+    "review_notes": "Gostkowski falló su único PAT (2820). New England convirtió dos intentos de 2 puntos (3534, 4041); el segundo tiene play_type=no_play por una falta entre jugadas, pero la conversión vale. El TD de White en overtime (4504) terminó el partido sin PAT posterior. El label es XPA=1, XPM=0, aunque NE tuvo cuatro TD. La temporada es 2016, aunque el Super Bowl se disputó en febrero de 2017.",
+    "pbp_source_sha256": "95eba04e2145e3c1c8ca502f2a3a76cfb0a5990680c3fb480f02a74a45f54a3b"
+  },
+  {
+    "game_id": "2017_07_DAL_SF",
+    "category": "Sustitución y jugador de posición S",
+    "labels": [
+      {
+        "team": "DAL",
+        "player_id": "00-0028660",
+        "xpa": 2,
+        "xpm": 2
+      },
+      {
+        "team": "DAL",
+        "player_id": "00-0030196",
+        "xpa": 3,
+        "xpm": 2
+      }
+    ],
+    "play_ids": [
+      219,
+      580,
+      1461,
+      2524,
+      3079,
+      3384
+    ],
+    "review_notes": "Bailey convirtió los dos primeros PAT. Después del intento fallado de 2PT (1461), Heath convirtió, falló y convirtió (2524, 3079, 3384): 3 XPA, 2 XPM. Se mantienen ambos IDs. La crónica oficial confirma la lesión de Bailey y el ingreso del safety Heath; la causa no se infiere automáticamente por haber dos jugadores.",
+    "external_source": "https://www.dallascowboys.com/news/with-bailey-hurt-heath-makes-kicking-cameo-for-first-time-since-high-scho-444326",
+    "external_title": "Dallas Cowboys: Heath sustituye a Bailey",
+    "pbp_source_sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710"
+  },
+  {
+    "game_id": "2020_06_DET_JAX",
+    "category": "PAT bloqueado anulado y repetido",
+    "labels": [
+      {
+        "team": "DET",
+        "player_id": "00-0023853",
+        "xpa": 4,
+        "xpm": 4
+      }
+    ],
+    "play_ids": [
+      421,
+      900,
+      2519,
+      2546,
+      3143,
+      3695
+    ],
+    "review_notes": "El bloqueo de Prater en 2519 fue anulado por offside; extra_point_attempt=0 y no tiene kicker ID estadístico. El intento repetido 2546 fue bueno. Los cuatro PAT oficiales fueron buenos: XPA=4, XPM=4. No se transforma el texto de un bloqueo anulado en un fallo oficial.",
+    "pbp_source_sha256": "8889f5d8782b5c5dce3c3644acdc0322b228a7e9cb13fa36cbac250e260e9f60"
+  },
+  {
+    "game_id": "2023_03_DEN_MIA",
+    "category": "Diez XPM y retorno de kickoff",
+    "labels": [
+      {
+        "team": "MIA",
+        "player_id": "00-0034794",
+        "xpa": 10,
+        "xpm": 10
+      }
+    ],
+    "play_ids": [
+      128,
+      486,
+      1203,
+      1943,
+      2061,
+      2890,
+      3370,
+      3503,
+      3953,
+      3968,
+      4068
+    ],
+    "review_notes": "Se inspeccionaron los diez PAT buenos de Jason Sanders: 10 XPA, 10 XPM. Miami tuvo diez TD. El retorno de Mims en 3968 es un TD de Denver, aunque Sanders aparece como pateador del kickoff; no se atribuye ese TD al equipo que pateó.",
+    "external_source": "https://www.miamidolphins.com/news/game-recap-dolphins-break-franchise-scoring-record-dominate-denver-in-historic-7",
+    "external_title": "Miami Dolphins: victoria 70-20 y diez touchdowns",
+    "pbp_source_sha256": "bd3484731408def6b0ec93225bba2bd7b2c65769ca707a2b9444d891abdc6776"
+  },
+  {
+    "game_id": "2024_02_NYG_WAS",
+    "category": "Kicker lesionado con cero y sustituto",
+    "labels": [
+      {
+        "team": "NYG",
+        "player_id": "00-0026858",
+        "xpa": 0,
+        "xpm": 0
+      },
+      {
+        "team": "NYG",
+        "player_id": "00-0035042",
+        "xpa": 1,
+        "xpm": 0
+      },
+      {
+        "team": "WAS",
+        "player_id": "00-0035145",
+        "xpa": 0,
+        "xpm": 0
+      }
+    ],
+    "play_ids": [
+      41,
+      782,
+      1936,
+      3303
+    ],
+    "review_notes": "Gano participó en el kickoff 41, sin PAT ni FG. El TD del retorno fue anulado por holding, pero el kickoff fue una jugada válida. La crónica oficial confirma su lesión. Gillan falló el PAT 782 y NYG falló luego dos 2PT. Gano y Gillan conservan XPM=0 por razones distintas. Seibert hizo siete FG y ningún PAT. Este caso demuestra que multiple_placekickers=false no descarta una sustitución: Gano no alcanzó a intentar PAT/FG.",
+    "external_source": "https://www.giants.com/news/giants-come-up-short-in-last-second-loss-to-commanders",
+    "external_title": "New York Giants: lesión de Gano y PAT fallado de Gillan",
+    "pbp_source_sha256": "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b"
+  },
+  {
+    "game_id": "2025_03_KC_NYG",
+    "category": "PAT bloqueado oficial y sustitución observada",
+    "labels": [
+      {
+        "team": "NYG",
+        "player_id": "00-0026858",
+        "xpa": 0,
+        "xpm": 0
+      },
+      {
+        "team": "NYG",
+        "player_id": "00-0035042",
+        "xpa": 1,
+        "xpm": 0
+      },
+      {
+        "team": "KC",
+        "player_id": "00-0033303",
+        "xpa": 2,
+        "xpm": 1
+      }
+    ],
+    "play_ids": [
+      1809,
+      2720,
+      3795
+    ],
+    "review_notes": "El PAT de Gillan 1809 fue bloqueado oficialmente: extra_point_attempt=1 y resultado blocked. XPA=1, XPM=0. Gano tiene un intento de FG y ningún PAT; se conservan ambos participantes. Butker convirtió 2720 y falló 3795: 2 XPA, 1 XPM. La evidencia estadística identifica el relevo en los intentos, sin inferir aquí su causa médica.",
+    "pbp_source_sha256": "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29"
+  }
+]
