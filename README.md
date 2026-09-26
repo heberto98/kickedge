@@ -86,9 +86,20 @@ con XPM exclusivamente como target y todas las features disponibles antes del cu
 La participación y los flags postpartido no son inputs predictivos.
 
 Véanse la [decisión metodológica](docs/feature_dataset.md) y el
-[contrato de features](kickedge/features/contract.json). Solo existe el esqueleto:
-no se han calculado features nuevas, entrenado modelos ni aprobado una población.
+[contrato de features](kickedge/features/contract.json). La Fase 1 implementa
+21 features del historial del kicker mediante replay experimental +24 h, sin
+entrenar modelos ni aprobar la población para entrenamiento final.
+La disponibilidad histórica de esas versiones permanece sin verificar.
 La investigación pregame/change detection siguiente se conserva como trabajo previo.
+
+```powershell
+.\.venv\Scripts\python.exe -m kickedge.features prepare
+.\.venv\Scripts\python.exe -m kickedge.features build
+```
+
+Consume solo el snapshot histórico y PBP ya cacheado. Véanse el
+[protocolo de Fase 1](docs/kicker_features_phase1.md) y el
+[reporte de cobertura y ejemplos](reports/kicker_features_phase1.md).
 
 ## Investigación conservada: reconstrucción prepartido y simulación secuencial
 

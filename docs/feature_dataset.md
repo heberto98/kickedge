@@ -21,6 +21,14 @@ disponibilidad de la versión de la fuente deben cumplir el límite; una revisi�
 posterior no se convierte en prepartido por pertenecer a un partido antiguo.
 Si no se demuestra disponibilidad, el valor queda faltante con su motivo.
 
+Excepción experimental autorizada para Fase 1: reconstruir únicamente el historial
+del kicker suponiendo disponibilidad del resultado a `max(inicio real + 24 h,
+último evento registrado)`. Esos valores sirven para validar el builder, no prueban
+disponibilidad de la versión histórica. Se separan `features_technically_reconstructible`
+y `features_temporally_verified`; todas las filas del replay tienen este último
+en false y `eligible_for_final_training=false`. La regla estricta anterior sigue
+siendo el requisito para aprobar entrenamiento final.
+
 Target, participación observada, sustituciones, flags derivados del resultado y
 conteos del partido objetivo nunca son inputs predictivos. Un XPM histórico de
 un partido anterior sí podrá ser una feature cuando ya esté disponible al cutoff.
@@ -39,25 +47,26 @@ kickers consultados por usuarios. La admisión a entrenamiento y el tratamiento
 de no participación siguen pendientes; no se modifican flags de elegibilidad
 existentes ni se declara aprobada una población en esta etapa.
 
-## Contrato y esqueleto
+## Contrato y Fase 1
 
 `kickedge/features/contract.json` define identidad, target, auditoría, kicker,
 ofensiva, defensa rival, contexto y grupos futuros opcionales. Cada campo tiene
 nombre, tipo, definición, fuente prevista, requisito as-of, estado de implementación,
-riesgo de leakage y permiso explícito de uso predictivo. Las ventanas iniciales
-de 3 partidos son especificaciones pendientes, no métricas ya calculadas.
+riesgo de leakage y permiso explícito de uso predictivo. Fase 1 materializa
+21 predictores del kicker, con ventanas de 3 y 5 partidos. Los nombres iniciales
+del esqueleto se sustituyeron coherentemente por los solicitados en Fase 1 y se
+registran como retirados en el contrato; ningún dataset previo los materializaba.
 
-Todos los campos están sin materializar en este nuevo dataset. El estado
-`existing_upstream_not_materialized` distingue IDs/labels ya existentes de nuevos
-builders planificados. El contrato no asegura que cada fuente prevista tenga
+El estado de cada campo distingue lo implementado de builders planificados.
+El contrato no asegura que cada fuente prevista tenga
 disponibilidad histórica suficiente. Los grupos market, injuries/personnel,
 weather y 2PT son opcionales y permanecen sin implementar.
 
-`FeatureContext` transporta únicamente contexto de identidad y cutoff;
-`FeatureBuilder` es una interfaz futura, sin cálculo, descargas ni acceso a labels.
-Cada futuro valor requerirá trazabilidad: fuente/versión, partidos contribuyentes,
-fecha de disponibilidad y motivo de faltante. El contrato es especificación;
-todavía no existe un motor que valide filas o haga joins temporales.
+`FeatureContext` transporta únicamente identidad, temporada y cutoff.
+`KickerFeatureBuilder` utiliza exclusivamente resultados previos revelados.
+La trazabilidad incluye fuentes/hashes, partidos contribuyentes, disponibilidad
+asumida y motivos de NULL. La validación comprueba contrato, tipos y límites
+temporales. Ver [protocolo de Fase 1](kicker_features_phase1.md).
 
 La investigación anterior se conserva íntegra en `kickedge/pregame/`, `audits/`
 y `reports/pregame_*`. Su conclusión sobre identificación automática permanece
