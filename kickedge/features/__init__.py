@@ -1,4 +1,4 @@
-"""Feature contract and builder interface only; no features are computed yet."""
+"""Point-in-time feature contract and shared builder context."""
 from dataclasses import dataclass
 from datetime import datetime
 from importlib.resources import files
@@ -18,6 +18,7 @@ class FeatureContext:
     kicker_id: str
     kickoff: datetime
     cutoff: datetime
+    season: int | None = None
 
     def __post_init__(self):
         if any(t.utcoffset() is None for t in (self.kickoff, self.cutoff)):
