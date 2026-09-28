@@ -9,8 +9,9 @@ import duckdb
 
 from kickedge.io import sha256_file, sql_literal, write_json, write_parquet
 from . import load_contract
-from .kicker import FEATURE_NAMES, LabelOracle, key, simulate
+from .kicker import FEATURE_NAMES, LabelOracle, key, simulate, instant
 from .validation import validate_contract, validate_rows
+from .temporal import HISTORICAL_EVENT, POLICY_VERSION, temporal_evidence_valid
 
 
 def summarize(rows):
@@ -48,6 +49,8 @@ def summarize(rows):
         'technically_reconstructible':sum(r['features_technically_reconstructible'] for r in rows),
         'temporally_verified':sum(r['features_temporally_verified'] for r in rows),
         'training_eligible':sum(r['eligible_for_final_training'] for r in rows),
+        'training_exclusions':dict(Counter(reason for r in rows for reason in r['training_exclusion_reasons'])),
+        'temporal_policy':rows[0]['temporal_policy'] if rows else None,
         'unavailable_history_rows':sum(r['history_unavailable_before_cutoff'] for r in rows),
         'multiple_placekicker_rows':sum(r['multiple_kickers_flag'] for r in rows),
         'manual_examples':examples}
@@ -57,9 +60,11 @@ def report(config, directory, summary):
     config.reports_dir.mkdir(parents=True,exist_ok=True)
     write_json(config.reports_dir/'kicker_features_phase1.json',{'build_id':directory.name,**summary})
     lines = ['# Fase 1 — features del kicker', '', f'Build `{directory.name}`. Filas: **{summary["rows"]}**.', '',
-        'Replay experimental autorizado: resultado utilizable a partir del máximo entre inicio real +24 h y último evento registrado. '
-        'Reconstrucción técnica no equivale a disponibilidad histórica verificada. '
-        f'Verificadas temporalmente: {summary["temporally_verified"]}; elegibles para entrenamiento final: {summary["training_eligible"]}.', '',
+        f'Política temporal: `{summary["temporal_policy"]}`. Eventos terminados antes del cutoff no requieren '
+        'fecha de publicación del archivo retrospectivo; el contexto point-in-time conserva ese requisito. '
+        f'Filas conformes temporalmente: {summary["temporally_verified"]}; elegibles para entrenamiento histórico de Fase 1: {summary["training_eligible"]}.',
+        'Se mantiene el margen conservador +24 h para incorporar eventos. No representa una fecha de publicación. '
+        '2015 permanece como reserva histórica; las temporadas objetivo son 2016–2025. Los snapshots experimentales anteriores permanecen sin modificar.', '',
         '| Feature | No NULL | NULL | Cobertura |','|---|---:|---:|---:|']
     for name,c in summary['coverage'].items():
         lines.append(f'| {name} | {c["non_null"]} | {c["null"]} | {c["coverage_pct"]:.2f}% |')
@@ -133,13 +138,29 @@ def build(config, prepared=None):
     dataset=[]
     for r in rows:
         label=targets[key(r)]
+        policy=source['inputs']['policy']
+        approved_policy=(policy.get('temporal_policy')==POLICY_VERSION and policy.get('temporal_class')==HISTORICAL_EVENT
+                         and policy.get('historical_training_approved') is True)
+        history=r['feature_provenance']['history']
+        temporal_ok=approved_policy and all(h.get('temporal_class')==HISTORICAL_EVENT and
+            temporal_evidence_valid(h,instant(r['prediction_cutoff'])) for h in history)
+        technical=not r['history_unavailable_before_cutoff'] and not r['feature_provenance']['unusable_prior_game_ids']
+        identity_problem=not label.get('id_in_players',False) or not label.get('schedule_identity_ok',False)
+        reasons=[]
+        if not temporal_ok: reasons.append('temporal_policy_not_approved')
+        if not technical: reasons.append('history_incomplete_or_unusable')
+        if not label.get('target_season_eligible',False): reasons.append('outside_target_seasons')
+        if not label['statistical_label_usable']: reasons.append('unusable_target_label')
+        if identity_problem: reasons.append('identity_problem')
         dataset.append({**r,'xpm':label['xpm'],'source_label':label,
             'multiple_kickers_flag':bool(label.get('multiple_placekickers')),
             'unusual_substitution_flag':None,
-            'identity_problem_flag':not label.get('id_in_players',False) or not label.get('schedule_identity_ok',False),
+            'identity_problem_flag':identity_problem,
             'label_quality_flag':not label['statistical_label_usable'] or label.get('label_status')!='agreed',
-            'features_technically_reconstructible':not r['history_unavailable_before_cutoff'] and not r['feature_provenance']['unusable_prior_game_ids'],
-            'features_temporally_verified':False,'eligible_for_final_training':False})
+            'features_technically_reconstructible':technical,
+            'temporal_policy':POLICY_VERSION if approved_policy else 'legacy_experimental_replay',
+            'features_temporally_verified':temporal_ok,'eligible_for_final_training':not reasons,
+            'training_exclusion_reasons':reasons})
     if sha256_file(feature_path)!=feature_sha:
         raise ValueError('Frozen features changed during target attachment')
     write_json(directory/'kicker_game_features.json',dataset)

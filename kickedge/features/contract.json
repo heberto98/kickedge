@@ -1,6 +1,6 @@
 {
-  "schema_version": "0.2.0",
-  "status": "phase_1_kicker_materialized_experimental_replay",
+  "schema_version": "0.3.0",
+  "status": "phase_1_approved_for_historical_training",
   "grain": "kicker-game",
   "primary_key": [
     "game_id",
@@ -19,7 +19,7 @@
     "prediction_cutoff"
   ],
   "default_cutoff_minutes_before_kickoff": 60,
-  "central_rule": "All predictive inputs must be available at or before cutoff, strictly before target-game kickoff. Target and observed participation are never predictive inputs.",
+  "central_rule": "Never include target-game or future data. Historical event features require completed prior games, chronological order and source traceability, not publication timestamps of retrospective files. Point-in-time context requires evidence of the version available at cutoff.",
   "population": "Retrospectively observed kicker participation; conditional on participation, not an automatic starter prediction. Training eligibility remains unapproved.",
   "history_scope": "Same-season GLOBAL kicker_id across teams; REG and postseason together. Rolling requires exactly 3/5 previous available observations; no cross-season or future fill.",
   "optional_groups": [
@@ -42,7 +42,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "season",
@@ -57,7 +60,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": true,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "week",
@@ -72,7 +78,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": true,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "game_type",
@@ -87,7 +96,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "kickoff",
@@ -102,7 +114,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "team",
@@ -117,7 +132,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent",
@@ -132,7 +150,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Revisiones del calendario o mappings posteriores al cutoff.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "kicker_id",
@@ -147,7 +168,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Selección retrospectiva de población; no inferir disponibilidad pregame.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "kicker_name",
@@ -162,7 +186,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Selección retrospectiva de población; no inferir disponibilidad pregame.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "xpm",
@@ -177,7 +204,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "LEAKAGE DIRECTO si entra como predictor. Solo target.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "multiple_kickers_flag",
@@ -192,7 +222,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Flag dependiente del resultado/participación: solo auditoría o política de población, nunca predictor.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "unusual_substitution_flag",
@@ -207,7 +240,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": false,
       "leakage_risk": "Flag dependiente del resultado/participación: solo auditoría o política de población, nunca predictor.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "identity_problem_flag",
@@ -222,7 +258,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Flag dependiente del resultado/participación: solo auditoría o política de población, nunca predictor.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "label_quality_flag",
@@ -237,7 +276,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Flag dependiente del resultado/participación: solo auditoría o política de población, nunca predictor.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "prediction_cutoff",
@@ -252,7 +294,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "Mover cutoff retrospectivamente para acomodar fuentes introduce leakage.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "feature_provenance",
@@ -261,13 +306,16 @@
       "dtype": "object",
       "nullable": true,
       "definition": "Por feature: fuente/hash/versión, partidos contribuyentes, available_at máximo, ventana y motivo de faltante.",
-      "planned_source": "Metadatos de los futuros builders",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "planned_source": "Metadatos de los builders: partidos, valores, relojes y hashes",
+      "as_of_requirement": "Eventos: partidos fuente concluidos antes del cutoff, excluyendo G/futuros, con trazabilidad. Contexto point-in-time: versión disponible antes/al cutoff. NULL según ventana o evidencia requerida por clase.",
       "implemented": true,
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
-      "leakage_risk": "Un hash o fecha de descarga actual no demuestra disponibilidad histórica.",
-      "optional": false
+      "leakage_risk": "Un hash permite trazabilidad pero no prueba disponibilidad point-in-time; para eventos se valida su finalización y cronología.",
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_touchdowns",
@@ -277,12 +325,15 @@
       "nullable": true,
       "definition": "Suma previa de TD ofensivos, excluyendo TD defensivos y special teams.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_points",
@@ -292,12 +343,15 @@
       "nullable": true,
       "definition": "Suma previa de puntos totales del equipo en marcador; incluye todas las fases.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_drives",
@@ -307,12 +361,15 @@
       "nullable": true,
       "definition": "Suma previa de posesiones ofensivas válidas; excluir drives solo de kneeldown/administrativos.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_td_per_drive",
@@ -322,12 +379,15 @@
       "nullable": true,
       "definition": "Drives con TD ofensivo / drives ofensivos válidos previos; denominador cero: NULL.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_red_zone_td_rate",
@@ -337,12 +397,15 @@
       "nullable": true,
       "definition": "Drives ofensivos con TD entre drives que llegaron a yarda rival <=20; denominador cero: NULL.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_epa_per_play",
@@ -352,12 +415,15 @@
       "nullable": true,
       "definition": "EPA medio de jugadas ofensivas run/pass, incluyendo sacks; excluir no_play, kneels, spikes y EPA faltante.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_success_rate",
@@ -367,12 +433,15 @@
       "nullable": true,
       "definition": "Proporción de esas jugadas ofensivas elegibles con EPA > 0.",
       "planned_source": "nflverse PBP ya cacheado; schedules para points",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
-      "leakage_risk": "Agregados que incluyen G, totales finales de temporada o revisiones posteriores. EPA heredado requiere revisar versión del modelo nflverse.",
-      "optional": false
+      "leakage_risk": "Agregados que incluyen G, partidos futuros o totales finales de temporada. EPA heredado requiere revisar versión y entrenamiento del modelo nflverse; una corrección del mismo evento concluido no equivale a un partido futuro.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_points_3",
@@ -382,12 +451,15 @@
       "nullable": true,
       "definition": "Media de puntos por partido en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_touchdowns_3",
@@ -397,12 +469,15 @@
       "nullable": true,
       "definition": "Media de TD ofensivos por partido en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_drives_3",
@@ -412,12 +487,15 @@
       "nullable": true,
       "definition": "Media de drives ofensivos válidos por partido en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_td_per_drive_3",
@@ -427,12 +505,15 @@
       "nullable": true,
       "definition": "Ratio agregado TD drives / drives válidos en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_epa_per_play_3",
@@ -442,12 +523,15 @@
       "nullable": true,
       "definition": "EPA medio ponderado por jugadas elegibles en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_success_rate_3",
@@ -457,12 +541,15 @@
       "nullable": true,
       "definition": "Proporción agregada EPA > 0 en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "offense_rolling_red_zone_td_rate_3",
@@ -472,12 +559,15 @@
       "nullable": true,
       "definition": "Ratio agregado TD de red zone / drives de red zone en los últimos 3 partidos del equipo; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP / schedules ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Rolling sin desplazar o con partidos todavía no disponibles; modelos EPA/versiones revisadas.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_td_allowed",
@@ -487,12 +577,15 @@
       "nullable": true,
       "definition": "Suma previa de TD ofensivos anotados por rivales contra esta defensa; excluir otras fases.",
       "planned_source": "nflverse PBP y schedules del rival de G ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Usar la ofensiva de G contra el rival o estadísticas finales de temporada; revisión de EPA.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_points_allowed",
@@ -502,12 +595,15 @@
       "nullable": true,
       "definition": "Suma previa de puntos totales concedidos en marcador, incluyendo todas las fases.",
       "planned_source": "nflverse PBP y schedules del rival de G ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Usar la ofensiva de G contra el rival o estadísticas finales de temporada; revisión de EPA.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_red_zone_td_rate_allowed",
@@ -517,12 +613,15 @@
       "nullable": true,
       "definition": "TD rivales en drives de red zone / drives rivales que llegaron a yarda <=20; cero denominador: NULL.",
       "planned_source": "nflverse PBP y schedules del rival de G ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Usar la ofensiva de G contra el rival o estadísticas finales de temporada; revisión de EPA.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_epa_allowed_per_play",
@@ -532,12 +631,15 @@
       "nullable": true,
       "definition": "EPA medio del ataque rival contra esta defensa; mismas jugadas elegibles que offense_epa_per_play.",
       "planned_source": "nflverse PBP y schedules del rival de G ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Usar la ofensiva de G contra el rival o estadísticas finales de temporada; revisión de EPA.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_rolling_td_allowed_3",
@@ -547,12 +649,15 @@
       "nullable": true,
       "definition": "Media de TD ofensivos concedidos por partido en los últimos 3 partidos previos del rival de G; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP y schedules del rival ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Ventana incluye G, rival equivocado en el join o publicaciones posteriores.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_rolling_points_allowed_3",
@@ -562,12 +667,15 @@
       "nullable": true,
       "definition": "Media de puntos concedidos por partido en los últimos 3 partidos previos del rival de G; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP y schedules del rival ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Ventana incluye G, rival equivocado en el join o publicaciones posteriores.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_rolling_red_zone_td_rate_allowed_3",
@@ -577,12 +685,15 @@
       "nullable": true,
       "definition": "Ratio agregado de TD / drives de red zone rivales en los últimos 3 partidos previos del rival de G; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP y schedules del rival ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Ventana incluye G, rival equivocado en el join o publicaciones posteriores.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "opponent_defense_rolling_epa_allowed_per_play_3",
@@ -592,12 +703,15 @@
       "nullable": true,
       "definition": "EPA rival medio ponderado por jugadas elegibles en los últimos 3 partidos previos del rival de G; requiere 3; mismas exclusiones que métrica base.",
       "planned_source": "nflverse PBP y schedules del rival ya cacheados",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Ventana incluye G, rival equivocado en el join o publicaciones posteriores.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "is_home",
@@ -612,7 +726,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Calendario revisado después del cutoff o usar el siguiente partido.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "rest_days",
@@ -627,7 +744,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Calendario revisado después del cutoff o usar el siguiente partido.",
-      "optional": false
+      "optional": false,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "market_xpm_line",
@@ -642,7 +762,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "market_side",
@@ -657,7 +780,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "market_decimal_odds",
@@ -672,7 +798,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "personnel_status",
@@ -687,7 +816,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "weather_forecast",
@@ -702,7 +834,10 @@
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "point_in_time_context_data",
+      "publication_timestamp_required": true,
+      "historical_training_approved": false
     },
     {
       "name": "offense_two_point_attempt_rate",
@@ -712,12 +847,15 @@
       "nullable": true,
       "definition": "Tasa histórica previa de decisiones 2PT sobre oportunidades elegibles; denominador exacto pendiente.",
       "planned_source": "nflverse PBP histórico cacheado; builder futuro",
-      "as_of_requirement": "Solo partidos previos de la misma temporada, terminados y con la versión utilizada disponible <= cutoff de G; excluir G; rolling desplazado. Historial insuficiente o disponibilidad no demostrada: NULL.",
+      "as_of_requirement": "Solo eventos de partidos fuente terminados antes del cutoff de G, excluir G/futuros, preservar cronología y trazabilidad. No se exige publicación histórica del archivo retrospectivo. Builder pendiente; sin aprobación de implementación en Fase 1.",
       "implemented": false,
       "implementation_status": "planned",
       "predictive_input_allowed": true,
       "leakage_risk": "Cuota de cierre posterior, lesión postpartido, clima realizado o decisión 2PT de G: prohibidos.",
-      "optional": true
+      "optional": true,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "kicker_games_before",
@@ -727,12 +865,15 @@
       "nullable": false,
       "definition": "Número de kicker-games previos revelados de la misma temporada; incluye observaciones con label inválido marcado.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpa_before",
@@ -742,12 +883,15 @@
       "nullable": true,
       "definition": "Suma XPA previa; 0 si no hay observaciones disponibles; NULL si alguna observación previa tiene label inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_before",
@@ -757,12 +901,15 @@
       "nullable": true,
       "definition": "Suma XPM previa; 0 si no hay observaciones disponibles; NULL si alguna observación previa tiene label inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xp_conversion_rate_before",
@@ -772,12 +919,15 @@
       "nullable": true,
       "definition": "Suma XPM / suma XPA previa; NULL si XPA=0 o historial inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_per_game_before",
@@ -787,12 +937,15 @@
       "nullable": true,
       "definition": "Suma XPM / kicker_games_before; NULL sin partidos o con label previo inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpa_per_game_before",
@@ -802,12 +955,15 @@
       "nullable": true,
       "definition": "Suma XPA / kicker_games_before; NULL sin partidos o con label previo inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpa_last_3",
@@ -817,12 +973,15 @@
       "nullable": true,
       "definition": "Suma XPA en exactamente los 3 kicker-games previos disponibles. NULL con menos de 3 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_last_3",
@@ -832,12 +991,15 @@
       "nullable": true,
       "definition": "Suma XPM en exactamente los 3 kicker-games previos disponibles. NULL con menos de 3 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xp_conversion_last_3",
@@ -847,12 +1009,15 @@
       "nullable": true,
       "definition": "Suma XPM / suma XPA; NULL con denominador cero en exactamente los 3 kicker-games previos disponibles. NULL con menos de 3 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_per_game_last_3",
@@ -862,12 +1027,15 @@
       "nullable": true,
       "definition": "Suma XPM / 3 en exactamente los 3 kicker-games previos disponibles. NULL con menos de 3 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpa_last_5",
@@ -877,12 +1045,15 @@
       "nullable": true,
       "definition": "Suma XPA en exactamente los 5 kicker-games previos disponibles. NULL con menos de 5 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_last_5",
@@ -892,12 +1063,15 @@
       "nullable": true,
       "definition": "Suma XPM en exactamente los 5 kicker-games previos disponibles. NULL con menos de 5 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xp_conversion_last_5",
@@ -907,12 +1081,15 @@
       "nullable": true,
       "definition": "Suma XPM / suma XPA; NULL con denominador cero en exactamente los 5 kicker-games previos disponibles. NULL con menos de 5 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_xpm_per_game_last_5",
@@ -922,12 +1099,15 @@
       "nullable": true,
       "definition": "Suma XPM / 5 en exactamente los 5 kicker-games previos disponibles. NULL con menos de 5 o cualquier label inutilizable en la ventana; nunca saltar labels inválidos.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "days_since_last_game",
@@ -937,12 +1117,15 @@
       "nullable": true,
       "definition": "Días fraccionarios transcurridos al cutoff de predicción desde el último kickoff previo disponible de la temporada; NULL sin historia. No usa el inicio futuro de G como predictor.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "previous_game_xpa",
@@ -952,12 +1135,15 @@
       "nullable": true,
       "definition": "XPA de la última observación previa disponible; NULL sin historia o label inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "previous_game_xpm",
@@ -967,12 +1153,15 @@
       "nullable": true,
       "definition": "XPM de la última observación previa disponible; NULL sin historia o label inutilizable.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_has_prior_game",
@@ -982,12 +1171,15 @@
       "nullable": false,
       "definition": "kicker_games_before >= 1.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_has_3_prior_games",
@@ -997,12 +1189,15 @@
       "nullable": false,
       "definition": "kicker_games_before >= 3.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_has_5_prior_games",
@@ -1012,12 +1207,15 @@
       "nullable": false,
       "definition": "kicker_games_before >= 5.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "kicker_low_sample_flag",
@@ -1027,12 +1225,15 @@
       "nullable": false,
       "definition": "kicker_games_before < 5; flag de tamaño de muestra, no de disponibilidad ni validez del label.",
       "planned_source": "Labels locales reconciliados (labels.parquet: player_id, season, xpa, xpm, statistical_label_usable), particionados por partido; relojes del PBP cacheado.",
-      "as_of_requirement": "Solo misma temporada y kicker_id, cualquier equipo; kickoff previo y available_at <= cutoff de G; freeze G antes de reveal. Replay autorizado: available_at=max(kickoff previo +24h, último evento); NO es publicación histórica verificada.",
+      "as_of_requirement": "Partidos concluidos de la misma temporada/kicker, cualquier equipo; inicio y último evento anteriores al cutoff de G, nunca G ni futuros. Margen conservador de incorporación max(inicio+24h,último evento) <= cutoff. No requiere fecha de publicación del archivo retrospectivo.",
       "implemented": true,
-      "implementation_status": "implemented_experimental_replay",
+      "implementation_status": "implemented_approved_historical_event",
       "predictive_input_allowed": true,
-      "leakage_risk": "Incluir G, revisiones posteriores o historia no disponible causa leakage. Replay evita target/future leakage pero la disponibilidad de la versión no está acreditada: fuera de entrenamiento final.",
-      "optional": false
+      "leakage_risk": "Incluir G, partidos futuros o aún en curso es leakage. Fijar fuente/hash y partidos contribuyentes. La exención de publicación se aplica exclusivamente a eventos concluidos; nunca a contexto point-in-time.",
+      "optional": false,
+      "temporal_class": "historical_event_data",
+      "publication_timestamp_required": false,
+      "historical_training_approved": true
     },
     {
       "name": "history_unavailable_before_cutoff",
@@ -1047,7 +1248,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "No usar flags retrospectivos de elegibilidad o población para predecir XPM.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "features_technically_reconstructible",
@@ -1062,7 +1266,10 @@
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "No usar flags retrospectivos de elegibilidad o población para predecir XPM.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "features_temporally_verified",
@@ -1070,14 +1277,17 @@
       "role": "audit",
       "dtype": "boolean",
       "nullable": false,
-      "definition": "Disponibilidad histórica de las versiones demostrada; false en todo replay experimental autorizado.",
+      "definition": "Cumple event-context-v1 para las 21 features: eventos previos concluidos y trazables. No afirma publicación histórica verificada del archivo.",
       "planned_source": "Metadatos del builder y política de disponibilidad",
       "as_of_requirement": "Auditoría del replay, excluida de la matriz predictiva",
       "implemented": true,
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "No usar flags retrospectivos de elegibilidad o población para predecir XPM.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "eligible_for_final_training",
@@ -1085,14 +1295,17 @@
       "role": "audit",
       "dtype": "boolean",
       "nullable": false,
-      "definition": "false en Fase 1; materializar features no aprueba la población.",
+      "definition": "Elegible para entrenamiento histórico de Fase 1: política temporal aprobada, historial técnicamente válido, temporada objetivo 2016-2025, target utilizable e identidad resuelta. NULLs semánticos y flags multi-kicker se conservan.",
       "planned_source": "Metadatos del builder y política de disponibilidad",
       "as_of_requirement": "Auditoría del replay, excluida de la matriz predictiva",
       "implemented": true,
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "No usar flags retrospectivos de elegibilidad o población para predecir XPM.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     },
     {
       "name": "feature_sources_verified",
@@ -1100,14 +1313,53 @@
       "role": "audit",
       "dtype": "boolean",
       "nullable": false,
-      "definition": "Todas las fuentes de historia utilizadas tienen disponibilidad verificada; vacuamente true sin historia, no aprueba la fila.",
+      "definition": "Evidencia de publicación de las fuentes efectivamente usadas; puede ser false para historical event data sin invalidar sus features. True vacuo sin fuentes; no es criterio de elegibilidad de eventos.",
       "planned_source": "Metadatos del builder y política de disponibilidad",
       "as_of_requirement": "Auditoría del replay, excluida de la matriz predictiva",
       "implemented": true,
       "implementation_status": "materialized_phase_1",
       "predictive_input_allowed": false,
       "leakage_risk": "No usar flags retrospectivos de elegibilidad o población para predecir XPM.",
-      "optional": false
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
+    },
+    {
+      "name": "temporal_policy",
+      "group": "audit",
+      "role": "audit",
+      "dtype": "string",
+      "nullable": false,
+      "definition": "Versión de política que aprueba esta observación, o legacy_experimental_replay para inputs antiguos sin reclasificar.",
+      "planned_source": "Validación posterior al freeze; política y flags históricos",
+      "as_of_requirement": "Solo auditoría/selección de población; nunca input predictivo",
+      "implemented": true,
+      "implementation_status": "materialized_phase_1",
+      "predictive_input_allowed": false,
+      "leakage_risk": "No usar flags de selección retrospectiva como predictores.",
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
+    },
+    {
+      "name": "training_exclusion_reasons",
+      "group": "audit",
+      "role": "audit",
+      "dtype": "array<string>",
+      "nullable": false,
+      "definition": "Motivos explícitos de no elegibilidad: temporalidad, historial, temporada, target o identidad; vacío cuando elegible.",
+      "planned_source": "Validación posterior al freeze; política y flags históricos",
+      "as_of_requirement": "Solo auditoría/selección de población; nunca input predictivo",
+      "implemented": true,
+      "implementation_status": "materialized_phase_1",
+      "predictive_input_allowed": false,
+      "leakage_risk": "No usar flags de selección retrospectiva como predictores.",
+      "optional": false,
+      "temporal_class": null,
+      "publication_timestamp_required": false,
+      "historical_training_approved": false
     }
   ],
   "retired_kicker_field_names": [
@@ -1119,11 +1371,9 @@
     "kicker_rolling_conversion_rate_3"
   ],
   "experimental_replay": {
-    "authorized": true,
-    "assumed_availability": "max(actual kickoff + 24 hours, last recorded event)",
-    "purpose": "Validate builder/pipeline only",
-    "temporally_verified": false,
-    "eligible_for_final_training": false
+    "status": "superseded_for_phase_1_historical_events_only",
+    "previous_snapshots_preserved": true,
+    "point_in_time_context_exemption": false
   },
   "predictor_columns_phase_1": [
     "kicker_games_before",
@@ -1147,5 +1397,64 @@
     "kicker_has_3_prior_games",
     "kicker_has_5_prior_games",
     "kicker_low_sample_flag"
-  ]
+  ],
+  "temporal_policy_version": "event-context-v1",
+  "temporal_classes": {
+    "historical_event_data": {
+      "definition": "Resultados/estadísticas de eventos deportivos concluidos: XPA/XPM, TD, puntos, drives, EPA, success rate, red zone, boxscore/PBP.",
+      "publication_timestamp_required": false,
+      "requirements": [
+        "Partido fuente terminado antes del cutoff",
+        "Excluir partido objetivo y futuros",
+        "Cronología preservada",
+        "Trazabilidad a partido y fuente/version fija"
+      ]
+    },
+    "point_in_time_context_data": {
+      "definition": "Odds, líneas/props, lesiones, inactivos, depth charts, roster/noticias y pronósticos; importa la versión conocida.",
+      "publication_timestamp_required": true,
+      "requirements": [
+        "Disponibilidad acreditada de la versión usada antes/al cutoff",
+        "Sin publicaciones ni modificaciones posteriores",
+        "No sustituir forecast por dato realizado"
+      ]
+    }
+  },
+  "historical_training_eligibility": {
+    "feature_names": [
+      "kicker_games_before",
+      "kicker_xpa_before",
+      "kicker_xpm_before",
+      "kicker_xp_conversion_rate_before",
+      "kicker_xpm_per_game_before",
+      "kicker_xpa_per_game_before",
+      "kicker_xpa_last_3",
+      "kicker_xpm_last_3",
+      "kicker_xp_conversion_last_3",
+      "kicker_xpm_per_game_last_3",
+      "kicker_xpa_last_5",
+      "kicker_xpm_last_5",
+      "kicker_xp_conversion_last_5",
+      "kicker_xpm_per_game_last_5",
+      "days_since_last_game",
+      "previous_game_xpa",
+      "previous_game_xpm",
+      "kicker_has_prior_game",
+      "kicker_has_3_prior_games",
+      "kicker_has_5_prior_games",
+      "kicker_low_sample_flag"
+    ],
+    "target_seasons": "2016-2025",
+    "history_only_seasons": [
+      2015
+    ],
+    "requirements": [
+      "Temporal policy event-context-v1",
+      "Complete usable prior history (semantic NULLs allowed)",
+      "Usable target label",
+      "Resolved identity"
+    ],
+    "multi_kicker_policy": "Preserve flags; no new automatic exclusion",
+    "scope": "Phase 1 kicker-game conditional on observed participation; no model training performed"
+  }
 }

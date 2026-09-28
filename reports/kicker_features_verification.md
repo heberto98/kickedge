@@ -1,5 +1,8 @@
 # Verificación Fase 1
 
+Este informe conserva la verificación del snapshot experimental original.
+La aprobación temporal posterior está en [temporal_policy_validation.md](temporal_policy_validation.md).
+
 - Build de features: `18a2c65f746116405ec5`.
 - Inputs preparados: `803e506961eff007e0f0`; histórico original: `c7300725b93c79971254`.
 - Suite completa: **132 tests aprobados** (109 existentes + 23 nuevos), sin eliminar ni reducir pruebas.

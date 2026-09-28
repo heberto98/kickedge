@@ -87,9 +87,12 @@ La participación y los flags postpartido no son inputs predictivos.
 
 Véanse la [decisión metodológica](docs/feature_dataset.md) y el
 [contrato de features](kickedge/features/contract.json). La Fase 1 implementa
-21 features del historial del kicker mediante replay experimental +24 h, sin
-entrenar modelos ni aprobar la población para entrenamiento final.
-La disponibilidad histórica de esas versiones permanece sin verificar.
+21 features del historial del kicker aprobadas para entrenamiento histórico bajo
+la [política temporal event-context-v1](docs/temporal_policy.md): eventos previos
+concluidos y trazables no requieren timestamps de publicación del archivo histórico.
+El contexto point-in-time sí los requiere. Se conserva el margen conservador +24 h.
+La elegibilidad de cada fila respeta las temporadas objetivo y calidad/identidad.
+No se ha entrenado ningún modelo.
 La investigación pregame/change detection siguiente se conserva como trabajo previo.
 
 ```powershell

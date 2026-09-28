@@ -1,8 +1,9 @@
 # Fase 1 — features del kicker
 
-Build `18a2c65f746116405ec5`. Filas: **6083**.
+Build `834c779fa5a01a6c8372`. Filas: **6083**.
 
-Replay experimental autorizado: resultado utilizable a partir del máximo entre inicio real +24 h y último evento registrado. Reconstrucción técnica no equivale a disponibilidad histórica verificada. Verificadas temporalmente: 0; elegibles para entrenamiento final: 0.
+Política temporal: `event-context-v1`. Eventos terminados antes del cutoff no requieren fecha de publicación del archivo retrospectivo; el contexto point-in-time conserva ese requisito. Filas conformes temporalmente: 6083; elegibles para entrenamiento histórico de Fase 1: 5535.
+Se mantiene el margen conservador +24 h para incorporar eventos. No representa una fecha de publicación. 2015 permanece como reserva histórica; las temporadas objetivo son 2016–2025. Los snapshots experimentales anteriores permanecen sin modificar.
 
 | Feature | No NULL | NULL | Cobertura |
 |---|---:|---:|---:|

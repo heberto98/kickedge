@@ -6,6 +6,7 @@ import json
 
 from kickedge.io import sha256_file
 from . import FeatureContext
+from .temporal import temporal_evidence_valid
 
 
 FEATURE_NAMES = (
@@ -49,7 +50,9 @@ class KickerFeatureBuilder:
             'game_id': identity['game_id'], 'team': identity['team'], 'kickoff': identity['kickoff'],
             'available_at': source['available_at'], 'availability_verified': source['availability_verified'],
             'source_sha256': source['sha256'], 'xpa': xpa if valid else None,
-            'xpm': xpm if valid else None, 'usable': valid})
+            'xpm': xpm if valid else None, 'usable': valid,
+            'temporal_class': source.get('temporal_class'), 'last_event': source.get('last_event'),
+            'event_completed': source.get('event_completed', False)})
 
     def build(self, context: FeatureContext):
         if context.season is None:
@@ -107,6 +110,8 @@ class LabelOracle:
         source = self.manifest[game_id]
         if game_id not in frozen or instant(now) < instant(source['available_at']):
             raise ValueError('Outcome access before freeze/availability')
+        if source.get('temporal_class') and not temporal_evidence_valid(source, instant(now)):
+            raise ValueError('Outcome temporal evidence is invalid')
         path = self.directory / source['filename']
         if sha256_file(path) != source['sha256']:
             raise ValueError('Outcome source changed')

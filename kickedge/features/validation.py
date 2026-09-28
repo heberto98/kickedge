@@ -2,6 +2,7 @@
 import math
 
 from .kicker import FEATURE_NAMES, instant
+from .temporal import HISTORICAL_EVENT, POINT_IN_TIME, temporal_evidence_valid
 
 
 def validate_contract(contract):
@@ -17,6 +18,15 @@ def validate_contract(contract):
         f = fields.get(name, {})
         if not f.get('implemented') or not f.get('predictive_input_allowed') or f.get('role') != 'feature':
             raise ValueError('Unimplemented predictor: '+name)
+        if (f.get('temporal_class') != HISTORICAL_EVENT or f.get('publication_timestamp_required') is not False
+                or f.get('historical_training_approved') is not True):
+            raise ValueError('Invalid Phase 1 temporal classification: '+name)
+    for f in fields.values():
+        if (f.get('group') in ('market', 'injuries_personnel', 'weather', 'game_context')
+                or f.get('role') == 'context') and f.get('temporal_class') != POINT_IN_TIME:
+            raise ValueError('Invalid context temporal classification: '+f['name'])
+        if f.get('temporal_class') == POINT_IN_TIME and not f.get('publication_timestamp_required'):
+            raise ValueError('Context temporal availability requirement cannot be waived')
     return fields
 
 
@@ -46,3 +56,5 @@ def validate_rows(rows, contract):
             if (h['game_id'] == r['game_id'] or instant(h['kickoff']) >= instant(r['kickoff'])
                     or instant(h['available_at']) > instant(r['prediction_cutoff'])):
                 raise ValueError('Feature history leakage')
+            if h.get('temporal_class') and not temporal_evidence_valid(h, instant(r['prediction_cutoff'])):
+                raise ValueError('Feature temporal evidence invalid')

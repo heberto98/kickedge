@@ -9,11 +9,13 @@ import duckdb
 
 from kickedge.io import records, sha256_file, write_json
 from .kicker import instant, key
+from .temporal import HISTORICAL_EVENT, POLICY_VERSION
 
 
-POLICY = {'version': 'kicker-features-v1', 'availability': 'experimental_result_plus_24h',
+POLICY = {'version': 'kicker-features-v2', 'temporal_policy': POLICY_VERSION, 'temporal_class': HISTORICAL_EVENT,
+          'availability': 'completed_event_conservative_24h_gate', 'publication_timestamp_required': False,
           'history_lag_hours': 24, 'cutoff_minutes': 60, 'history_scope': 'same_season_global_kicker',
-          'availability_verified': False, 'eligible_for_final_training': False}
+          'availability_verified': False, 'historical_training_approved': True}
 
 
 def prepare(config, base=None):
@@ -42,7 +44,8 @@ def prepare(config, base=None):
             clocks_sources[str(source['season'])] = source['sha256']
             for r in records(con, """SELECT game_id, count(DISTINCT start_time) clock_versions,
                 timezone('America/New_York',try_strptime(min(start_time),'%m/%d/%y, %H:%M:%S'))::VARCHAR kickoff,
-                max(try_cast(time_of_day AS TIMESTAMPTZ))::VARCHAR last_event
+                max(try_cast(time_of_day AS TIMESTAMPTZ))::VARCHAR last_event,
+                count(*) FILTER(WHERE "desc" ILIKE '%END GAME%' AND play_deleted=0) end_markers
                 FROM read_parquet(?) GROUP BY game_id""", [str(path)]):
                 if r['clock_versions'] != 1 or not r['kickoff'] or not r['last_event']:
                     raise ValueError('Unresolved actual kickoff: '+r['game_id'])
@@ -57,6 +60,8 @@ def prepare(config, base=None):
     outcomes, identities, manifest = defaultdict(list), [], {}
     for r in labels:
         clock = clocks[r['game_id']]
+        if not clock['end_markers']:
+            raise ValueError('Incomplete historical event: '+r['game_id'])
         kickoff, scheduled = instant(clock['kickoff']), instant(games[r['game_id']]['scheduled_kickoff'])
         end = instant(clock['last_event'])
         if not kickoff <= end or abs((kickoff-scheduled).total_seconds()) > 12*3600:
@@ -67,7 +72,10 @@ def prepare(config, base=None):
         outcomes[r['game_id']].append({**r,'kicker_id':r['player_id']})
         manifest[r['game_id']] = {'filename':r['game_id']+'.json',
             'available_at':max(kickoff+timedelta(hours=24),end).isoformat(), 'availability_verified':False,
-            'availability_basis':'experimental_24h_after_actual_start_and_not_before_last_event',
+            'availability_basis':'completed_event_conservative_24h_gate_not_publication',
+            'temporal_class':HISTORICAL_EVENT, 'event_completed':clock['end_markers'] > 0,
+            'completion_basis':'non_deleted_pbp_END_GAME',
+            'publication_timestamp_required':False,
             'actual_kickoff':kickoff.isoformat(), 'scheduled_kickoff':scheduled.isoformat(),
             'last_event':end.isoformat(), 'clock_source_sha256':clocks_sources[str(r['season'])]}
     if len({key(r) for r in identities}) != len(identities):

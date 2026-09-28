@@ -27,12 +27,12 @@ def source_fixture(tmp_path):
         stats = json.loads((tmp_path/manifest[i['game_id']]['filename']).read_text())[0]
         labels.append({**{k:v for k,v in i.items() if k not in ('kickoff','prediction_cutoff')}, **stats, 'player_id': i['kicker_id'], 'label_status': 'agreed',
                        'id_in_players': True, 'schedule_identity_ok': True,
-                       'eligible_for_pregame_training': False, 'multiple_kicking_participants': False})
+                       'eligible_for_pregame_training': False, 'target_season_eligible': True, 'multiple_kicking_participants': False})
         games.append({k: i[k] for k in ['game_id','season','week','game_type']} |
                      dict(gameday=i['kickoff'][:10], gametime='13:00', home_team='A', away_team='B'))
         from kickedge.features.kicker import instant
         dt = instant(i['kickoff'])
-        clocks.append(dict(game_id=i['game_id'], start_time=dt.strftime('%m/%d/%y, 13:00:00'),
+        clocks.append(dict(game_id=i['game_id'], start_time=dt.strftime('%m/%d/%y, 13:00:00'), desc='END GAME', play_deleted=0,
                            time_of_day=(dt+timedelta(hours=3)).isoformat()))
     with duckdb.connect() as con:
         for name, rows in [('labels',labels),('games',games),('pbp',clocks)]:
@@ -56,7 +56,7 @@ def test_materialization_reproducible_and_preserves_targets_flags(tmp_path):
     rows = json.loads((p/'kicker_game_features.json').read_text())
     assert len(rows)==7 and rows[3]['xpm']==4 and rows[3]['previous_game_xpm']==3
     assert rows[3]['source_label']['multiple_placekickers'] is False
-    assert all(not r['features_temporally_verified'] and not r['eligible_for_final_training'] for r in rows)
+    assert all(r['features_temporally_verified'] and r['eligible_for_final_training'] for r in rows)
     assert rows[3]['features_technically_reconstructible']
     con=duckdb.connect()
     assert con.execute('select count(*) from read_parquet(?)',[str(p/'kicker_game_features.parquet')]).fetchone()[0]==7
@@ -158,7 +158,8 @@ def test_real_materialization_matches_independent_sql_and_preserves_population()
         assert row['xpm']==m and row['source_label']['xpa']==a
         assert row['multiple_kickers_flag']==multiple
         assert row['source_label']['multiple_kicking_participants']==kicking
-        assert row['features_temporally_verified'] is False and row['eligible_for_final_training'] is False
+        assert row['features_temporally_verified'] is True
+        assert row['eligible_for_final_training'] == row['source_label']['target_season_eligible']
     for g,t,k,n,a,m,a3,m3,a5,m5,pa,pm,days,history_ids in ref:
         expected=dict(kicker_games_before=n,kicker_xpa_before=a,kicker_xpm_before=m,
             kicker_xp_conversion_rate_before=m/a if a else None,

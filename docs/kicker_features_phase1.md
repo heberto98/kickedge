@@ -26,8 +26,8 @@ datos futuros ni se intenta reconstruir el titular.
    reloj del partido objetivo, nunca sus conteos ni participación como predictores.
 3. Cutoff = `min(inicio real, inicio programado) - 60 minutos`: un retraso no
    permite incorporar información posterior al corte original.
-4. Antes de G, revela solo resultados de partidos previamente congelados cuya
-   disponibilidad asumida no supera el cutoff. Construye y persiste las filas de
+4. Antes de G, revela solo resultados de partidos previamente congelados cuyo
+   margen de incorporación no supera el cutoff y cuyo evento ya concluyó. Construye y persiste las filas de
    ambos equipos/múltiples kickers de G antes de permitir revelar G.
 5. El resultado de G se incorpora únicamente para partidos futuros. No se leen
    ni siquiera los bytes/hash de su archivo de resultados para construir su fila.
@@ -35,13 +35,16 @@ datos futuros ni se intenta reconstruir el titular.
    conserva todos los campos/flags originales. El acceso predictivo se limita a
    `predictor_columns_phase_1`; no usar todo el Parquet como matriz del modelo.
 
-El usuario autorizó **replay experimental +24 h**: disponibilidad asumida = máximo
-entre inicio real +24 h y último evento del partido. Evita resultados de partidos
-aún en curso, pero NO demuestra publicación histórica ni descarta revisiones
-posteriores del proveedor. `features_temporally_verified=false` y
-`eligible_for_final_training=false` en todas las filas, incluso sin historia.
-`feature_sources_verified` describe las fuentes efectivamente utilizadas (true
-vacuamente sin fuentes); no equivale a aprobación de la fila.
+La política final [event-context-v1](temporal_policy.md) clasifica estas 21 features
+como **historical event data**, aprobadas para entrenamiento histórico. El margen
+de incorporación sigue siendo máximo(inicio real +24 h, último evento); además el
+último evento debe ser anterior al cutoff y la preparación exige un marcador PBP
+END GAME no eliminado. No requiere publicación histórica del
+archivo retrospectivo. `features_temporally_verified` indica conformidad con esa
+política, mientras `feature_sources_verified` conserva por separado la evidencia
+de publicación. Esta última no bloquea eventos históricos.
+`eligible_for_final_training` aplica temporalidad, validez del historial/target,
+identidad y temporadas objetivo 2016–2025. No se borran los snapshots experimentales.
 
 ## Nulos, ventanas y calidad
 
@@ -81,11 +84,11 @@ con los mismos inputs/runtime debe producir los mismos bytes. Los punteros
 históricos y pregame originales no cambian.
 
 `feature_provenance.history` enumera cada partido previo, equipo, inicio,
-disponibilidad asumida, conteos y hash. Las listas last_3/last_5 indican sus
+margen de incorporación, estado del evento, conteos y hash. Las listas last_3/last_5 indican sus
 contribuyentes disponibles; si no están completas, el valor sigue siendo NULL.
 El reporte `reports/kicker_features_phase1.*` incluye cobertura, nulos,
 histograma y cinco ejemplos. Una primera observación no demuestra que sea rookie.
 
-Fase 1 completa técnicamente significa features reconstruidas y pruebas de
-no-leakage aprobadas **bajo este replay autorizado**; no significa población
-aprobada para entrenamiento final ni disponibilidad histórica verificada.
+Fase 1 queda cerrada para uso en entrenamiento histórico bajo event-context-v1,
+con elegibilidad explícita por fila. El contexto point-in-time conserva todos sus
+requisitos de disponibilidad; no se implementa ni se aprueba en esta fase.

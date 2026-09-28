@@ -1,5 +1,5 @@
 {
-  "build_id": "18a2c65f746116405ec5",
+  "build_id": "834c779fa5a01a6c8372",
   "rows": 6083,
   "coverage": {
     "kicker_games_before": {
@@ -138,8 +138,12 @@
     "5+": 3912
   },
   "technically_reconstructible": 6083,
-  "temporally_verified": 0,
-  "training_eligible": 0,
+  "temporally_verified": 6083,
+  "training_eligible": 5535,
+  "training_exclusions": {
+    "outside_target_seasons": 548
+  },
+  "temporal_policy": "event-context-v1",
   "unavailable_history_rows": 0,
   "multiple_placekicker_rows": 20,
   "manual_examples": {
@@ -249,7 +253,10 @@
             "source_sha256": "a4fb03280f789d948928ee8872a2a6d40b63e08529eb4271b988a95ccd9da114",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-09-13T03:09:55+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_02_LA_IND",
@@ -260,7 +267,10 @@
             "source_sha256": "3684a7b1fffd29cc9b16f3386aa624fd8e71e2d4cb13a451cea3b3e01c6834e2",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-09-19T19:58:42+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_03_TB_LA",
@@ -271,7 +281,10 @@
             "source_sha256": "24010934b07df40fdcb017dd98da8f98561df4d9ae3b614332f74727837f8a6c",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-09-26T23:31:09+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_04_ARI_LA",
@@ -282,7 +295,10 @@
             "source_sha256": "293884567b7382881634abdd8d105494350d1031439f01499d591f705906e738",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-10-03T23:10:25+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_05_LA_SEA",
@@ -293,7 +309,10 @@
             "source_sha256": "05149a29d5067dd80226618f0535c514f1d047814fcd9da3d523cd63768e3c4f",
             "xpa": 3,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-10-08T03:27:14+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_06_LA_NYG",
@@ -304,7 +323,10 @@
             "source_sha256": "aa41e8c7af0d6b450f40c3b9946edf7358665d12d2f4d98a06e61fde4f228940",
             "xpa": 5,
             "xpm": 5,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-10-17T20:03:59+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_07_DET_LA",
@@ -315,7 +337,10 @@
             "source_sha256": "4b6b0e5bf0aa53b957072dd51183c20168e6de96c6ed66eca7ae82f7f87f2b97",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-10-24T23:13:07+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_08_LA_HOU",
@@ -326,7 +351,10 @@
             "source_sha256": "87d0a0030e29b76888aefdfac300e9c5d9a4002383e3b1aa0191bab1ce0e77c5",
             "xpa": 5,
             "xpm": 5,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-10-31T19:56:11+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_09_TEN_LA",
@@ -337,7 +365,10 @@
             "source_sha256": "cd7fc676cf88a0d377021c4ac73efdfc9cfddb229368f8683429dbbab59d1fe3",
             "xpa": 1,
             "xpm": 1,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-11-08T04:30:16+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_10_LA_SF",
@@ -348,7 +379,10 @@
             "source_sha256": "9ec7e235a78ac108304c9f9b5a215a2ce330c5b8fd3dd01d8f47db0bc0be272d",
             "xpa": 1,
             "xpm": 1,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-11-16T04:05:04+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_12_LA_GB",
@@ -359,7 +393,10 @@
             "source_sha256": "1e2b46a22bcd17d6e06e5c2bccbb689933b4a0943bc783069c3fe50147517082",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-11-29T00:43:39+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_13_JAX_LA",
@@ -370,7 +407,10 @@
             "source_sha256": "0dc403ab88d6dfffc129015ff3c2dd282a22549f5607665c7d7c1afc95afd9e8",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-12-05T23:58:00+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_14_LA_ARI",
@@ -381,7 +421,10 @@
             "source_sha256": "eae83d14fe13e554c95515ac1e511186da8dfe8929e6be941b861a3e672ca7de",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-12-14T04:16:12+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_15_SEA_LA",
@@ -392,7 +435,10 @@
             "source_sha256": "92af396fe6a7349dbc57280afef5ecada870a93310a0dddf2d84c40199bbe481",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-12-22T02:57:49+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_16_LA_MIN",
@@ -403,7 +449,10 @@
             "source_sha256": "f4e467648e766cca3e807dfe2327e58a612bc21adb5c034451711648e46a4e23",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2021-12-26T21:03:20+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_17_LA_BAL",
@@ -414,7 +463,10 @@
             "source_sha256": "befbb8c72a341714789206317c12e1dd158895fbbcb526c05360f9dc8f8a8222",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2022-01-02T20:55:33+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_18_SF_LA",
@@ -425,7 +477,10 @@
             "source_sha256": "cc5ba22d9dcfaec5a5df955962165c616ed2310b068447977192f1fd9c1e7b5f",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2022-01-10T00:36:50+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_19_ARI_LA",
@@ -436,7 +491,10 @@
             "source_sha256": "54e98bb945234a5ef23e7defadb3dc6dd87b3a06e19410f6f01c53acd5ba3d08",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2022-01-18T04:24:04+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_20_LA_TB",
@@ -447,7 +505,10 @@
             "source_sha256": "3c89bc64c0e973687ca6e579e798f23433fa92193a310eb9693fa8f2a625fe85",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2022-01-23T23:23:12+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2021_21_SF_LA",
@@ -458,7 +519,10 @@
             "source_sha256": "0c084b31b078c279eee21cd611d3e2d43f9399f93f050debf18021735251f403",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2022-01-31T02:37:32+00:00",
+            "event_completed": true
           }
         ],
         "last_3_game_ids": [
@@ -525,7 +589,10 @@
             "source_sha256": "78cad4f30de27b27b934be0174e071623c7d6b7732b4c458484c968340ebd8c6",
             "xpa": 1,
             "xpm": 1,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2015-09-14T15:38:17+00:00",
+            "event_completed": true
           }
         ],
         "last_3_game_ids": [
@@ -595,7 +662,10 @@
             "source_sha256": "56f3e7594b163b1723626b40f3e47e5a5615dd0b52b34882399470611de1061b",
             "xpa": 0,
             "xpm": 0,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2015-09-13T20:09:16+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2015_02_NE_BUF",
@@ -606,7 +676,10 @@
             "source_sha256": "57ae605c280858330b0afadef769161c4457b497de9306801e2f787922d92618",
             "xpa": 0,
             "xpm": 0,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2015-09-20T20:40:05+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2015_03_BUF_MIA",
@@ -617,7 +690,10 @@
             "source_sha256": "696ebed5a0f642e800c50d4e58aacea6514c03290c58f12dec2c0227da38e09f",
             "xpa": 0,
             "xpm": 0,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2015-09-27T23:31:41+00:00",
+            "event_completed": true
           }
         ],
         "last_3_game_ids": [
@@ -689,7 +765,10 @@
             "source_sha256": "0817ed2aacf25d69a3c34d9196029c7364810b4cccf6c56fc86f6fb875b5425d",
             "xpa": 1,
             "xpm": 1,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2017-09-11T03:16:54+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2017_02_DAL_DEN",
@@ -700,7 +779,10 @@
             "source_sha256": "ea19a51099b73c5412abccd3756b49cbd72704efe3ff4dbdf373c3431c4dab7d",
             "xpa": 2,
             "xpm": 2,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2017-09-18T00:39:13+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2017_03_DAL_ARI",
@@ -711,7 +793,10 @@
             "source_sha256": "a9551b33a31bf1f1807524aa79ff70c1d45969419e192e5527f72dd1b844a6cc",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2017-09-26T03:44:46+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2017_04_LA_DAL",
@@ -722,7 +807,10 @@
             "source_sha256": "c5714d66d86e11ca9ef1d533734dde6e87aac85ef2f4ed3d896ef06d76a181cc",
             "xpa": 3,
             "xpm": 3,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2017-10-01T20:21:04+00:00",
+            "event_completed": true
           },
           {
             "game_id": "2017_05_GB_DAL",
@@ -733,7 +821,10 @@
             "source_sha256": "3c286f9c1fa9964d692e9940b94cdcdbc99135c5fb116cf1b484e62db0610422",
             "xpa": 4,
             "xpm": 4,
-            "usable": true
+            "usable": true,
+            "temporal_class": "historical_event_data",
+            "last_event": "2017-10-08T23:30:52+00:00",
+            "event_completed": true
           }
         ],
         "last_3_game_ids": [

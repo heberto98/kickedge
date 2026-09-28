@@ -14,20 +14,17 @@ Su identidad puede conocerse retrospectivamente: es una decisión de población,
 no una feature prepartido. No se exige reconstruir `expected_kicker_id`.
 El XPM del partido objetivo se usa exclusivamente como target.
 
-**Para el partido G, toda feature debe usar exclusivamente información disponible
-ANTES del kickoff y como máximo en el cutoff de G.** Se conserva la convención
-T−60 minutos como cutoff inicial configurable. Tanto el evento utilizado como la
-disponibilidad de la versión de la fuente deben cumplir el límite; una revisión
-posterior no se convierte en prepartido por pertenecer a un partido antiguo.
-Si no se demuestra disponibilidad, el valor queda faltante con su motivo.
+**Para el partido G, nunca usar datos del objetivo ni de partidos futuros.**
+Según [event-context-v1](temporal_policy.md), historical event data exige eventos
+concluidos antes del cutoff, cronología y trazabilidad; no exige timestamps de
+publicación de archivos retrospectivos. Point-in-time context data sí exige
+la versión disponible antes/al cutoff. La excepción de eventos no se extiende
+a odds, lesiones, roster/noticias, depth charts ni pronósticos.
 
-Excepción experimental autorizada para Fase 1: reconstruir únicamente el historial
-del kicker suponiendo disponibilidad del resultado a `max(inicio real + 24 h,
-último evento registrado)`. Esos valores sirven para validar el builder, no prueban
-disponibilidad de la versión histórica. Se separan `features_technically_reconstructible`
-y `features_temporally_verified`; todas las filas del replay tienen este último
-en false y `eligible_for_final_training=false`. La regla estricta anterior sigue
-siendo el requisito para aprobar entrenamiento final.
+Las 21 features del kicker quedan aprobadas para entrenamiento histórico.
+Se conserva `max(inicio real +24h, último evento registrado)` como margen
+conservador de incorporación. No representa una fecha de publicación supuesta.
+El cutoff sigue siendo `min(inicio real, programado)-60m`.
 
 Target, participación observada, sustituciones, flags derivados del resultado y
 conteos del partido objetivo nunca son inputs predictivos. Un XPM histórico de
@@ -43,9 +40,10 @@ ampliación de participantes necesitará una decisión posterior documentada.
 
 Esta población describe XPM **condicional a participar**. No estima por sí sola
 la probabilidad de participar, y su selección retrospectiva puede diferir de los
-kickers consultados por usuarios. La admisión a entrenamiento y el tratamiento
-de no participación siguen pendientes; no se modifican flags de elegibilidad
-existentes ni se declara aprobada una población en esta etapa.
+kickers consultados por usuarios. Se aprueban las filas de Fase 1 de 2016–2025
+con temporalidad válida, historial utilizable, target válido e identidad resuelta.
+2015 permanece como historia de referencia. El tratamiento prospectivo de no
+participación sigue pendiente; los flags originales bajo source_label se conservan.
 
 ## Contrato y Fase 1
 
@@ -64,8 +62,8 @@ weather y 2PT son opcionales y permanecen sin implementar.
 
 `FeatureContext` transporta únicamente identidad, temporada y cutoff.
 `KickerFeatureBuilder` utiliza exclusivamente resultados previos revelados.
-La trazabilidad incluye fuentes/hashes, partidos contribuyentes, disponibilidad
-asumida y motivos de NULL. La validación comprueba contrato, tipos y límites
+La trazabilidad incluye fuentes/hashes, partidos contribuyentes, clase temporal,
+relojes del evento, margen de incorporación y motivos de NULL. La validación comprueba contrato, tipos y límites
 temporales. Ver [protocolo de Fase 1](kicker_features_phase1.md).
 
 La investigación anterior se conserva íntegra en `kickedge/pregame/`, `audits/`
