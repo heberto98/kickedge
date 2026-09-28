@@ -95,6 +95,13 @@ La elegibilidad de cada fila respeta las temporadas objetivo y calidad/identidad
 No se ha entrenado ningún modelo.
 La investigación pregame/change detection siguiente se conserva como trabajo previo.
 
+La [Fase 2](docs/team_features_phase2.md) añade 20 features ofensivas y 20 de defensa
+rival en un artefacto separado que integra las 21 de Fase 1 sin alterarlas.
+Se ejecuta con `python -m kickedge.features prepare-teams` y
+`python -m kickedge.features build-teams`. Para la matriz conjunta de 61 predictores
+usar `eligible_for_phase_2_training`; ver cobertura y ejemplos en
+`reports/team_features_phase2.json`.
+
 ```powershell
 .\.venv\Scripts\python.exe -m kickedge.features prepare
 .\.venv\Scripts\python.exe -m kickedge.features build

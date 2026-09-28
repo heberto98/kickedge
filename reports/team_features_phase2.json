@@ -1,0 +1,221 @@
+{
+  "build_id": "3ebe56f85f679fe7352b",
+  "rows": 6083,
+  "new_features": 40,
+  "coverage": {
+    "offense_games_before": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "offense_points_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_touchdowns_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_drives_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_td_per_drive_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_red_zone_td_rate_before": {
+      "non_null": 5726,
+      "null": 357
+    },
+    "offense_epa_per_play_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_success_rate_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "offense_points_per_game_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_touchdowns_per_game_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_td_per_drive_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_red_zone_td_rate_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_epa_per_play_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_success_rate_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "offense_points_per_game_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "offense_touchdowns_per_game_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "offense_td_per_drive_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "offense_red_zone_td_rate_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "offense_epa_per_play_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "offense_success_rate_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_games_before": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "defense_points_allowed_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_touchdowns_allowed_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_drives_faced_per_game_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_td_allowed_per_drive_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_red_zone_td_rate_allowed_before": {
+      "non_null": 5725,
+      "null": 358
+    },
+    "defense_epa_allowed_per_play_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_success_rate_allowed_before": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "defense_points_allowed_per_game_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_touchdowns_allowed_per_game_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_td_allowed_per_drive_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_red_zone_td_rate_allowed_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_epa_allowed_per_play_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_success_rate_allowed_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "defense_points_allowed_per_game_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_touchdowns_allowed_per_game_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_td_allowed_per_drive_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_red_zone_td_rate_allowed_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_epa_allowed_per_play_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "defense_success_rate_allowed_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    }
+  },
+  "coverage_pct": 83.98364293933915,
+  "training_eligible": 5535,
+  "training_exclusions": {
+    "phase_1_ineligible": 548
+  },
+  "null_reasons": {
+    "no_prior_game": 13452,
+    "insufficient_window": 25512,
+    "zero_denominator": 7
+  },
+  "examples": {
+    "strong_offense": {
+      "game_id": "2015_06_ARI_PIT",
+      "team": "ARI",
+      "opponent": "PIT",
+      "kicker_name": "Chandler Catanzaro",
+      "season": 2015,
+      "week": 6,
+      "offense_games_before": 5,
+      "offense_points_per_game_before": 38.0,
+      "defense_games_before": 5,
+      "defense_points_allowed_per_game_before": 19.0,
+      "offense_epa_per_play_before": 0.18830516239800069,
+      "defense_epa_allowed_per_play_before": -0.03672023951775984
+    },
+    "permissive_defense": {
+      "game_id": "2020_07_DAL_WAS",
+      "team": "WAS",
+      "opponent": "DAL",
+      "kicker_name": "Dustin Hopkins",
+      "season": 2020,
+      "week": 7,
+      "offense_games_before": 6,
+      "offense_points_per_game_before": 18.0,
+      "defense_games_before": 6,
+      "defense_points_allowed_per_game_before": 36.333333333333336,
+      "offense_epa_per_play_before": -0.11765051612340997,
+      "defense_epa_allowed_per_play_before": 0.15562615828643728
+    },
+    "early_season": {
+      "game_id": "2015_01_PIT_NE",
+      "team": "NE",
+      "opponent": "PIT",
+      "kicker_name": "Stephen Gostkowski",
+      "season": 2015,
+      "week": 1,
+      "offense_games_before": 0,
+      "offense_points_per_game_before": null,
+      "defense_games_before": 0,
+      "defense_points_allowed_per_game_before": null,
+      "offense_epa_per_play_before": null,
+      "defense_epa_allowed_per_play_before": null
+    }
+  }
+}

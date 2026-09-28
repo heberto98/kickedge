@@ -55,6 +55,9 @@ riesgo de leakage y permiso explícito de uso predictivo. Fase 1 materializa
 del esqueleto se sustituyeron coherentemente por los solicitados en Fase 1 y se
 registran como retirados en el contrato; ningún dataset previo los materializaba.
 
+La [Fase 2](team_features_phase2.md) implementa además 20 features de ofensiva y
+20 de defensa rival. El contrato conserva los 21 predictores de Fase 1 y declara
+la lista conjunta de 61; `eligible_for_phase_2_training` rige el dataset integrado.
 El estado de cada campo distingue lo implementado de builders planificados.
 El contrato no asegura que cada fuente prevista tenga
 disponibilidad histórica suficiente. Los grupos market, injuries/personnel,
