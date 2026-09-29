@@ -3,6 +3,7 @@ import math
 
 from .kicker import FEATURE_NAMES, instant
 from .temporal import HISTORICAL_EVENT, POINT_IN_TIME, temporal_evidence_valid
+from .context import CALENDAR_CLASS, calendar_field_approved
 
 
 def validate_contract(contract):
@@ -22,8 +23,11 @@ def validate_contract(contract):
                 or f.get('historical_training_approved') is not True):
             raise ValueError('Invalid Phase 1 temporal classification: '+name)
     for f in fields.values():
+        calendar_ok=calendar_field_approved(f,contract)
+        if f.get('temporal_class')==CALENDAR_CLASS and not calendar_ok:
+            raise ValueError('Invalid calendar temporal classification: '+f['name'])
         if (f.get('group') in ('market', 'injuries_personnel', 'weather', 'game_context')
-                or f.get('role') == 'context') and f.get('temporal_class') != POINT_IN_TIME:
+                or f.get('role') == 'context') and f.get('temporal_class') != POINT_IN_TIME and not calendar_ok:
             raise ValueError('Invalid context temporal classification: '+f['name'])
         if f.get('temporal_class') == POINT_IN_TIME and not f.get('publication_timestamp_required'):
             raise ValueError('Context temporal availability requirement cannot be waived')
