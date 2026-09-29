@@ -73,3 +73,15 @@ Se mantienen los tests de target/future leakage, eliminación física del result
 rolling, season-to-date, cronología, freeze/reveal y comparación SQL independiente.
 Se añaden pruebas que aceptan un evento previo descargado después y rechazan
 contexto sin versión demostrada, eventos incompletos/futuros y clases desconocidas.
+
+## Excepción de calendario autorizada para Fase 3
+
+`phase3-calendar-v1` permite usar el schedule histórico exclusivamente para
+matchup, home/away, temporada, semana, game_type y descanso. Es una tercera clase,
+`historical_schedule_context`, aprobada para entrenamiento como aproximación;
+no se etiqueta como publicación prepartido verificada ni como resultado deportivo.
+Para rest se prefiere kickoff programado de G y kickoff real del partido previo;
+si falta el programado se registra el uso del histórico de G. Esta autorización
+no aplica a mercado/odds, clima, lesiones, inactivos, roster, noticias o QB.
+Los controles de eventos y contexto point-in-time anteriores permanecen vigentes.
+Detalles y trazabilidad en [game_context_phase3.md](game_context_phase3.md).

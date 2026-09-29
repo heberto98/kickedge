@@ -1,0 +1,198 @@
+{
+  "build_id": "96c91563d48708f787b8",
+  "rows": 6083,
+  "phase_3_predictors": 21,
+  "new_columns": 18,
+  "existing_columns_promoted": [
+    "season",
+    "week",
+    "game_type"
+  ],
+  "coverage": {
+    "is_home": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "is_away": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "season": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "week": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "game_type": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "team_days_rest": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "opponent_days_rest": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "team_short_week_flag": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "opponent_short_week_flag": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "team_long_rest_flag": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "opponent_long_rest_flag": {
+      "non_null": 5729,
+      "null": 354
+    },
+    "team_two_point_attempt_rate_before": {
+      "non_null": 5704,
+      "null": 379
+    },
+    "team_two_point_attempts_before": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "team_two_point_attempt_rate_last_3": {
+      "non_null": 5019,
+      "null": 1064
+    },
+    "team_two_point_attempts_last_3": {
+      "non_null": 5020,
+      "null": 1063
+    },
+    "team_two_point_attempt_rate_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "team_two_point_attempts_last_5": {
+      "non_null": 4312,
+      "null": 1771
+    },
+    "team_has_3_prior_games": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "team_has_5_prior_games": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "opponent_has_3_prior_games": {
+      "non_null": 6083,
+      "null": 0
+    },
+    "opponent_has_5_prior_games": {
+      "non_null": 6083,
+      "null": 0
+    }
+  },
+  "coverage_pct": 93.60278058288908,
+  "days_rest_distribution": {
+    "team": {
+      "non_null": 5729,
+      "null": 354,
+      "min": 3.6719328703703704,
+      "median": 6.998252314814815,
+      "mean": 7.499496714651901,
+      "max": 16.6928125,
+      "under_6_days": 757,
+      "6_to_8_days": 3876,
+      "over_8_days": 1096
+    },
+    "opponent": {
+      "non_null": 5729,
+      "null": 354,
+      "min": 3.6719328703703704,
+      "median": 6.998252314814815,
+      "mean": 7.503593641916048,
+      "max": 16.6928125,
+      "under_6_days": 755,
+      "6_to_8_days": 3873,
+      "over_8_days": 1101
+    }
+  },
+  "flags": {
+    "team_short_week_flag": {
+      "true": 757,
+      "false": 4972,
+      "null": 354
+    },
+    "team_long_rest_flag": {
+      "true": 1096,
+      "false": 4633,
+      "null": 354
+    },
+    "opponent_short_week_flag": {
+      "true": 755,
+      "false": 4974,
+      "null": 354
+    },
+    "opponent_long_rest_flag": {
+      "true": 1101,
+      "false": 4628,
+      "null": 354
+    }
+  },
+  "training_eligible": 5535,
+  "training_exclusions": {
+    "phase_2_ineligible": 548
+  },
+  "calendar_policy": "phase3-calendar-v1",
+  "calendar_point_in_time_verified": false,
+  "rest_historical_kickoff_fallback_rows": 0,
+  "examples": {
+    "week_1": {
+      "game_id": "2015_01_PIT_NE",
+      "team": "NE",
+      "opponent": "PIT",
+      "kicker_name": "Stephen Gostkowski",
+      "season": 2015,
+      "week": 1,
+      "game_type": "REG",
+      "is_home": true,
+      "team_days_rest": null,
+      "opponent_days_rest": null,
+      "team_long_rest_flag": null,
+      "team_two_point_attempts_last_3": null,
+      "team_two_point_attempt_rate_last_3": null
+    },
+    "after_bye": {
+      "game_id": "2015_05_BUF_TEN",
+      "team": "TEN",
+      "opponent": "BUF",
+      "kicker_name": "Ryan Succop",
+      "season": 2015,
+      "week": 5,
+      "game_type": "REG",
+      "is_home": true,
+      "team_days_rest": 13.99738425925926,
+      "opponent_days_rest": 6.997881944444444,
+      "team_long_rest_flag": true,
+      "team_two_point_attempts_last_3": 1,
+      "team_two_point_attempt_rate_last_3": 0.08333333333333333
+    },
+    "recent_two_point_tendency": {
+      "game_id": "2019_12_DET_WAS",
+      "team": "WAS",
+      "opponent": "DET",
+      "kicker_name": "Dustin Hopkins",
+      "season": 2019,
+      "week": 12,
+      "game_type": "REG",
+      "is_home": true,
+      "team_days_rest": 6.997951388888889,
+      "opponent_days_rest": 6.998217592592592,
+      "team_long_rest_flag": false,
+      "team_two_point_attempts_last_3": 2,
+      "team_two_point_attempt_rate_last_3": 1.0
+    }
+  }
+}

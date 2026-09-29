@@ -102,6 +102,12 @@ Se ejecuta con `python -m kickedge.features prepare-teams` y
 usar `eligible_for_phase_2_training`; ver cobertura y ejemplos en
 `reports/team_features_phase2.json`.
 
+La [Fase 3](docs/game_context_phase3.md) añade contexto de calendario, descanso,
+tendencia 2PT y muestra. Usa `prepare-context` / `build-context` en el mismo CLI.
+La matriz conjunta tiene 82 predictores y requiere `eligible_for_phase_3_training`.
+El calendario/descanso utiliza una aproximación histórica expresamente autorizada;
+mercado, clima, lesiones y QB siguen requiriendo evidencia point-in-time.
+
 ```powershell
 .\.venv\Scripts\python.exe -m kickedge.features prepare
 .\.venv\Scripts\python.exe -m kickedge.features build
