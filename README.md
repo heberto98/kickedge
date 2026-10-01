@@ -5,7 +5,7 @@ La unidad del label es `(game_id, team, player_id)`; XPM y XPA requieren acuerdo
 entre player stats y el conteo PBP. **La población es observada después del partido**,
 no una lista de titulares conocidos antes del kickoff. Incluye ceros demostrables.
 
-No contiene entrenamiento, predicciones, features, interfaz, odds procesadas ni clima.
+Incluye features historicas y adaptadores opcionales de mercado/clima con controles temporales. No contiene modelos entrenados, interfaz ni deployment.
 
 ## Ejecutar
 
@@ -162,3 +162,11 @@ Resultados y límites: [comparación A/B/C](reports/pregame_policy_comparison.md
 La cobertura de C es amplia pero falla especialmente cuando cambia el kicker;
 no se ha aprobado una política de entrenamiento. Todas las filas de la comparación
 secuencial conservan `eligible_for_pregame_training=false`.
+## Fase 4: mercado y clima
+
+La extension de [mercado/clima](docs/market_weather_phase4.md) conserva los 82
+predictores anteriores y separa capturas current/forward de datos experimentales.
+`python -m kickedge.features build-environment` materializa desde los snapshots
+locales, sin red. Las closing lines, el clima observado y el techo retrospectivo
+no se aprueban como point-in-time; no bloquean las 5,535 filas elegibles previas.
+ParlayAPI y Open-Meteo se consultan solo mediante sus adaptadores opcionales.
