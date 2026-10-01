@@ -7,12 +7,13 @@ from kickedge.config import load_config
 
 def main():
     parser=argparse.ArgumentParser(description='Historical kicker and team pregame features')
-    parser.add_argument('command',choices=['prepare','build','prepare-teams','build-teams','prepare-context','build-context'])
+    parser.add_argument('command',choices=['prepare','build','prepare-teams','build-teams','prepare-context','build-context','build-environment'])
     parser.add_argument('--config',type=Path,default=Path('config.toml'))
     parser.add_argument('--base',type=Path,help='Frozen historical build for prepare')
     parser.add_argument('--inputs',type=Path,help='Prepared identity/outcome inputs for build')
     parser.add_argument('--phase1',type=Path,help='Frozen Phase 1 build for prepare-teams')
     parser.add_argument('--phase2',type=Path,help='Frozen Phase 2 build for prepare-context')
+    parser.add_argument('--phase3',type=Path,help='Frozen Phase 3 build for build-environment')
     args=parser.parse_args()
     config=load_config(args.config)
     if args.command=='prepare':
@@ -30,9 +31,12 @@ def main():
     elif args.command=='prepare-context':
         from .context_prepare import prepare
         output=prepare(config,args.phase2)
-    else:
+    elif args.command=='build-context':
         from .context_materialize import build
         output=build(config,args.inputs)
+    else:
+        from .environment import build
+        output=build(config,args.phase3)
     print(output.relative_to(config.root).as_posix())
 
 
