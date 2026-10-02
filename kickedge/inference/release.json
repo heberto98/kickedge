@@ -1,0 +1,9 @@
+{
+  "name": "KickEdge Poisson GLM",
+  "version": "phase5-c2f8f5ff0071",
+  "artifact_sha256": "c2f8f5ff00712546023b769a7c8374478399b7d00e343dc4e5e928c10977f0d0",
+  "metadata_canonical_sha256": "c16a912824f67a3d2db6e541e135211603485495881cb289de48937a65ef4b30",
+  "phase5_commit": "6c68bc6871d87a7510850f154900020bf503b425",
+  "phase6_commit": "02c8edf5aff8700d92f5f80272b0d7f81ce7ffe1",
+  "phase6_verdict": "PASS"
+}

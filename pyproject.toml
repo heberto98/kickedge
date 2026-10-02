@@ -20,6 +20,7 @@ include = ["kickedge*"]
 
 [tool.setuptools.package-data]
 "kickedge.features" = ["contract.json"]
+"kickedge.inference" = ["release.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
