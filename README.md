@@ -179,3 +179,12 @@ con los 82 predictores historicos. Entrena 2016–2023, valida exclusivamente en
 Los binarios quedan ignorados bajo `data/models/phase5/`.
 Consulta la [metodologia](docs/modeling_phase5.md), el
 [reporte](reports/phase5_model_report.md) y las [metricas](reports/phase5_metrics.json).
+
+## Fase 6: validacion ciega
+
+El flujo `python -m kickedge.validation prepare` registra el modelo congelado y
+el baseline pre-2025 antes de abrir targets. `python -m kickedge.validation reveal`
+consume una unica evaluacion de 2025 y bloquea repeticiones. No entrena ni calibra.
+Consulta la [metodologia](docs/blind_validation_phase6.md), la
+[preregistracion](reports/phase6_preregistration.json), el
+[reporte](reports/phase6_blind_validation.md) y las [metricas](reports/phase6_metrics.json).

@@ -1,0 +1,3865 @@
+{
+  "phase": 6,
+  "evaluated_at_utc": "2026-10-02T20:29:05.975985+00:00",
+  "one_time_blind_statement": "2025 fue utilizado una única vez como blind holdout y no se utilizó para modificar el modelo.",
+  "preregistration": {
+    "prepared_at_utc": "2026-10-02T20:28:51.402161+00:00",
+    "targets_2025_accessed": false,
+    "model_sha256": "c2f8f5ff00712546023b769a7c8374478399b7d00e343dc4e5e928c10977f0d0",
+    "phase5_metadata_sha256": "9d3a386ceba9dfebbe20cdbc4be35fb461a74c7621932abe8f908110c99b8305",
+    "dataset_sha256": "bb1730a0f957aea3dd86f22f5448858bf182cdbb39d8bf09ac238013f20ebb3f",
+    "contract_sha256": "a8030cbf2224e3cebea5e48cd38b2559c154c73175881fdab5d7e8000caa8879",
+    "selected": {
+      "name": "poisson_glm_alpha_0.1",
+      "family": "glm",
+      "params": {
+        "alpha": 0.1,
+        "max_iter": 2000,
+        "tol": 1e-08
+      }
+    },
+    "features": [
+      "kicker_games_before",
+      "kicker_xpa_before",
+      "kicker_xpm_before",
+      "kicker_xp_conversion_rate_before",
+      "kicker_xpm_per_game_before",
+      "kicker_xpa_per_game_before",
+      "kicker_xpa_last_3",
+      "kicker_xpm_last_3",
+      "kicker_xp_conversion_last_3",
+      "kicker_xpm_per_game_last_3",
+      "kicker_xpa_last_5",
+      "kicker_xpm_last_5",
+      "kicker_xp_conversion_last_5",
+      "kicker_xpm_per_game_last_5",
+      "days_since_last_game",
+      "previous_game_xpa",
+      "previous_game_xpm",
+      "kicker_has_prior_game",
+      "kicker_has_3_prior_games",
+      "kicker_has_5_prior_games",
+      "kicker_low_sample_flag",
+      "offense_games_before",
+      "offense_points_per_game_before",
+      "offense_touchdowns_per_game_before",
+      "offense_drives_per_game_before",
+      "offense_td_per_drive_before",
+      "offense_red_zone_td_rate_before",
+      "offense_epa_per_play_before",
+      "offense_success_rate_before",
+      "offense_points_per_game_last_3",
+      "offense_touchdowns_per_game_last_3",
+      "offense_td_per_drive_last_3",
+      "offense_red_zone_td_rate_last_3",
+      "offense_epa_per_play_last_3",
+      "offense_success_rate_last_3",
+      "offense_points_per_game_last_5",
+      "offense_touchdowns_per_game_last_5",
+      "offense_td_per_drive_last_5",
+      "offense_red_zone_td_rate_last_5",
+      "offense_epa_per_play_last_5",
+      "offense_success_rate_last_5",
+      "defense_games_before",
+      "defense_points_allowed_per_game_before",
+      "defense_touchdowns_allowed_per_game_before",
+      "defense_drives_faced_per_game_before",
+      "defense_td_allowed_per_drive_before",
+      "defense_red_zone_td_rate_allowed_before",
+      "defense_epa_allowed_per_play_before",
+      "defense_success_rate_allowed_before",
+      "defense_points_allowed_per_game_last_3",
+      "defense_touchdowns_allowed_per_game_last_3",
+      "defense_td_allowed_per_drive_last_3",
+      "defense_red_zone_td_rate_allowed_last_3",
+      "defense_epa_allowed_per_play_last_3",
+      "defense_success_rate_allowed_last_3",
+      "defense_points_allowed_per_game_last_5",
+      "defense_touchdowns_allowed_per_game_last_5",
+      "defense_td_allowed_per_drive_last_5",
+      "defense_red_zone_td_rate_allowed_last_5",
+      "defense_epa_allowed_per_play_last_5",
+      "defense_success_rate_allowed_last_5",
+      "is_home",
+      "is_away",
+      "season",
+      "week",
+      "game_type",
+      "team_days_rest",
+      "opponent_days_rest",
+      "team_short_week_flag",
+      "opponent_short_week_flag",
+      "team_long_rest_flag",
+      "opponent_long_rest_flag",
+      "team_two_point_attempt_rate_before",
+      "team_two_point_attempts_before",
+      "team_two_point_attempt_rate_last_3",
+      "team_two_point_attempts_last_3",
+      "team_two_point_attempt_rate_last_5",
+      "team_two_point_attempts_last_5",
+      "team_has_3_prior_games",
+      "team_has_5_prior_games",
+      "opponent_has_3_prior_games",
+      "opponent_has_5_prior_games"
+    ],
+    "training_seasons": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "training_rows": 4965,
+    "preprocessing_hash": "858b6f058cfdcf8637ed9bcec7ecfca9",
+    "preprocessing": {
+      "numeric_median_fields": 81,
+      "missing_indicators": 81,
+      "numeric_standard_scaler": true,
+      "game_type_categories": [
+        "CON",
+        "DIV",
+        "REG",
+        "SB",
+        "WC"
+      ],
+      "unknown_categories": "ignore; frozen from refit"
+    },
+    "baseline_mean": 2.1818731117824774,
+    "baseline_seasons": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "holdout_rows_feature_only": 570,
+    "prepared_bundle_sha256": "a9da6da7ba180d7441cbe0df83d96fc08efd4822e3f6993bb93b0be94a3d87f7",
+    "evaluation_code_sha256": {
+      "__init__.py": "827507469a0445e2c1d6572caa373096b55b97d23fce8e7458881733a6d30a6a",
+      "__main__.py": "f690057d86169198a242e382aaa729ec229a01c000eb6b798b3fd0eea944e58f",
+      "blind.py": "d05e5eca7db7f50e039ae984aa1624bd3f213bf576496dbe156ad5ea21cfe118",
+      "diagnostics.py": "b70409ce3e4a1e113394953288e38206741603ebd020b04636e0dcaddcd821da",
+      "report.py": "8e88ad0fe5e59225d8cf889b416fb26a7a699995535942f893a1fbb8222cf3a8",
+      "statistics.py": "e22d190157b5cfef144d52ba40a22934f760eda0760c45a916361303a3715566"
+    },
+    "policy": {
+      "version": "phase6-prereveal-v1",
+      "seed": 42,
+      "bootstrap_resamples": 1000,
+      "calibration_reasonable_ece_max": 0.05,
+      "calibration_slight_ece_max": 0.1,
+      "calibration_severe_fail_above": 0.15,
+      "global_bias_pass_max": 0.05,
+      "pass_requires_paired_delta_nll_rps_upper95_below_zero": true,
+      "signal_requires_nll_rps_improve_and_at_least_two_briers_improve": true,
+      "subgroup_min_n": 50,
+      "subgroup_nll_warning_relative": 0.2,
+      "year_degradation_warning_relative": 0.1,
+      "top_feature_missing_shift_warning": 0.1,
+      "ece_is_descriptive_not_significance_test": true
+    },
+    "sanity": {
+      "finite_positive_means": true,
+      "finite_nonnegative_probabilities": true,
+      "mass_including_tail_one": true,
+      "deterministic": true,
+      "row_order_invariant": true,
+      "exact_82_features": true,
+      "no_2025_fitting": true
+    }
+  },
+  "target_summary_2025": {
+    "count": 570,
+    "mean": 2.2245614035087717,
+    "sample_variance": 2.0689914593161287,
+    "variance_to_mean": 0.9300671386515721,
+    "max": 7,
+    "histogram": {
+      "0": 60,
+      "1": 136,
+      "2": 152,
+      "3": 109,
+      "4": 75,
+      "5+": 38
+    }
+  },
+  "past_target_summaries": {
+    "train_2016_2023": {
+      "count": 4394,
+      "mean": 2.1820664542558035,
+      "sample_variance": 2.1043357242420577,
+      "variance_to_mean": 0.9643774689528162,
+      "max": 10,
+      "histogram": {
+        "0": 522,
+        "1": 1008,
+        "2": 1184,
+        "3": 905,
+        "4": 494,
+        "5+": 281
+      }
+    },
+    "validation_2024": {
+      "count": 571,
+      "mean": 2.180385288966725,
+      "sample_variance": 2.1796847635726793,
+      "variance_to_mean": 0.9996787148594376,
+      "max": 7,
+      "histogram": {
+        "0": 67,
+        "1": 138,
+        "2": 152,
+        "3": 113,
+        "4": 57,
+        "5+": 44
+      }
+    }
+  },
+  "glm": {
+    "nll": 1.71735755446005,
+    "rps": 0.7700799599630468,
+    "mae": 1.1288698845826888,
+    "poisson_deviance": 1.0232995924605188,
+    "brier_ge_2": 0.21817622669474987,
+    "brier_ge_3": 0.228585517280082,
+    "brier_ge_4": 0.1506595599126343,
+    "rmse": 1.3896214866184873,
+    "calibration": {
+      "ge_2": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 9,
+            "predicted_mean": 0.3659953171745267,
+            "observed_frequency": 0.5555555555555556,
+            "observed_ci95": [
+              0.26665129349549305,
+              0.8112214789023355
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 53,
+            "predicted_mean": 0.46325260394378887,
+            "observed_frequency": 0.5094339622641509,
+            "observed_ci95": [
+              0.3788352911467995,
+              0.6387575015215675
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 146,
+            "predicted_mean": 0.5607324848137357,
+            "observed_frequency": 0.5821917808219178,
+            "observed_ci95": [
+              0.5010880861123241,
+              0.6590812034080034
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 215,
+            "predicted_mean": 0.6487789040500908,
+            "observed_frequency": 0.6790697674418604,
+            "observed_ci95": [
+              0.6139957550450466,
+              0.7378571361527282
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 127,
+            "predicted_mean": 0.7410871931721983,
+            "observed_frequency": 0.7401574803149606,
+            "observed_ci95": [
+              0.6576327620109064,
+              0.8085803217456327
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 20,
+            "predicted_mean": 0.8230878908874312,
+            "observed_frequency": 0.85,
+            "observed_ci95": [
+              0.6395811352592431,
+              0.9476312541037835
+            ]
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.025360636312200122,
+        "predicted_mean": 0.6311940076627794,
+        "observed_frequency": 0.656140350877193,
+        "bias": -0.02494634321441358,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      },
+      "ge_3": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 27,
+            "predicted_mean": 0.16927861014962234,
+            "observed_frequency": 0.2222222222222222,
+            "observed_ci95": [
+              0.10607239452360037,
+              0.4075692886663257
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 111,
+            "predicted_mean": 0.25272295448226967,
+            "observed_frequency": 0.2972972972972973,
+            "observed_ci95": [
+              0.22020824463768182,
+              0.38794720321099085
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 221,
+            "predicted_mean": 0.35071768879871085,
+            "observed_frequency": 0.3393665158371041,
+            "observed_ci95": [
+              0.2801595515452538,
+              0.40406238700469627
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 138,
+            "predicted_mean": 0.4446340561677462,
+            "observed_frequency": 0.45652173913043476,
+            "observed_ci95": [
+              0.37571826809265996,
+              0.5396802331652159
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 60,
+            "predicted_mean": 0.5379621013873528,
+            "observed_frequency": 0.5666666666666667,
+            "observed_ci95": [
+              0.44103438776125564,
+              0.6842760319531324
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 12,
+            "predicted_mean": 0.6183542774140715,
+            "observed_frequency": 0.8333333333333334,
+            "observed_ci95": [
+              0.5519691377470266,
+              0.9530348578161463
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 1,
+            "predicted_mean": 0.7024908403473038,
+            "observed_frequency": 1.0,
+            "observed_ci95": [
+              0.20654931437723745,
+              1.0
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.026536615437257983,
+        "predicted_mean": 0.3717392064031459,
+        "observed_frequency": 0.3894736842105263,
+        "bias": -0.01773447780738041,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      },
+      "ge_4": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 81,
+            "predicted_mean": 0.07550951812970913,
+            "observed_frequency": 0.09876543209876543,
+            "observed_ci95": [
+              0.050900116268798354,
+              0.18296501401647308
+            ]
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 289,
+            "predicted_mean": 0.15370198389541367,
+            "observed_frequency": 0.1522491349480969,
+            "observed_ci95": [
+              0.11541130506054839,
+              0.1982104723699771
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 148,
+            "predicted_mean": 0.24404316496555642,
+            "observed_frequency": 0.2702702702702703,
+            "observed_ci95": [
+              0.20520640383811534,
+              0.34695806739302876
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 47,
+            "predicted_mean": 0.33876702465314706,
+            "observed_frequency": 0.3617021276595745,
+            "observed_ci95": [
+              0.23966213245714155,
+              0.5046410346520489
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 5,
+            "predicted_mean": 0.4312903059414087,
+            "observed_frequency": 0.8,
+            "observed_ci95": [
+              0.37553462976252533,
+              0.9637758913675698
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.015976688199931244,
+        "predicted_mean": 0.18374216564489176,
+        "observed_frequency": 0.19824561403508772,
+        "bias": -0.014503448390195961,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    }
+  },
+  "baseline": {
+    "nll": 1.745959792306789,
+    "rps": 0.7988561312729683,
+    "mae": 1.1630105475168282,
+    "poisson_deviance": 1.0805040681539975,
+    "brier_ge_2": 0.22584974545768555,
+    "brier_ge_3": 0.23807470219512367,
+    "brier_ge_4": 0.15939164012926424,
+    "rmse": 1.4377704754198044,
+    "calibration": {
+      "ge_2": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 570,
+            "predicted_mean": 0.6409892905268904,
+            "observed_frequency": 0.656140350877193,
+            "observed_ci95": [
+              0.6162176205557386,
+              0.6939725848815075
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.01515106035030267,
+        "predicted_mean": 0.6409892905268904,
+        "observed_frequency": 0.656140350877193,
+        "bias": -0.01515106035030267,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      },
+      "ge_3": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 570,
+            "predicted_mean": 0.37242174364300906,
+            "observed_frequency": 0.3894736842105263,
+            "observed_ci95": [
+              0.35030943017038385,
+              0.43011772777853186
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.017051940567517243,
+        "predicted_mean": 0.37242174364300906,
+        "observed_frequency": 0.3894736842105263,
+        "bias": -0.017051940567517243,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      },
+      "ge_4": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 570,
+            "predicted_mean": 0.1770949738952356,
+            "observed_frequency": 0.19824561403508772,
+            "observed_ci95": [
+              0.16758385943550314,
+              0.23294742893296544
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.021150640139852128,
+        "predicted_mean": 0.1770949738952356,
+        "observed_frequency": 0.19824561403508772,
+        "bias": -0.021150640139852128,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    }
+  },
+  "vs_baseline": {
+    "nll": {
+      "reference": 1.745959792306789,
+      "value": 1.71735755446005,
+      "delta": -0.02860223784673921,
+      "percent_change": -1.6381956774015678,
+      "direction": "improvement"
+    },
+    "rps": {
+      "reference": 0.7988561312729683,
+      "value": 0.7700799599630468,
+      "delta": -0.028776171309921494,
+      "percent_change": -3.602171928513209,
+      "direction": "improvement"
+    },
+    "brier_ge_2": {
+      "reference": 0.22584974545768555,
+      "value": 0.21817622669474987,
+      "delta": -0.007673518762935677,
+      "percent_change": -3.3976211695015444,
+      "direction": "improvement"
+    },
+    "brier_ge_3": {
+      "reference": 0.23807470219512367,
+      "value": 0.228585517280082,
+      "delta": -0.009489184915041665,
+      "percent_change": -3.985801442802782,
+      "direction": "improvement"
+    },
+    "brier_ge_4": {
+      "reference": 0.15939164012926424,
+      "value": 0.1506595599126343,
+      "delta": -0.00873208021662994,
+      "percent_change": -5.4783803024727975,
+      "direction": "improvement"
+    },
+    "mae": {
+      "reference": 1.1630105475168282,
+      "value": 1.1288698845826888,
+      "delta": -0.03414066293413942,
+      "percent_change": -2.935541986874837,
+      "direction": "improvement"
+    },
+    "rmse": {
+      "reference": 1.4377704754198044,
+      "value": 1.3896214866184873,
+      "delta": -0.04814898880131713,
+      "percent_change": -3.348864761411827,
+      "direction": "improvement"
+    },
+    "poisson_deviance": {
+      "reference": 1.0805040681539975,
+      "value": 1.0232995924605188,
+      "delta": -0.05720447569347864,
+      "percent_change": -5.2942397330544475,
+      "direction": "improvement"
+    }
+  },
+  "vs_2024": {
+    "nll": {
+      "reference": 1.7068353388990938,
+      "value": 1.71735755446005,
+      "delta": 0.010522215560956116,
+      "percent_change": 0.6164751409320438,
+      "direction": "degradation"
+    },
+    "rps": {
+      "reference": 0.7661077662144355,
+      "value": 0.7700799599630468,
+      "delta": 0.003972193748611241,
+      "percent_change": 0.5184902077470148,
+      "direction": "degradation"
+    },
+    "brier_ge_2": {
+      "reference": 0.21791142534547198,
+      "value": 0.21817622669474987,
+      "delta": 0.00026480134927789334,
+      "percent_change": 0.1215178822579326,
+      "direction": "degradation"
+    },
+    "brier_ge_3": {
+      "reference": 0.21575308319669975,
+      "value": 0.228585517280082,
+      "delta": 0.01283243408338225,
+      "percent_change": 5.947740766088176,
+      "direction": "degradation"
+    },
+    "brier_ge_4": {
+      "reference": 0.13414538417153507,
+      "value": 0.1506595599126343,
+      "delta": 0.01651417574109923,
+      "percent_change": 12.310655221637846,
+      "direction": "degradation"
+    },
+    "mae": {
+      "reference": 1.1099628036146498,
+      "value": 1.1288698845826888,
+      "delta": 0.018907080968038947,
+      "percent_change": 1.703397709046383,
+      "direction": "degradation"
+    },
+    "rmse": {
+      "reference": 1.3956216422711936,
+      "value": 1.3896214866184873,
+      "delta": -0.006000155652706285,
+      "percent_change": -0.4299270999367571,
+      "direction": "improvement"
+    },
+    "poisson_deviance": {
+      "reference": 1.0434341831149039,
+      "value": 1.0232995924605188,
+      "delta": -0.020134590654385054,
+      "percent_change": -1.9296464482578501,
+      "direction": "improvement"
+    }
+  },
+  "bootstrap": {
+    "method": "paired IID row bootstrap, percentile",
+    "seed": 42,
+    "resamples": 1000,
+    "confidence_level": 0.95,
+    "estimates": {
+      "nll": {
+        "point": 1.71735755446005,
+        "lower": 1.6727552138025807,
+        "upper": 1.7609845083620972
+      },
+      "rps": {
+        "point": 0.7700799599630468,
+        "lower": 0.7244921951082174,
+        "upper": 0.8119217844521078
+      },
+      "brier_ge_2": {
+        "point": 0.21817622669474987,
+        "lower": 0.2053579679734251,
+        "upper": 0.22942728799857917
+      },
+      "brier_ge_3": {
+        "point": 0.228585517280082,
+        "lower": 0.21649899872462955,
+        "upper": 0.24135661821414486
+      },
+      "brier_ge_4": {
+        "point": 0.1506595599126343,
+        "lower": 0.13250804712740813,
+        "upper": 0.17144499573874505
+      },
+      "delta_nll": {
+        "point": -0.028602237846739268,
+        "lower": -0.0496736978893213,
+        "upper": -0.007167565784333566
+      },
+      "delta_rps": {
+        "point": -0.028776171309921557,
+        "lower": -0.04808823085591773,
+        "upper": -0.008436377426555317
+      }
+    },
+    "limitations": "Shared games, teams and kickers imply dependence; row intervals may be optimistic. No model estimation uncertainty or bias correction."
+  },
+  "distribution": {
+    "predicted_mean": 2.186259624259811,
+    "observed_mean": 2.2245614035087717,
+    "bins": [
+      {
+        "label": "0",
+        "predicted_probability": 0.12181629512134595,
+        "observed_frequency": 0.10526315789473684,
+        "observed_count": 60,
+        "expected_count": 69.43528821916719
+      },
+      {
+        "label": "1",
+        "predicted_probability": 0.24698969721587463,
+        "observed_frequency": 0.23859649122807017,
+        "observed_count": 136,
+        "expected_count": 140.78412741304854
+      },
+      {
+        "label": "2",
+        "predicted_probability": 0.2594548012596336,
+        "observed_frequency": 0.26666666666666666,
+        "observed_count": 152,
+        "expected_count": 147.88923671799117
+      },
+      {
+        "label": "3",
+        "predicted_probability": 0.18799704075825405,
+        "observed_frequency": 0.1912280701754386,
+        "observed_count": 109,
+        "expected_count": 107.1583132322048
+      },
+      {
+        "label": "4",
+        "predicted_probability": 0.10555136466723086,
+        "observed_frequency": 0.13157894736842105,
+        "observed_count": 75,
+        "expected_count": 60.16427786032159
+      },
+      {
+        "label": "5+",
+        "predicted_probability": 0.07819080097766087,
+        "observed_frequency": 0.06666666666666667,
+        "observed_count": 38,
+        "expected_count": 44.568756557266695
+      }
+    ]
+  },
+  "props": {
+    "over_1.5": {
+      "predicted_mean": 0.6311940076627794,
+      "observed_frequency": 0.656140350877193,
+      "brier": 0.21817622669474987,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 9,
+            "predicted_mean": 0.3659953171745267,
+            "observed_frequency": 0.5555555555555556,
+            "observed_ci95": [
+              0.26665129349549305,
+              0.8112214789023355
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 53,
+            "predicted_mean": 0.46325260394378887,
+            "observed_frequency": 0.5094339622641509,
+            "observed_ci95": [
+              0.3788352911467995,
+              0.6387575015215675
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 146,
+            "predicted_mean": 0.5607324848137357,
+            "observed_frequency": 0.5821917808219178,
+            "observed_ci95": [
+              0.5010880861123241,
+              0.6590812034080034
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 215,
+            "predicted_mean": 0.6487789040500908,
+            "observed_frequency": 0.6790697674418604,
+            "observed_ci95": [
+              0.6139957550450466,
+              0.7378571361527282
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 127,
+            "predicted_mean": 0.7410871931721983,
+            "observed_frequency": 0.7401574803149606,
+            "observed_ci95": [
+              0.6576327620109064,
+              0.8085803217456327
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 20,
+            "predicted_mean": 0.8230878908874312,
+            "observed_frequency": 0.85,
+            "observed_ci95": [
+              0.6395811352592431,
+              0.9476312541037835
+            ]
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.025360636312200122,
+        "predicted_mean": 0.6311940076627794,
+        "observed_frequency": 0.656140350877193,
+        "bias": -0.02494634321441358,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    },
+    "under_1.5": {
+      "predicted_mean": 0.36880599233722056,
+      "observed_frequency": 0.34385964912280703,
+      "brier": 0.21817622669474987,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 20,
+            "predicted_mean": 0.17691210911256877,
+            "observed_frequency": 0.15,
+            "observed_ci95": [
+              0.052368745896216595,
+              0.36041886474075696
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 127,
+            "predicted_mean": 0.25891280682780166,
+            "observed_frequency": 0.25984251968503935,
+            "observed_ci95": [
+              0.1914196782543675,
+              0.3423672379890937
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 215,
+            "predicted_mean": 0.3512210959499093,
+            "observed_frequency": 0.3209302325581395,
+            "observed_ci95": [
+              0.26214286384727176,
+              0.3860042449549534
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 146,
+            "predicted_mean": 0.43926751518626433,
+            "observed_frequency": 0.4178082191780822,
+            "observed_ci95": [
+              0.3409187965919966,
+              0.4989119138876759
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 53,
+            "predicted_mean": 0.5367473960562111,
+            "observed_frequency": 0.49056603773584906,
+            "observed_ci95": [
+              0.3612424984784323,
+              0.6211647088532004
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 9,
+            "predicted_mean": 0.6340046828254733,
+            "observed_frequency": 0.4444444444444444,
+            "observed_ci95": [
+              0.18877852109766452,
+              0.733348706504507
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.02536063631220019,
+        "predicted_mean": 0.36880599233722056,
+        "observed_frequency": 0.34385964912280703,
+        "bias": 0.024946343214413524,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    },
+    "over_2.5": {
+      "predicted_mean": 0.3717392064031459,
+      "observed_frequency": 0.3894736842105263,
+      "brier": 0.228585517280082,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 27,
+            "predicted_mean": 0.16927861014962234,
+            "observed_frequency": 0.2222222222222222,
+            "observed_ci95": [
+              0.10607239452360037,
+              0.4075692886663257
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 111,
+            "predicted_mean": 0.25272295448226967,
+            "observed_frequency": 0.2972972972972973,
+            "observed_ci95": [
+              0.22020824463768182,
+              0.38794720321099085
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 221,
+            "predicted_mean": 0.35071768879871085,
+            "observed_frequency": 0.3393665158371041,
+            "observed_ci95": [
+              0.2801595515452538,
+              0.40406238700469627
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 138,
+            "predicted_mean": 0.4446340561677462,
+            "observed_frequency": 0.45652173913043476,
+            "observed_ci95": [
+              0.37571826809265996,
+              0.5396802331652159
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 60,
+            "predicted_mean": 0.5379621013873528,
+            "observed_frequency": 0.5666666666666667,
+            "observed_ci95": [
+              0.44103438776125564,
+              0.6842760319531324
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 12,
+            "predicted_mean": 0.6183542774140715,
+            "observed_frequency": 0.8333333333333334,
+            "observed_ci95": [
+              0.5519691377470266,
+              0.9530348578161463
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 1,
+            "predicted_mean": 0.7024908403473038,
+            "observed_frequency": 1.0,
+            "observed_ci95": [
+              0.20654931437723745,
+              1.0
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.026536615437257983,
+        "predicted_mean": 0.3717392064031459,
+        "observed_frequency": 0.3894736842105263,
+        "bias": -0.01773447780738041,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    },
+    "under_2.5": {
+      "predicted_mean": 0.6282607935968542,
+      "observed_frequency": 0.6105263157894737,
+      "brier": 0.228585517280082,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 1,
+            "predicted_mean": 0.2975091596526962,
+            "observed_frequency": 0.0,
+            "observed_ci95": [
+              0.0,
+              0.7934506856227626
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 12,
+            "predicted_mean": 0.3816457225859285,
+            "observed_frequency": 0.16666666666666666,
+            "observed_ci95": [
+              0.04696514218385378,
+              0.4480308622529734
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 60,
+            "predicted_mean": 0.4620378986126472,
+            "observed_frequency": 0.43333333333333335,
+            "observed_ci95": [
+              0.3157239680468677,
+              0.5589656122387444
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 138,
+            "predicted_mean": 0.5553659438322538,
+            "observed_frequency": 0.5434782608695652,
+            "observed_ci95": [
+              0.46031976683478404,
+              0.6242817319073399
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 221,
+            "predicted_mean": 0.6492823112012892,
+            "observed_frequency": 0.6606334841628959,
+            "observed_ci95": [
+              0.5959376129953037,
+              0.7198404484547462
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 111,
+            "predicted_mean": 0.7472770455177303,
+            "observed_frequency": 0.7027027027027027,
+            "observed_ci95": [
+              0.6120527967890093,
+              0.7797917553623184
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 27,
+            "predicted_mean": 0.8307213898503776,
+            "observed_frequency": 0.7777777777777778,
+            "observed_ci95": [
+              0.5924307113336742,
+              0.8939276054763996
+            ]
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.02653661543725796,
+        "predicted_mean": 0.6282607935968542,
+        "observed_frequency": 0.6105263157894737,
+        "bias": 0.017734477807380467,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    },
+    "over_3.5": {
+      "predicted_mean": 0.18374216564489176,
+      "observed_frequency": 0.19824561403508772,
+      "brier": 0.1506595599126343,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 81,
+            "predicted_mean": 0.07550951812970913,
+            "observed_frequency": 0.09876543209876543,
+            "observed_ci95": [
+              0.050900116268798354,
+              0.18296501401647308
+            ]
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 289,
+            "predicted_mean": 0.15370198389541367,
+            "observed_frequency": 0.1522491349480969,
+            "observed_ci95": [
+              0.11541130506054839,
+              0.1982104723699771
+            ]
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 148,
+            "predicted_mean": 0.24404316496555642,
+            "observed_frequency": 0.2702702702702703,
+            "observed_ci95": [
+              0.20520640383811534,
+              0.34695806739302876
+            ]
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 47,
+            "predicted_mean": 0.33876702465314706,
+            "observed_frequency": 0.3617021276595745,
+            "observed_ci95": [
+              0.23966213245714155,
+              0.5046410346520489
+            ]
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 5,
+            "predicted_mean": 0.4312903059414087,
+            "observed_frequency": 0.8,
+            "observed_ci95": [
+              0.37553462976252533,
+              0.9637758913675698
+            ]
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          }
+        ],
+        "ece": 0.015976688199931244,
+        "predicted_mean": 0.18374216564489176,
+        "observed_frequency": 0.19824561403508772,
+        "bias": -0.014503448390195961,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    },
+    "under_3.5": {
+      "predicted_mean": 0.8162578343551083,
+      "observed_frequency": 0.8017543859649123,
+      "brier": 0.1506595599126343,
+      "reliability": {
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "count": 0,
+            "predicted_mean": null,
+            "observed_frequency": null,
+            "observed_ci95": null
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "count": 5,
+            "predicted_mean": 0.5687096940585913,
+            "observed_frequency": 0.2,
+            "observed_ci95": [
+              0.03622410863243014,
+              0.6244653702374747
+            ]
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "count": 47,
+            "predicted_mean": 0.6612329753468529,
+            "observed_frequency": 0.6382978723404256,
+            "observed_ci95": [
+              0.4953589653479511,
+              0.7603378675428585
+            ]
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "count": 148,
+            "predicted_mean": 0.7559568350344436,
+            "observed_frequency": 0.7297297297297297,
+            "observed_ci95": [
+              0.6530419326069712,
+              0.7947935961618846
+            ]
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "count": 289,
+            "predicted_mean": 0.8462980161045863,
+            "observed_frequency": 0.8477508650519031,
+            "observed_ci95": [
+              0.8017895276300229,
+              0.8845886949394517
+            ]
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "count": 81,
+            "predicted_mean": 0.9244904818702908,
+            "observed_frequency": 0.9012345679012346,
+            "observed_ci95": [
+              0.8170349859835269,
+              0.9490998837312017
+            ]
+          }
+        ],
+        "ece": 0.01597668819993122,
+        "predicted_mean": 0.8162578343551083,
+        "observed_frequency": 0.8017543859649123,
+        "bias": 0.014503448390196017,
+        "category": "reasonably_calibrated",
+        "interpretation": "Operational descriptive bands, not significance tests."
+      }
+    }
+  },
+  "subgroups": {
+    "home:home": {
+      "n": 286,
+      "model": {
+        "nll": 1.7433523746597257,
+        "rps": 0.7834517788739249,
+        "mae": 1.143965937587894,
+        "poisson_deviance": 1.0066519452047356,
+        "brier_ge_2": 0.20771639443579942,
+        "brier_ge_3": 0.23503403797090458,
+        "brier_ge_4": 0.1615003575430773,
+        "rmse": 1.410446218427152
+      },
+      "baseline": {
+        "nll": 1.7775335465209092,
+        "rps": 0.822445866102807,
+        "mae": 1.1885006232438258,
+        "poisson_deviance": 1.0750142889271026,
+        "brier_ge_2": 0.2166372689352194,
+        "brier_ge_3": 0.24932525435674865,
+        "brier_ge_4": 0.17587956453912845,
+        "rmse": 1.4696485123451053
+      },
+      "delta": {
+        "nll": -0.034181171861183524,
+        "rps": -0.03899408722888209,
+        "mae": -0.04453468565593166,
+        "poisson_deviance": -0.06836234372236705,
+        "brier_ge_2": -0.008920874499419973,
+        "brier_ge_3": -0.014291216385844074,
+        "brier_ge_4": -0.014379206996051164,
+        "rmse": -0.059202293917953286
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "home:away": {
+      "n": 284,
+      "model": {
+        "nll": 1.691179672146292,
+        "rps": 0.7566139733133596,
+        "mae": 1.1136675213450522,
+        "poisson_deviance": 1.0400644766688079,
+        "brier_ge_2": 0.22870971974425633,
+        "brier_ge_3": 0.22209158447171845,
+        "brier_ge_4": 0.13974241863690648,
+        "rmse": 1.3683298500816272
+      },
+      "baseline": {
+        "nll": 1.7141636877108797,
+        "rps": 0.7751002715499616,
+        "mae": 1.1373409642142889,
+        "poisson_deviance": 1.086032507797983,
+        "brier_ge_2": 0.2351270985753804,
+        "brier_ge_3": 0.22674492079292388,
+        "brier_ge_4": 0.14278760357566864,
+        "rmse": 1.4049371638246282
+      },
+      "delta": {
+        "nll": -0.022984015564587734,
+        "rps": -0.018486298236602083,
+        "mae": -0.02367344286923667,
+        "poisson_deviance": -0.045968031129175246,
+        "brier_ge_2": -0.00641737883112406,
+        "brier_ge_3": -0.004653336321205431,
+        "brier_ge_4": -0.0030451849387621577,
+        "rmse": -0.03660731374300097
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "home:unknown": {
+      "n": 0,
+      "model": null,
+      "baseline": null,
+      "delta": null,
+      "small_sample": true,
+      "warning": false
+    },
+    "week:early": {
+      "n": 243,
+      "model": {
+        "nll": 1.72063687687095,
+        "rps": 0.7705774626384856,
+        "mae": 1.1258292125862015,
+        "poisson_deviance": 1.0233325094448116,
+        "brier_ge_2": 0.2078123757052722,
+        "brier_ge_3": 0.23329982019431567,
+        "brier_ge_4": 0.1521769328173885,
+        "rmse": 1.390310219558354
+      },
+      "baseline": {
+        "nll": 1.7543569891542354,
+        "rps": 0.8051955698801342,
+        "mae": 1.1709795730608084,
+        "poisson_deviance": 1.0907727340113829,
+        "brier_ge_2": 0.22404195555099465,
+        "brier_ge_3": 0.2416005816647256,
+        "brier_ge_4": 0.1589300474993549,
+        "rmse": 1.4461715301359908
+      },
+      "delta": {
+        "nll": -0.03372011228328553,
+        "rps": -0.0346181072416486,
+        "mae": -0.045150360474606854,
+        "poisson_deviance": -0.06744022456657128,
+        "brier_ge_2": -0.016229579845722458,
+        "brier_ge_3": -0.008300761470409923,
+        "brier_ge_4": -0.0067531146819664045,
+        "rmse": -0.05586131057763666
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "week:late": {
+      "n": 327,
+      "model": {
+        "nll": 1.7149206267969044,
+        "rps": 0.7697102561400142,
+        "mae": 1.1311294665250327,
+        "poisson_deviance": 1.0232751312153106,
+        "brier_ge_2": 0.2258778040355544,
+        "brier_ge_3": 0.22508222795849556,
+        "brier_ge_4": 0.14953197087332154,
+        "rmse": 1.389109454734447
+      },
+      "baseline": {
+        "nll": 1.7397196735485954,
+        "rps": 0.7941451723080101,
+        "mae": 1.157088611103412,
+        "poisson_deviance": 1.072873224718693,
+        "brier_ge_2": 0.22719314896632745,
+        "brier_ge_3": 0.23545455323147457,
+        "brier_ge_4": 0.1597346585056189,
+        "rmse": 1.4314955576369575
+      },
+      "delta": {
+        "nll": -0.02479904675169098,
+        "rps": -0.024434916167995868,
+        "mae": -0.025959144578379334,
+        "poisson_deviance": -0.0495980935033824,
+        "brier_ge_2": -0.001315344930773038,
+        "brier_ge_3": -0.010372325272979016,
+        "brier_ge_4": -0.01020268763229737,
+        "rmse": -0.04238610290251055
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "week:unknown": {
+      "n": 0,
+      "model": null,
+      "baseline": null,
+      "delta": null,
+      "small_sample": true,
+      "warning": false
+    },
+    "history:limited": {
+      "n": 205,
+      "model": {
+        "nll": 1.7246674608797488,
+        "rps": 0.7748716648563958,
+        "mae": 1.1321277865829744,
+        "poisson_deviance": 1.0020929613474991,
+        "brier_ge_2": 0.2113718001952654,
+        "brier_ge_3": 0.2355020770052721,
+        "brier_ge_4": 0.15048788984200562,
+        "rmse": 1.4072489478177663
+      },
+      "baseline": {
+        "nll": 1.752930861985469,
+        "rps": 0.8029144348556222,
+        "mae": 1.1632038906491784,
+        "poisson_deviance": 1.0586197635589407,
+        "brier_ge_2": 0.22379855338326782,
+        "brier_ge_3": 0.2407605602236919,
+        "brier_ge_4": 0.15737434728325245,
+        "rmse": 1.4546391935606389
+      },
+      "delta": {
+        "nll": -0.028263401105720343,
+        "rps": -0.02804276999922639,
+        "mae": -0.03107610406620398,
+        "poisson_deviance": -0.056526802211441574,
+        "brier_ge_2": -0.012426753188002404,
+        "brier_ge_3": -0.005258483218419818,
+        "brier_ge_4": -0.006886457441246829,
+        "rmse": -0.04739024574287254
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "history:established": {
+      "n": 365,
+      "model": {
+        "nll": 1.7132519905804933,
+        "rps": 0.7673887284476041,
+        "mae": 1.1270401040071858,
+        "poisson_deviance": 1.035210166099338,
+        "brier_ge_2": 0.2219978908930905,
+        "brier_ge_3": 0.22470087414675607,
+        "brier_ge_4": 0.15075597734956273,
+        "rmse": 1.3796223635854854
+      },
+      "baseline": {
+        "nll": 1.742044533994106,
+        "rps": 0.7965768100827106,
+        "mae": 1.1629019575383852,
+        "poisson_deviance": 1.0927952529265637,
+        "brier_ge_2": 0.2270017848419476,
+        "brier_ge_3": 0.2365662065900374,
+        "brier_ge_4": 0.16052464022085994,
+        "rmse": 1.4282088918890579
+      },
+      "delta": {
+        "nll": -0.028792543413612703,
+        "rps": -0.029188081635106555,
+        "mae": -0.03586185353119942,
+        "poisson_deviance": -0.05758508682722563,
+        "brier_ge_2": -0.005003893948857113,
+        "brier_ge_3": -0.011865332443281335,
+        "brier_ge_4": -0.009768662871297212,
+        "rmse": -0.04858652830357246
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "history:unknown": {
+      "n": 0,
+      "model": null,
+      "baseline": null,
+      "delta": null,
+      "small_sample": true,
+      "warning": false
+    },
+    "lambda:below2": {
+      "n": 180,
+      "model": {
+        "nll": 1.6320529660392926,
+        "rps": 0.7076411503228293,
+        "mae": 1.03361924136223,
+        "poisson_deviance": 0.9895221370155479,
+        "brier_ge_2": 0.24680364534158677,
+        "brier_ge_3": 0.21256856815347386,
+        "brier_ge_4": 0.10670259832260866,
+        "rmse": 1.2903838674678925
+      },
+      "baseline": {
+        "nll": 1.6495718323221478,
+        "rps": 0.7201029294952178,
+        "mae": 1.0818395434709636,
+        "poisson_deviance": 1.0245598695812583,
+        "brier_ge_2": 0.24951286030050285,
+        "brier_ge_3": 0.21666244513403804,
+        "brier_ge_4": 0.11029496949345212,
+        "rmse": 1.3187672196074485
+      },
+      "delta": {
+        "nll": -0.01751886628285515,
+        "rps": -0.012461779172388554,
+        "mae": -0.048220302108733515,
+        "poisson_deviance": -0.03503773256571041,
+        "brier_ge_2": -0.002709214958916073,
+        "brier_ge_3": -0.004093876980564182,
+        "brier_ge_4": -0.0035923711708434614,
+        "rmse": -0.028383352139556006
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "lambda:2to3": {
+      "n": 371,
+      "model": {
+        "nll": 1.7512288839810266,
+        "rps": 0.7967095850611154,
+        "mae": 1.170549750327345,
+        "poisson_deviance": 1.059805781051831,
+        "brier_ge_2": 0.21051434114673423,
+        "brier_ge_3": 0.23838072985064301,
+        "brier_ge_4": 0.16537607828889409,
+        "rmse": 1.433584804917209
+      },
+      "baseline": {
+        "nll": 1.7657272731505251,
+        "rps": 0.8125461862299013,
+        "mae": 1.170311316683089,
+        "poisson_deviance": 1.0888025593908282,
+        "brier_ge_2": 0.21781454930962635,
+        "brier_ge_3": 0.24323647247644214,
+        "brier_ge_4": 0.16888013415780262,
+        "rmse": 1.4557811047808764
+      },
+      "delta": {
+        "nll": -0.014498389169498527,
+        "rps": -0.015836601168785824,
+        "mae": 0.00023843364425601976,
+        "poisson_deviance": -0.028996778338997053,
+        "brier_ge_2": -0.007300208162892119,
+        "brier_ge_3": -0.004855742625799131,
+        "brier_ge_4": -0.0035040558689085344,
+        "rmse": -0.022196299863667335
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "lambda:3plus": {
+      "n": 19,
+      "model": {
+        "nll": 1.864124010431315,
+        "rps": 0.8416270559554497,
+        "mae": 1.2173901787098,
+        "poisson_deviance": 0.6304651720772536,
+        "brier_ge_2": 0.09657749942544287,
+        "brier_ge_3": 0.18906062144383717,
+        "brier_ge_4": 0.2797345477343305,
+        "rmse": 1.4237577045316476
+      },
+      "baseline": {
+        "nll": 2.2731228135809745,
+        "rps": 1.277622759218914,
+        "mae": 1.7894418826522498,
+        "poisson_deviance": 1.448462778376572,
+        "brier_ge_2": 0.1585706454167835,
+        "brier_ge_3": 0.34013730728071645,
+        "brier_ge_4": 0.43924266275339335,
+        "rmse": 2.038944510136773
+      },
+      "delta": {
+        "nll": -0.4089988031496594,
+        "rps": -0.43599570326346426,
+        "mae": -0.5720517039424498,
+        "poisson_deviance": -0.8179976062993184,
+        "brier_ge_2": -0.061993145991340634,
+        "brier_ge_3": -0.15107668583687928,
+        "brier_ge_4": -0.15950811501906287,
+        "rmse": -0.6151868056051255
+      },
+      "small_sample": true,
+      "warning": false
+    },
+    "lambda:unknown": {
+      "n": 0,
+      "model": null,
+      "baseline": null,
+      "delta": null,
+      "small_sample": true,
+      "warning": false
+    },
+    "rest:short": {
+      "n": 73,
+      "model": {
+        "nll": 1.6497427484198577,
+        "rps": 0.6826892670275235,
+        "mae": 0.9892449891467608,
+        "poisson_deviance": 0.8129105390758247,
+        "brier_ge_2": 0.20546912913369564,
+        "brier_ge_3": 0.2378147776173641,
+        "brier_ge_4": 0.14497064405494284,
+        "rmse": 1.231384456371885
+      },
+      "baseline": {
+        "nll": 1.6258380453012933,
+        "rps": 0.6690956350560389,
+        "mae": 0.9564292513346854,
+        "poisson_deviance": 0.7651011328386962,
+        "brier_ge_2": 0.2100058155729526,
+        "brier_ge_3": 0.22957561720061326,
+        "brier_ge_4": 0.1463698993505141,
+        "rmse": 1.1896945295264678
+      },
+      "delta": {
+        "nll": 0.023904703118564408,
+        "rps": 0.013593631971484665,
+        "mae": 0.032815737812075474,
+        "poisson_deviance": 0.04780940623712848,
+        "brier_ge_2": -0.004536686439256948,
+        "brier_ge_3": 0.008239160416750851,
+        "brier_ge_4": -0.00139925529557125,
+        "rmse": 0.04168992684541717
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "rest:long": {
+      "n": 110,
+      "model": {
+        "nll": 1.6914394268260537,
+        "rps": 0.740166761700383,
+        "mae": 1.1079028644817754,
+        "poisson_deviance": 0.8503722829166213,
+        "brier_ge_2": 0.20507063210903317,
+        "brier_ge_3": 0.2414879532652099,
+        "brier_ge_4": 0.162059994381356,
+        "rmse": 1.3172307090749622
+      },
+      "baseline": {
+        "nll": 1.7317350058753438,
+        "rps": 0.7790459018151169,
+        "mae": 1.1528975556165888,
+        "poisson_deviance": 0.9309634410152011,
+        "brier_ge_2": 0.22117258877035012,
+        "brier_ge_3": 0.2546781881899091,
+        "brier_ge_4": 0.17226664117012408,
+        "rmse": 1.3831862375353945
+      },
+      "delta": {
+        "nll": -0.04029557904929004,
+        "rps": -0.03887914011473392,
+        "mae": -0.04499469113481336,
+        "poisson_deviance": -0.08059115809857986,
+        "brier_ge_2": -0.016101956661316946,
+        "brier_ge_3": -0.013190234924699229,
+        "brier_ge_4": -0.010206646788768092,
+        "rmse": -0.06595552846043229
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "rest:normal": {
+      "n": 355,
+      "model": {
+        "nll": 1.7534678326451467,
+        "rps": 0.8102988264456794,
+        "mae": 1.1868541669030586,
+        "poisson_deviance": 1.1278818477252956,
+        "brier_ge_2": 0.224014402346726,
+        "brier_ge_3": 0.22600578778136246,
+        "brier_ge_4": 0.1552864871322865,
+        "rmse": 1.46132673065532
+      },
+      "baseline": {
+        "nll": 1.789425792251672,
+        "rps": 0.8452601179107951,
+        "mae": 1.2292055657206078,
+        "poisson_deviance": 1.1997977669383468,
+        "brier_ge_2": 0.22976553400604796,
+        "brier_ge_3": 0.23788555726353436,
+        "brier_ge_4": 0.16598218995784186,
+        "rmse": 1.519743713464173
+      },
+      "delta": {
+        "nll": -0.03595795960652537,
+        "rps": -0.03496129146511573,
+        "mae": -0.042351398817549235,
+        "poisson_deviance": -0.07191591921305118,
+        "brier_ge_2": -0.005751131659321951,
+        "brier_ge_3": -0.011879769482171898,
+        "brier_ge_4": -0.010695702825555375,
+        "rmse": -0.05841698280885299
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "rest:unknown": {
+      "n": 32,
+      "model": {
+        "nll": 1.5600989958651843,
+        "rps": 0.6260885472084093,
+        "mae": 0.876200176901188,
+        "poisson_deviance": 0.9374778527078824,
+        "brier_ge_2": 0.22744751325519602,
+        "brier_ge_3": 0.19179801756320022,
+        "brier_ge_4": 0.07311843188374552,
+        "rmse": 1.1326444911888998
+      },
+      "baseline": {
+        "nll": 1.5866842941326267,
+        "rps": 0.6481757002658117,
+        "mae": 0.9346865558912387,
+        "poisson_deviance": 0.9906484492427672,
+        "brier_ge_2": 0.2346306574115533,
+        "brier_ge_3": 0.20248708331659462,
+        "brier_ge_4": 0.07172575804204973,
+        "rmse": 1.1806342851172311
+      },
+      "delta": {
+        "nll": -0.02658529826744238,
+        "rps": -0.022087153057402387,
+        "mae": -0.058486378990050714,
+        "poisson_deviance": -0.05317059653488476,
+        "brier_ge_2": -0.007183144156357291,
+        "brier_ge_3": -0.0106890657533944,
+        "brier_ge_4": 0.0013926738416957934,
+        "rmse": -0.04798979392833136
+      },
+      "small_sample": true,
+      "warning": false
+    },
+    "offense:strong": {
+      "n": 225,
+      "model": {
+        "nll": 1.7816491374831924,
+        "rps": 0.8197516976257648,
+        "mae": 1.2026198719471635,
+        "poisson_deviance": 1.0639181173104941,
+        "brier_ge_2": 0.2047617065413519,
+        "brier_ge_3": 0.2336094745691134,
+        "brier_ge_4": 0.18103213132390322,
+        "rmse": 1.467442707323037
+      },
+      "baseline": {
+        "nll": 1.8276980175358533,
+        "rps": 0.8721228615013792,
+        "mae": 1.259802618328298,
+        "poisson_deviance": 1.1560158774158158,
+        "brier_ge_2": 0.21536212103954497,
+        "brier_ge_3": 0.2555029365138331,
+        "brier_ge_4": 0.19783810990407713,
+        "rmse": 1.5431502865793854
+      },
+      "delta": {
+        "nll": -0.046048880052660834,
+        "rps": -0.05237116387561436,
+        "mae": -0.05718274638113452,
+        "poisson_deviance": -0.09209776010532167,
+        "brier_ge_2": -0.010600414498193073,
+        "brier_ge_3": -0.021893461944719694,
+        "brier_ge_4": -0.016805978580173908,
+        "rmse": -0.07570757925634841
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "offense:weak": {
+      "n": 184,
+      "model": {
+        "nll": 1.6264492864208793,
+        "rps": 0.6989673002145547,
+        "mae": 1.0241171246248957,
+        "poisson_deviance": 0.9674150158371649,
+        "brier_ge_2": 0.24215471974933991,
+        "brier_ge_3": 0.2122419669974318,
+        "brier_ge_4": 0.11309190809948705,
+        "rmse": 1.2609490064522
+      },
+      "baseline": {
+        "nll": 1.6402317849198396,
+        "rps": 0.7060976348197616,
+        "mae": 1.0459707079994747,
+        "poisson_deviance": 0.9949800128350854,
+        "brier_ge_2": 0.24076062656489636,
+        "brier_ge_3": 0.21496756491673508,
+        "brier_ge_4": 0.11559872354541445,
+        "rmse": 1.2834386745322788
+      },
+      "delta": {
+        "nll": -0.013782498498960294,
+        "rps": -0.007130334605206956,
+        "mae": -0.02185358337457899,
+        "poisson_deviance": -0.027564996997920477,
+        "brier_ge_2": 0.0013940931844435567,
+        "brier_ge_3": -0.0027255979193032687,
+        "brier_ge_4": -0.0025068154459274017,
+        "rmse": -0.022489668080078795
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "offense:unknown": {
+      "n": 161,
+      "model": {
+        "nll": 1.7314042323420398,
+        "rps": 0.7819345464202578,
+        "mae": 1.1455205720064598,
+        "poisson_deviance": 1.0304026608297903,
+        "brier_ge_2": 0.20951923484673737,
+        "brier_ge_3": 0.24024280213707316,
+        "brier_ge_4": 0.15114787895663168,
+        "rmse": 1.4177805373786403
+      },
+      "baseline": {
+        "nll": 1.7525613617643008,
+        "rps": 0.8024744483288538,
+        "mae": 1.1615019421665949,
+        "poisson_deviance": 1.0727169196743125,
+        "brier_ge_2": 0.2234653564536785,
+        "brier_ge_3": 0.2401266309995578,
+        "brier_ge_4": 0.15571114914849077,
+        "rmse": 1.451946509437138
+      },
+      "delta": {
+        "nll": -0.021157129422261,
+        "rps": -0.020539901908596003,
+        "mae": -0.01598137016013501,
+        "poisson_deviance": -0.04231425884452222,
+        "brier_ge_2": -0.013946121606941114,
+        "brier_ge_3": 0.00011617113751535846,
+        "brier_ge_4": -0.004563270191859092,
+        "rmse": -0.034165972058497696
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "defense:strong": {
+      "n": 193,
+      "model": {
+        "nll": 1.66561774312635,
+        "rps": 0.7307148519011026,
+        "mae": 1.081735284999109,
+        "poisson_deviance": 0.9984445170752885,
+        "brier_ge_2": 0.23960220677252805,
+        "brier_ge_3": 0.22196953633996144,
+        "brier_ge_4": 0.11956740839224063,
+        "rmse": 1.3293236287043853
+      },
+      "baseline": {
+        "nll": 1.6723579700570232,
+        "rps": 0.7356518780497385,
+        "mae": 1.0937526415478298,
+        "poisson_deviance": 1.0119249709366351,
+        "brier_ge_2": 0.2399268872370453,
+        "brier_ge_3": 0.22595355015946084,
+        "brier_ge_4": 0.1217091137668157,
+        "rmse": 1.3354503686487977
+      },
+      "delta": {
+        "nll": -0.006740226930673332,
+        "rps": -0.004937026148635892,
+        "mae": -0.012017356548720715,
+        "poisson_deviance": -0.013480453861346664,
+        "brier_ge_2": -0.00032468046451725185,
+        "brier_ge_3": -0.0039840138194993935,
+        "brier_ge_4": -0.002141705374575073,
+        "rmse": -0.006126739944412485
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "defense:permissive": {
+      "n": 216,
+      "model": {
+        "nll": 1.754716336535968,
+        "rps": 0.7960965042571149,
+        "mae": 1.1582303779533345,
+        "poisson_deviance": 1.029559070680141,
+        "brier_ge_2": 0.20574631504542776,
+        "brier_ge_3": 0.22790254002447077,
+        "brier_ge_4": 0.17812299246440103,
+        "rmse": 1.4193625102965755
+      },
+      "baseline": {
+        "nll": 1.8042630667529682,
+        "rps": 0.8489242319051215,
+        "mae": 1.2197045988586774,
+        "poisson_deviance": 1.1286525311141415,
+        "brier_ge_2": 0.21374335511127324,
+        "brier_ge_3": 0.24855700922328583,
+        "brier_ge_4": 0.19580500418415825,
+        "rmse": 1.5070668842819706
+      },
+      "delta": {
+        "nll": -0.04954673021700029,
+        "rps": -0.052827727648006584,
+        "mae": -0.061474220905342936,
+        "poisson_deviance": -0.09909346043400058,
+        "brier_ge_2": -0.007997040065845479,
+        "brier_ge_3": -0.020654469198815056,
+        "brier_ge_4": -0.017682011719757224,
+        "rmse": -0.0877043739853951
+      },
+      "small_sample": false,
+      "warning": false
+    },
+    "defense:unknown": {
+      "n": 161,
+      "model": {
+        "nll": 1.7292599560687816,
+        "rps": 0.7823650052328385,
+        "mae": 1.1459823762073558,
+        "poisson_deviance": 1.0446969977643146,
+        "brier_ge_2": 0.20916782148507526,
+        "brier_ge_3": 0.2374327682655186,
+        "brier_ge_4": 0.15108616744216452,
+        "rmse": 1.419682648612355
+      },
+      "baseline": {
+        "nll": 1.7559700060572871,
+        "rps": 0.8074506103756905,
+        "mae": 1.1699724156048865,
+        "poisson_deviance": 1.0981170977413257,
+        "brier_ge_2": 0.22521677621177646,
+        "brier_ge_3": 0.23854180793922253,
+        "brier_ge_4": 0.15571114914849077,
+        "rmse": 1.4606711082860384
+      },
+      "delta": {
+        "nll": -0.02671004998850557,
+        "rps": -0.025085605142852074,
+        "mae": -0.02399003939753075,
+        "poisson_deviance": -0.05342009997701114,
+        "brier_ge_2": -0.016048954726701203,
+        "brier_ge_3": -0.001109039673703932,
+        "brier_ge_4": -0.004624981706326248,
+        "rmse": -0.040988459673683364
+      },
+      "small_sample": false,
+      "warning": false
+    }
+  },
+  "drift": {
+    "top_features": {
+      "defense_points_allowed_per_game_last_5": {
+        "reference": {
+          "mean": 22.630625000000002,
+          "median": 22.4,
+          "std": 4.891714313771484,
+          "p05": 14.8,
+          "p25": 19.2,
+          "p75": 26.0,
+          "p95": 30.8
+        },
+        "holdout": {
+          "mean": 23.00048899755501,
+          "median": 22.8,
+          "std": 5.002503017060361,
+          "p05": 15.2,
+          "p25": 19.4,
+          "p75": 26.4,
+          "p95": 31.6
+        },
+        "smd": 0.07561030220300109,
+        "smd_flag": false
+      },
+      "defense_success_rate_allowed_last_3": {
+        "reference": {
+          "mean": 0.43333535497165565,
+          "median": 0.43359974047422434,
+          "std": 0.046610620873696565,
+          "p05": 0.35446560846560843,
+          "p25": 0.4020618556701031,
+          "p75": 0.4662835183015096,
+          "p95": 0.5079492403021815
+        },
+        "holdout": {
+          "mean": 0.4394853560253269,
+          "median": 0.44,
+          "std": 0.05072717153767212,
+          "p05": 0.3524933361286651,
+          "p25": 0.40298507462686567,
+          "p75": 0.47593582887700536,
+          "p95": 0.517487684729064
+        },
+        "smd": 0.13194419937756796,
+        "smd_flag": false
+      },
+      "offense_points_per_game_last_5": {
+        "reference": {
+          "mean": 23.062443181818182,
+          "median": 22.8,
+          "std": 5.635423548972796,
+          "p05": 14.390000000000004,
+          "p25": 19.0,
+          "p75": 27.0,
+          "p95": 32.6
+        },
+        "holdout": {
+          "mean": 23.522738386308067,
+          "median": 23.4,
+          "std": 5.402425999693983,
+          "p05": 14.6,
+          "p25": 19.6,
+          "p75": 27.2,
+          "p95": 32.71999999999999
+        },
+        "smd": 0.08167890141527796,
+        "smd_flag": false
+      },
+      "defense_td_allowed_per_drive_last_3": {
+        "reference": {
+          "mean": 0.2188442511444777,
+          "median": 0.21621621621621623,
+          "std": 0.07772056657308825,
+          "p05": 0.0967741935483871,
+          "p25": 0.16216216216216217,
+          "p75": 0.2702702702702703,
+          "p95": 0.35294117647058826
+        },
+        "holdout": {
+          "mean": 0.2344403151815153,
+          "median": 0.22857142857142856,
+          "std": 0.08331658799479863,
+          "p05": 0.10639097744360902,
+          "p25": 0.17857142857142858,
+          "p75": 0.2903225806451613,
+          "p95": 0.3870967741935484
+        },
+        "smd": 0.20066842953815978,
+        "smd_flag": false
+      },
+      "defense_td_allowed_per_drive_last_5": {
+        "reference": {
+          "mean": 0.218613710039044,
+          "median": 0.21428571428571427,
+          "std": 0.06226135305121961,
+          "p05": 0.11864406779661017,
+          "p25": 0.17543859649122806,
+          "p75": 0.25925925925925924,
+          "p95": 0.3269230769230769
+        },
+        "holdout": {
+          "mean": 0.2340032919619082,
+          "median": 0.23076923076923078,
+          "std": 0.06585770334857867,
+          "p05": 0.12685185185185185,
+          "p25": 0.1896551724137931,
+          "p75": 0.2777777777777778,
+          "p95": 0.3452037617554859
+        },
+        "smd": 0.24717711981305435,
+        "smd_flag": false
+      },
+      "defense_success_rate_allowed_last_5": {
+        "reference": {
+          "mean": 0.43333501160949134,
+          "median": 0.43414771879728087,
+          "std": 0.038151122343223744,
+          "p05": 0.3693379790940767,
+          "p25": 0.40753156267445356,
+          "p75": 0.4600669347295278,
+          "p95": 0.49363457917718223
+        },
+        "holdout": {
+          "mean": 0.4400038773765439,
+          "median": 0.44025157232704404,
+          "std": 0.04272462181988796,
+          "p05": 0.3635086831366843,
+          "p25": 0.41420118343195267,
+          "p75": 0.46984126984126984,
+          "p95": 0.510279082619508
+        },
+        "smd": 0.17480129960677435,
+        "smd_flag": false
+      },
+      "offense_success_rate_before": {
+        "reference": {
+          "mean": 0.43685077020696195,
+          "median": 0.4382724421463084,
+          "std": 0.0428954719648811,
+          "p05": 0.37019833415800757,
+          "p25": 0.40816326530612246,
+          "p75": 0.4645669291338583,
+          "p95": 0.5041617831951755
+        },
+        "holdout": {
+          "mean": 0.4428698977588145,
+          "median": 0.4431008107831832,
+          "std": 0.04023275846772129,
+          "p05": 0.3692614966199872,
+          "p25": 0.41950743093884246,
+          "p75": 0.46838268484246637,
+          "p95": 0.5069277004726842
+        },
+        "smd": 0.14032081420576253,
+        "smd_flag": false
+      },
+      "kicker_xpm_per_game_before": {
+        "reference": {
+          "mean": 2.209984065424687,
+          "median": 2.125,
+          "std": 0.8252731279466228,
+          "p05": 1.0,
+          "p25": 1.6666666666666667,
+          "p75": 2.75,
+          "p95": 3.5773809523809526
+        },
+        "holdout": {
+          "mean": 2.2386939511755193,
+          "median": 2.25,
+          "std": 0.8133109961456627,
+          "p05": 1.0,
+          "p25": 1.6666666666666667,
+          "p75": 2.720779220779221,
+          "p95": 3.5
+        },
+        "smd": 0.03478834434154657,
+        "smd_flag": false
+      },
+      "is_home": {
+        "reference": {
+          "mean": 0.5001007049345418,
+          "median": 1.0,
+          "std": 0.499999989858516,
+          "p05": 0.0,
+          "p25": 0.0,
+          "p75": 1.0,
+          "p95": 1.0
+        },
+        "holdout": {
+          "mean": 0.5017543859649123,
+          "median": 1.0,
+          "std": 0.49999692212041275,
+          "p05": 0.0,
+          "p25": 0.0,
+          "p75": 1.0,
+          "p95": 1.0
+        },
+        "smd": 0.003307362127824013,
+        "smd_flag": false
+      },
+      "is_away": {
+        "reference": {
+          "mean": 0.4998992950654582,
+          "median": 0.0,
+          "std": 0.4999999898585161,
+          "p05": 0.0,
+          "p25": 0.0,
+          "p75": 1.0,
+          "p95": 1.0
+        },
+        "holdout": {
+          "mean": 0.4982456140350877,
+          "median": 0.0,
+          "std": 0.49999692212041275,
+          "p05": 0.0,
+          "p25": 0.0,
+          "p75": 1.0,
+          "p95": 1.0
+        },
+        "smd": -0.003307362127824123,
+        "smd_flag": false
+      },
+      "kicker_games_before": {
+        "reference": {
+          "mean": 7.255790533736153,
+          "median": 7.0,
+          "std": 4.97334579363961,
+          "p05": 0.0,
+          "p25": 3.0,
+          "p75": 11.0,
+          "p95": 16.0
+        },
+        "holdout": {
+          "mean": 7.336842105263158,
+          "median": 7.0,
+          "std": 5.073724248222313,
+          "p05": 0.0,
+          "p25": 3.0,
+          "p75": 11.75,
+          "p95": 16.0
+        },
+        "smd": 0.01629719204939687,
+        "smd_flag": false
+      },
+      "kicker_xpm_before": {
+        "reference": {
+          "mean": 16.316213494461227,
+          "median": 14.0,
+          "std": 13.008553579330927,
+          "p05": 0.0,
+          "p25": 6.0,
+          "p75": 24.0,
+          "p95": 41.0
+        },
+        "holdout": {
+          "mean": 16.789473684210527,
+          "median": 14.0,
+          "std": 13.186831339469816,
+          "p05": 0.0,
+          "p25": 6.0,
+          "p75": 25.75,
+          "p95": 41.549999999999955
+        },
+        "smd": 0.036380692662192335,
+        "smd_flag": false
+      },
+      "kicker_xpa_before": {
+        "reference": {
+          "mean": 17.15105740181269,
+          "median": 15.0,
+          "std": 13.644329056333648,
+          "p05": 0.0,
+          "p25": 6.0,
+          "p75": 26.0,
+          "p95": 43.0
+        },
+        "holdout": {
+          "mean": 17.398245614035087,
+          "median": 15.0,
+          "std": 13.54929908497335,
+          "p05": 0.0,
+          "p25": 6.0,
+          "p75": 27.0,
+          "p95": 42.0
+        },
+        "smd": 0.018116553126344716,
+        "smd_flag": false
+      },
+      "team_two_point_attempt_rate_before": {
+        "reference": {
+          "mean": 0.09799381666802595,
+          "median": 0.07692307692307693,
+          "std": 0.11070587372653666,
+          "p05": 0.0,
+          "p25": 0.0,
+          "p75": 0.13636363636363635,
+          "p95": 0.3
+        },
+        "holdout": {
+          "mean": 0.09965665383424802,
+          "median": 0.07894736842105263,
+          "std": 0.10685757480166488,
+          "p05": 0.0,
+          "p25": 0.024127906976744187,
+          "p75": 0.14285714285714285,
+          "p95": 0.2702797202797201
+        },
+        "smd": 0.015020315636815893,
+        "smd_flag": false
+      },
+      "team_days_rest": {
+        "reference": {
+          "mean": 7.499204010134491,
+          "median": 6.998263888888889,
+          "std": 2.1270118374924616,
+          "p05": 4.303831018518519,
+          "p25": 6.857314814814814,
+          "p75": 7.183414351851852,
+          "p95": 13.98574363425926
+        },
+        "holdout": {
+          "mean": 7.47816865017899,
+          "median": 6.998200231481482,
+          "std": 2.1469894941688485,
+          "p05": 4.300276041666667,
+          "p25": 6.8566666666666665,
+          "p75": 7.303411458333334,
+          "p95": 13.99207175925926
+        },
+        "smd": -0.009889629942210359,
+        "smd_flag": false
+      }
+    },
+    "missingness": {
+      "kicker_games_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": true
+      },
+      "kicker_xpa_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": true
+      },
+      "kicker_xpm_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": true
+      },
+      "kicker_xp_conversion_rate_before": {
+        "reference": 0.0892245720040282,
+        "holdout": 0.08421052631578947,
+        "delta": -0.005014045688238725,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpm_per_game_before": {
+        "reference": 0.07935548841893253,
+        "holdout": 0.07543859649122807,
+        "delta": -0.003916891927704461,
+        "flag": false,
+        "top_feature": true
+      },
+      "kicker_xpa_per_game_before": {
+        "reference": 0.07935548841893253,
+        "holdout": 0.07543859649122807,
+        "delta": -0.003916891927704461,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpa_last_3": {
+        "reference": 0.2231621349446123,
+        "holdout": 0.22280701754385965,
+        "delta": -0.0003551174007526414,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpm_last_3": {
+        "reference": 0.2231621349446123,
+        "holdout": 0.22280701754385965,
+        "delta": -0.0003551174007526414,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xp_conversion_last_3": {
+        "reference": 0.22437059415911378,
+        "holdout": 0.22456140350877193,
+        "delta": 0.00019080934965814977,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpm_per_game_last_3": {
+        "reference": 0.2231621349446123,
+        "holdout": 0.22280701754385965,
+        "delta": -0.0003551174007526414,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpa_last_5": {
+        "reference": 0.35709969788519635,
+        "holdout": 0.35964912280701755,
+        "delta": 0.0025494249218211973,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpm_last_5": {
+        "reference": 0.35709969788519635,
+        "holdout": 0.35964912280701755,
+        "delta": 0.0025494249218211973,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xp_conversion_last_5": {
+        "reference": 0.35709969788519635,
+        "holdout": 0.35964912280701755,
+        "delta": 0.0025494249218211973,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_xpm_per_game_last_5": {
+        "reference": 0.35709969788519635,
+        "holdout": 0.35964912280701755,
+        "delta": 0.0025494249218211973,
+        "flag": false,
+        "top_feature": false
+      },
+      "days_since_last_game": {
+        "reference": 0.07935548841893253,
+        "holdout": 0.07543859649122807,
+        "delta": -0.003916891927704461,
+        "flag": false,
+        "top_feature": false
+      },
+      "previous_game_xpa": {
+        "reference": 0.07935548841893253,
+        "holdout": 0.07543859649122807,
+        "delta": -0.003916891927704461,
+        "flag": false,
+        "top_feature": false
+      },
+      "previous_game_xpm": {
+        "reference": 0.07935548841893253,
+        "holdout": 0.07543859649122807,
+        "delta": -0.003916891927704461,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_has_prior_game": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_has_3_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_has_5_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "kicker_low_sample_flag": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_games_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_points_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_touchdowns_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_drives_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_td_per_drive_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_red_zone_td_rate_before": {
+        "reference": 0.05881168177240685,
+        "holdout": 0.056140350877192984,
+        "delta": -0.002671330895213868,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_epa_per_play_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_success_rate_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": true
+      },
+      "offense_points_per_game_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_touchdowns_per_game_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_td_per_drive_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_red_zone_td_rate_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_epa_per_play_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_success_rate_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_points_per_game_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": true
+      },
+      "offense_touchdowns_per_game_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_td_per_drive_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_red_zone_td_rate_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_epa_per_play_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "offense_success_rate_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_games_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_points_allowed_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_touchdowns_allowed_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_drives_faced_per_game_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_td_allowed_per_drive_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_red_zone_td_rate_allowed_before": {
+        "reference": 0.059013091641490434,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0028727407642974503,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_epa_allowed_per_play_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_success_rate_allowed_before": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_points_allowed_per_game_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_touchdowns_allowed_per_game_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_td_allowed_per_drive_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": true
+      },
+      "defense_red_zone_td_rate_allowed_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_epa_allowed_per_play_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_success_rate_allowed_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": true
+      },
+      "defense_points_allowed_per_game_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": true
+      },
+      "defense_touchdowns_allowed_per_game_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_td_allowed_per_drive_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": true
+      },
+      "defense_red_zone_td_rate_allowed_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_epa_allowed_per_play_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "defense_success_rate_allowed_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": true
+      },
+      "is_home": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": true
+      },
+      "is_away": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": true
+      },
+      "season": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "week": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "game_type": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_days_rest": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": true
+      },
+      "opponent_days_rest": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_short_week_flag": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "opponent_short_week_flag": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_long_rest_flag": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "opponent_long_rest_flag": {
+        "reference": 0.05820745216515609,
+        "holdout": 0.056140350877192984,
+        "delta": -0.0020671012879631065,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_two_point_attempt_rate_before": {
+        "reference": 0.06243705941591138,
+        "holdout": 0.06140350877192982,
+        "delta": -0.0010335506439815567,
+        "flag": false,
+        "top_feature": true
+      },
+      "team_two_point_attempts_before": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_two_point_attempt_rate_last_3": {
+        "reference": 0.17482376636455185,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004648327768060623,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_two_point_attempts_last_3": {
+        "reference": 0.17462235649546828,
+        "holdout": 0.17017543859649123,
+        "delta": -0.004446917898977054,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_two_point_attempt_rate_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_two_point_attempts_last_5": {
+        "reference": 0.29103726082578046,
+        "holdout": 0.2824561403508772,
+        "delta": -0.008581120474903281,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_has_3_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "team_has_5_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "opponent_has_3_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      },
+      "opponent_has_5_prior_games": {
+        "reference": 0.0,
+        "holdout": 0.0,
+        "delta": 0.0,
+        "flag": false,
+        "top_feature": false
+      }
+    },
+    "outside_reference_range": {
+      "kicker_games_before": 0,
+      "kicker_xpa_before": 0,
+      "kicker_xpm_before": 0,
+      "kicker_xp_conversion_rate_before": 0,
+      "kicker_xpm_per_game_before": 0,
+      "kicker_xpa_per_game_before": 0,
+      "kicker_xpa_last_3": 0,
+      "kicker_xpm_last_3": 0,
+      "kicker_xp_conversion_last_3": 0,
+      "kicker_xpm_per_game_last_3": 0,
+      "kicker_xpa_last_5": 0,
+      "kicker_xpm_last_5": 0,
+      "kicker_xp_conversion_last_5": 0,
+      "kicker_xpm_per_game_last_5": 0,
+      "days_since_last_game": 0,
+      "previous_game_xpa": 0,
+      "previous_game_xpm": 0,
+      "kicker_has_prior_game": 0,
+      "kicker_has_3_prior_games": 0,
+      "kicker_has_5_prior_games": 0,
+      "kicker_low_sample_flag": 0,
+      "offense_games_before": 0,
+      "offense_points_per_game_before": 0,
+      "offense_touchdowns_per_game_before": 0,
+      "offense_drives_per_game_before": 0,
+      "offense_td_per_drive_before": 0,
+      "offense_red_zone_td_rate_before": 0,
+      "offense_epa_per_play_before": 0,
+      "offense_success_rate_before": 0,
+      "offense_points_per_game_last_3": 0,
+      "offense_touchdowns_per_game_last_3": 0,
+      "offense_td_per_drive_last_3": 0,
+      "offense_red_zone_td_rate_last_3": 0,
+      "offense_epa_per_play_last_3": 0,
+      "offense_success_rate_last_3": 0,
+      "offense_points_per_game_last_5": 0,
+      "offense_touchdowns_per_game_last_5": 0,
+      "offense_td_per_drive_last_5": 0,
+      "offense_red_zone_td_rate_last_5": 0,
+      "offense_epa_per_play_last_5": 0,
+      "offense_success_rate_last_5": 0,
+      "defense_games_before": 0,
+      "defense_points_allowed_per_game_before": 0,
+      "defense_touchdowns_allowed_per_game_before": 0,
+      "defense_drives_faced_per_game_before": 0,
+      "defense_td_allowed_per_drive_before": 0,
+      "defense_red_zone_td_rate_allowed_before": 0,
+      "defense_epa_allowed_per_play_before": 0,
+      "defense_success_rate_allowed_before": 0,
+      "defense_points_allowed_per_game_last_3": 0,
+      "defense_touchdowns_allowed_per_game_last_3": 0,
+      "defense_td_allowed_per_drive_last_3": 0,
+      "defense_red_zone_td_rate_allowed_last_3": 0,
+      "defense_epa_allowed_per_play_last_3": 0,
+      "defense_success_rate_allowed_last_3": 0,
+      "defense_points_allowed_per_game_last_5": 0,
+      "defense_touchdowns_allowed_per_game_last_5": 0,
+      "defense_td_allowed_per_drive_last_5": 0,
+      "defense_red_zone_td_rate_allowed_last_5": 0,
+      "defense_epa_allowed_per_play_last_5": 1,
+      "defense_success_rate_allowed_last_5": 0,
+      "is_home": 0,
+      "is_away": 0,
+      "season": 570,
+      "week": 0,
+      "game_type": null,
+      "team_days_rest": 0,
+      "opponent_days_rest": 0,
+      "team_short_week_flag": 0,
+      "opponent_short_week_flag": 0,
+      "team_long_rest_flag": 0,
+      "opponent_long_rest_flag": 0,
+      "team_two_point_attempt_rate_before": 0,
+      "team_two_point_attempts_before": 0,
+      "team_two_point_attempt_rate_last_3": 0,
+      "team_two_point_attempts_last_3": 0,
+      "team_two_point_attempt_rate_last_5": 0,
+      "team_two_point_attempts_last_5": 0,
+      "team_has_3_prior_games": 0,
+      "team_has_5_prior_games": 0,
+      "opponent_has_3_prior_games": 0,
+      "opponent_has_5_prior_games": 0
+    },
+    "game_type": {
+      "reference_categories": [
+        "CON",
+        "DIV",
+        "REG",
+        "SB",
+        "WC"
+      ],
+      "holdout_categories": [
+        "CON",
+        "DIV",
+        "REG",
+        "SB",
+        "WC"
+      ],
+      "new_categories": []
+    },
+    "expected_calendar_drift": true
+  },
+  "error_cases": [
+    {
+      "game_id": "2025_18_SEA_SF",
+      "team": "SF",
+      "kicker_id": "00-0034173",
+      "opponent": "SEA",
+      "kicker_name": "Eddy Pineiro",
+      "week": 18.0,
+      "is_home": 1.0,
+      "kicker_games_before": 13.0,
+      "offense_points_per_game_last_5": 34.6,
+      "defense_points_allowed_per_game_last_5": 14.4,
+      "team_short_week_flag": 1.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 5.983726851851852,
+      "target": 0,
+      "lambda": 2.9992791383655955,
+      "observed_pmf": 0.049822970894162,
+      "probability_ge3": 0.5766483963275002,
+      "nll": 2.9992791383655955,
+      "reasons": [
+        "largest_overprediction"
+      ]
+    },
+    {
+      "game_id": "2025_15_IND_SEA",
+      "team": "SEA",
+      "kicker_id": "00-0031492",
+      "opponent": "IND",
+      "kicker_name": "Jason Myers",
+      "week": 15.0,
+      "is_home": 1.0,
+      "kicker_games_before": 13.0,
+      "offense_points_per_game_last_5": 31.2,
+      "defense_points_allowed_per_game_last_5": 26.2,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.140798611111111,
+      "target": 0,
+      "lambda": 2.8501552400786094,
+      "observed_pmf": 0.057835341814891764,
+      "probability_ge3": 0.5424155846724493,
+      "nll": 2.8501552400786094,
+      "reasons": [
+        "largest_overprediction"
+      ]
+    },
+    {
+      "game_id": "2025_17_PHI_BUF",
+      "team": "BUF",
+      "kicker_id": "00-0034084",
+      "opponent": "PHI",
+      "kicker_name": "Mike Badgley",
+      "week": 17.0,
+      "is_home": 1.0,
+      "kicker_games_before": 8.0,
+      "offense_points_per_game_last_5": 28.4,
+      "defense_points_allowed_per_game_last_5": 17.6,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.140729166666667,
+      "target": 0,
+      "lambda": 2.8418277738086717,
+      "observed_pmf": 0.058318974596043634,
+      "probability_ge3": 0.5404569588313329,
+      "nll": 2.8418277738086717,
+      "reasons": [
+        "largest_overprediction"
+      ]
+    },
+    {
+      "game_id": "2025_02_CHI_DET",
+      "team": "DET",
+      "kicker_id": "00-0039172",
+      "opponent": "CHI",
+      "kicker_name": "Jake Bates",
+      "week": 2.0,
+      "is_home": 1.0,
+      "kicker_games_before": 1.0,
+      "offense_points_per_game_last_5": null,
+      "defense_points_allowed_per_game_last_5": null,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.8571990740740745,
+      "target": 7,
+      "lambda": 2.2865237862274164,
+      "observed_pmf": 0.006588322741484538,
+      "probability_ge3": 0.4003843875234421,
+      "nll": 5.022456478570302,
+      "reasons": [
+        "largest_underprediction"
+      ]
+    },
+    {
+      "game_id": "2025_16_CIN_MIA",
+      "team": "CIN",
+      "kicker_id": "00-0036854",
+      "opponent": "MIA",
+      "kicker_name": "Evan McPherson",
+      "week": 16.0,
+      "is_home": 0.0,
+      "kicker_games_before": 14.0,
+      "offense_points_per_game_last_5": 19.6,
+      "defense_points_allowed_per_game_last_5": 16.2,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.9980671296296295,
+      "target": 6,
+      "lambda": 1.6974711416440087,
+      "observed_pmf": 0.006085265784609894,
+      "probability_ge3": 0.24210938003520385,
+      "nll": 5.101884874842481,
+      "reasons": [
+        "largest_underprediction"
+      ]
+    },
+    {
+      "game_id": "2025_03_CIN_MIN",
+      "team": "MIN",
+      "kicker_id": "00-0039404",
+      "opponent": "CIN",
+      "kicker_name": "Will Reichard",
+      "week": 3.0,
+      "is_home": 1.0,
+      "kicker_games_before": 2.0,
+      "offense_points_per_game_last_5": null,
+      "defense_points_allowed_per_game_last_5": null,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.692152777777777,
+      "target": 6,
+      "lambda": 1.7470381946868665,
+      "observed_pmf": 0.0068826051503783564,
+      "probability_ge3": 0.2552423612860241,
+      "nll": 4.978758043130567,
+      "reasons": [
+        "largest_underprediction"
+      ]
+    },
+    {
+      "game_id": "2025_13_MIN_SEA",
+      "team": "SEA",
+      "kicker_id": "00-0031492",
+      "opponent": "MIN",
+      "kicker_name": "Jason Myers",
+      "week": 13.0,
+      "is_home": 1.0,
+      "kicker_games_before": 11.0,
+      "offense_points_per_game_last_5": 31.6,
+      "defense_points_allowed_per_game_last_5": 26.0,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.126354166666666,
+      "target": 2,
+      "lambda": 3.1418252281305996,
+      "observed_pmf": 0.21323411595939057,
+      "probability_ge3": 0.6078230095661726,
+      "nll": 1.5453645809208032,
+      "reasons": [
+        "highest_failed_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_09_CAR_GB",
+      "team": "GB",
+      "kicker_id": "00-0029822",
+      "opponent": "CAR",
+      "kicker_name": "Brandon McManus",
+      "week": 9.0,
+      "is_home": 1.0,
+      "kicker_games_before": 5.0,
+      "offense_points_per_game_last_5": 27.8,
+      "defense_points_allowed_per_game_last_5": 27.8,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.73431712962963,
+      "target": 1,
+      "lambda": 3.1278158932129103,
+      "observed_pmf": 0.13704020487985089,
+      "probability_ge3": 0.6048281437635745,
+      "nll": 1.9874809299305332,
+      "reasons": [
+        "highest_failed_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_10_ATL_IND",
+      "team": "IND",
+      "kicker_id": "00-0034084",
+      "opponent": "ATL",
+      "kicker_name": "Mike Badgley",
+      "week": 10.0,
+      "is_home": 1.0,
+      "kicker_games_before": 4.0,
+      "offense_points_per_game_last_5": 33.4,
+      "defense_points_allowed_per_game_last_5": 23.8,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.85244212962963,
+      "target": 1,
+      "lambda": 3.0083075620477784,
+      "observed_pmf": 0.1485357048163362,
+      "probability_ge3": 0.5786685806647391,
+      "nll": 1.9069299131659547,
+      "reasons": [
+        "highest_failed_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_16_LV_HOU",
+      "team": "LV",
+      "kicker_id": "00-0034161",
+      "opponent": "HOU",
+      "kicker_name": "Daniel Carlson",
+      "week": 16.0,
+      "is_home": 0.0,
+      "kicker_games_before": 14.0,
+      "offense_points_per_game_last_5": 11.4,
+      "defense_points_allowed_per_game_last_5": 15.6,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.140162037037037,
+      "target": 3,
+      "lambda": 1.1921088779671736,
+      "observed_pmf": 0.0857176407031829,
+      "probability_ge3": 0.11880615185418218,
+      "nll": 2.45669663205018,
+      "reasons": [
+        "lowest_successful_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_15_TEN_SF",
+      "team": "TEN",
+      "kicker_id": "00-0035192",
+      "opponent": "SF",
+      "kicker_name": "Joey Slye",
+      "week": 15.0,
+      "is_home": 0.0,
+      "kicker_games_before": 12.0,
+      "offense_points_per_game_last_5": 18.2,
+      "defense_points_allowed_per_game_last_5": 21.0,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.140451388888889,
+      "target": 3,
+      "lambda": 1.2473907855494257,
+      "observed_pmf": 0.0929226120898767,
+      "probability_ge3": 0.13094876692506216,
+      "nll": 2.3759882603054674,
+      "reasons": [
+        "lowest_successful_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_12_CLE_LV",
+      "team": "CLE",
+      "kicker_id": "00-0038428",
+      "opponent": "LV",
+      "kicker_name": "Andre Szmyt",
+      "week": 12.0,
+      "is_home": 0.0,
+      "kicker_games_before": 10.0,
+      "offense_points_per_game_last_5": 17.8,
+      "defense_points_allowed_per_game_last_5": 22.8,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.985891203703703,
+      "target": 3,
+      "lambda": 1.414961023788586,
+      "observed_pmf": 0.11470237648250144,
+      "probability_ge3": 0.17012929655038134,
+      "nll": 2.1654145359463546,
+      "reasons": [
+        "lowest_successful_ge3"
+      ]
+    },
+    {
+      "game_id": "2025_10_LA_SF",
+      "team": "LA",
+      "kicker_id": "00-0039498",
+      "opponent": "SF",
+      "kicker_name": "Harrison Mevis",
+      "week": 10.0,
+      "is_home": 0.0,
+      "kicker_games_before": 0.0,
+      "offense_points_per_game_last_5": 27.2,
+      "defense_points_allowed_per_game_last_5": 22.6,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 7.0136921296296295,
+      "target": 6,
+      "lambda": 1.8894152187820707,
+      "observed_pmf": 0.009551451066143532,
+      "probability_ge3": 0.2934228842575524,
+      "nll": 4.651062191933034,
+      "reasons": [
+        "highest_nll_fill"
+      ]
+    },
+    {
+      "game_id": "2025_16_SF_IND",
+      "team": "SF",
+      "kicker_id": "00-0034173",
+      "opponent": "IND",
+      "kicker_name": "Eddy Pineiro",
+      "week": 16.0,
+      "is_home": 0.0,
+      "kicker_games_before": 11.0,
+      "offense_points_per_game_last_5": 30.0,
+      "defense_points_allowed_per_game_last_5": 24.4,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 1.0,
+      "team_days_rest": 8.159189814814814,
+      "target": 6,
+      "lambda": 2.3559079132514404,
+      "observed_pmf": 0.022514357741367678,
+      "probability_ge3": 0.41873029851892024,
+      "nll": 3.7936020514463666,
+      "reasons": [
+        "highest_nll_fill"
+      ]
+    },
+    {
+      "game_id": "2025_04_CAR_NE",
+      "team": "NE",
+      "kicker_id": "00-0040200",
+      "opponent": "CAR",
+      "kicker_name": "Andy Borregales",
+      "week": 4.0,
+      "is_home": 1.0,
+      "kicker_games_before": 3.0,
+      "offense_points_per_game_last_5": null,
+      "defense_points_allowed_per_game_last_5": null,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.998310185185185,
+      "target": 6,
+      "lambda": 2.4979674376420653,
+      "observed_pmf": 0.02775458042166532,
+      "probability_ge3": 0.4556653942478662,
+      "nll": 3.5843543921704444,
+      "reasons": [
+        "highest_nll_fill"
+      ]
+    },
+    {
+      "game_id": "2025_17_CHI_SF",
+      "team": "SF",
+      "kicker_id": "00-0034173",
+      "opponent": "CHI",
+      "kicker_name": "Eddy Pineiro",
+      "week": 17.0,
+      "is_home": 1.0,
+      "kicker_games_before": 12.0,
+      "offense_points_per_game_last_5": 34.4,
+      "defense_points_allowed_per_game_last_5": 18.0,
+      "team_short_week_flag": 0.0,
+      "team_long_rest_flag": 0.0,
+      "team_days_rest": 6.0020138888888885,
+      "target": 6,
+      "lambda": 2.5974995322974164,
+      "observed_pmf": 0.03176293736066986,
+      "probability_ge3": 0.4809425139630601,
+      "nll": 3.449455160712597,
+      "reasons": [
+        "highest_nll_fill"
+      ]
+    }
+  ],
+  "sanity": {
+    "finite_positive_means": true,
+    "finite_nonnegative_probabilities": true,
+    "mass_including_tail_one": true,
+    "deterministic": true,
+    "row_order_invariant": true,
+    "exact_82_features": true,
+    "no_2025_fitting": true,
+    "phase5_artifact_unchanged": true,
+    "no_calibration_fit": true,
+    "target_reads": 1,
+    "target_used_only_for_evaluation": true
+  },
+  "limitations": [
+    "IID row bootstrap may underestimate uncertainty from shared games/teams/kickers.",
+    "2024 uses model fit through 2023; 2025 uses the frozen refit through 2024; year comparison is descriptive.",
+    "No calibration intercept/slope fitted; reliability, Wilson intervals, ECE and Brier only.",
+    "Subgroups and extreme errors are descriptive, not tuning or causal inference.",
+    "No financial evaluation and no Phase 7."
+  ],
+  "gate": {
+    "verdict": "PASS",
+    "failures": [],
+    "warnings": [],
+    "point_signal": true,
+    "robust_paired_nll_rps_improvement": true,
+    "criteria": {
+      "version": "phase6-prereveal-v1",
+      "seed": 42,
+      "bootstrap_resamples": 1000,
+      "calibration_reasonable_ece_max": 0.05,
+      "calibration_slight_ece_max": 0.1,
+      "calibration_severe_fail_above": 0.15,
+      "global_bias_pass_max": 0.05,
+      "pass_requires_paired_delta_nll_rps_upper95_below_zero": true,
+      "signal_requires_nll_rps_improve_and_at_least_two_briers_improve": true,
+      "subgroup_min_n": 50,
+      "subgroup_nll_warning_relative": 0.2,
+      "year_degradation_warning_relative": 0.1,
+      "top_feature_missing_shift_warning": 0.1,
+      "ece_is_descriptive_not_significance_test": true
+    }
+  }
+}
