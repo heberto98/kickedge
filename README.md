@@ -188,3 +188,14 @@ consume una unica evaluacion de 2025 y bloquea repeticiones. No entrena ni calib
 Consulta la [metodologia](docs/blind_validation_phase6.md), la
 [preregistracion](reports/phase6_preregistration.json), el
 [reporte](reports/phase6_blind_validation.md) y las [metricas](reports/phase6_metrics.json).
+
+## Fase 7A: inferencia offline y props
+
+`python -m kickedge infer --features examples/inference_demo_2024.json --line 2.5 --side over --odds +119 --json`
+carga y verifica el GLM congelado, recibe exactamente 82 features materializadas
+y devuelve lambda, distribucion con cola, Over/Under/Push, implied/no-vig,
+edge, fair odds, EV y advertencias. No entrena ni consulta APIs.
+El ejemplo es **DEMO / TEST FIXTURE historica de 2024**, con precio hipotetico;
+requiere el modelo local aprobado, que sigue ignorado por Git.
+Consulta [contrato y uso](docs/inference_phase7a.md) y
+[verificacion](reports/phase7a_verification.md). No se inicia Fase 7B.
