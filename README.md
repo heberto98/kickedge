@@ -170,3 +170,12 @@ predictores anteriores y separa capturas current/forward de datos experimentales
 locales, sin red. Las closing lines, el clima observado y el techo retrospectivo
 no se aprueban como point-in-time; no bloquean las 5,535 filas elegibles previas.
 ParlayAPI y Open-Meteo se consultan solo mediante sus adaptadores opcionales.
+
+## Fase 5: primer modelo probabilistico
+
+`python -m kickedge.modeling train` compara un baseline, GLM y boosting Poisson
+con los 82 predictores historicos. Entrena 2016–2023, valida exclusivamente en
+2024 y deja un refit 2016–2024. **2025 permanece ciego, sin evaluar.**
+Los binarios quedan ignorados bajo `data/models/phase5/`.
+Consulta la [metodologia](docs/modeling_phase5.md), el
+[reporte](reports/phase5_model_report.md) y las [metricas](reports/phase5_metrics.json).
