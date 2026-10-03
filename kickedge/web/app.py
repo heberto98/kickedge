@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 import threading
 import time
-from typing import Literal
+from typing import Annotated, Literal
 
 from fastapi import FastAPI, Path as PathParam, Query, Request
 from fastapi.exceptions import RequestValidationError
@@ -23,7 +23,12 @@ from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
 
 from kickedge.current.catalog import kicker_candidates, upcoming_games
 from kickedge.current.engine import analyze_current_prop, current_season
+from kickedge.current.multi import MAX_SELECTIONS, MIN_SELECTIONS, analyze_selections
+from kickedge.current.optional import collect_context
+from kickedge.current.snapshot import digest
 from kickedge.current.sources import CurrentSourceError, load_current_sources
+from kickedge.inference.odds import american_to_decimal
+from kickedge.io import write_json
 from kickedge.teams import normalize_team, team_display
 from .artifact import ensure_model
 
@@ -43,15 +48,26 @@ _recent = defaultdict(deque)
 _last_market = [0.]
 
 
+KICKER = r"^[\w .'\-]+$"
+TEAM = r"^[A-Za-z0-9 .'&\-]+$"
+# Decimal odds (stake included) are the primary price format; never strings, NaN or infinity.
+DecimalOdds = Annotated[float, Field(strict=True, gt=1, le=1000, allow_inf_nan=False)]
+
+
 class AnalyzeRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
-    kicker: str = Field(min_length=2, max_length=60, pattern=r"^[\w .'\-]+$")
+    kicker: str = Field(min_length=2, max_length=60, pattern=KICKER)
     # Codes, aliases or names (LAR, Rams, Los Angeles Rams); normalized server-side.
-    team: str = Field(min_length=2, max_length=40, pattern=r"^[A-Za-z0-9 .'&\-]+$")
-    opponent: str = Field(min_length=2, max_length=40, pattern=r"^[A-Za-z0-9 .'&\-]+$")
+    # Optional with a game_id: the kicker's team is then derived, never asked twice.
+    team: str | None = Field(default=None, min_length=2, max_length=40, pattern=TEAM)
+    opponent: str | None = Field(default=None, min_length=2, max_length=40, pattern=TEAM)
     line: float = Field(ge=0, le=20)
     side: Literal['over', 'under']
-    odds: StrictInt
+    decimal_odds: DecimalOdds | None = None
+    over_decimal_odds: DecimalOdds | None = None
+    under_decimal_odds: DecimalOdds | None = None
+    # Legacy American prices, still accepted for older clients and scripts.
+    odds: StrictInt | None = None
     over_odds: StrictInt | None = None
     under_odds: StrictInt | None = None
     season: StrictInt | None = Field(default=None, ge=2015, le=2100)
@@ -67,6 +83,60 @@ class AnalyzeRequest(BaseModel):
         return ' '.join(value.split())
 
 
+class SelectionRequest(BaseModel):
+    """One leg of a multiple-selection analysis: decimal odds only."""
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
+    kicker: str = Field(min_length=2, max_length=60, pattern=KICKER)
+    game_id: str | None = Field(default=None, max_length=20, pattern=GAME_ID)
+    team: str | None = Field(default=None, min_length=2, max_length=40, pattern=TEAM)
+    opponent: str | None = Field(default=None, min_length=2, max_length=40, pattern=TEAM)
+    season: StrictInt | None = Field(default=None, ge=2015, le=2100)
+    week: StrictInt | None = Field(default=None, ge=1, le=23)
+    line: float = Field(ge=0, le=20)
+    side: Literal['over', 'under']
+    decimal_odds: DecimalOdds
+    over_decimal_odds: DecimalOdds | None = None
+    under_decimal_odds: DecimalOdds | None = None
+
+    @field_validator('kicker')
+    @classmethod
+    def _collapse_spaces(cls, value):
+        return ' '.join(value.split())
+
+
+class MultiRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    selections: list[SelectionRequest] = Field(min_length=MIN_SELECTIONS, max_length=MAX_SELECTIONS)
+    include_weather: bool = True
+    refresh_data: bool = False
+
+
+def _price(body):
+    """(odds, over, under, format): decimal or legacy American, never mixed."""
+    if (body.decimal_odds is None) == (body.odds is None):
+        raise ValueError('Provide decimal odds (or legacy American odds), exactly one price')
+    if body.decimal_odds is not None:
+        if body.over_odds is not None or body.under_odds is not None:
+            raise ValueError('Paired odds must use the same decimal format as the selected odds')
+        return body.decimal_odds, body.over_decimal_odds, body.under_decimal_odds, 'decimal'
+    if body.over_decimal_odds is not None or body.under_decimal_odds is not None:
+        raise ValueError('Paired odds must use the same American format as the selected odds')
+    return body.odds, body.over_odds, body.under_odds, 'american'
+
+
+def _teams(team, opponent, game_id):
+    """Canonical (team, opponent, notes); both None when a game lets the server derive them."""
+    if team is None and opponent is None:
+        if game_id is None:
+            raise ValueError('Choose an upcoming game, or provide team and opponent')
+        return None, None, []
+    if team is None or opponent is None:
+        raise ValueError('Provide both team and opponent, or neither with a selected game')
+    canonical = normalize_team(team), normalize_team(opponent)
+    notes = [f'Normalized {raw} \u2192 {code}' for raw, code in zip((team, opponent), canonical) if raw.upper() != code]
+    return canonical[0], canonical[1], notes
+
+
 def _error(status, code, message, **extra):
     return JSONResponse({'error': {'code': code, 'message': message} | extra}, status_code=status)
 
@@ -78,6 +148,9 @@ def _now():
 # Ordered (fragment, status, code); messages come from the 7A/7B validators.
 _KNOWN = (
     ('Kicker roster conflict', 409, 'KICKER_TEAM_MISMATCH'),
+    ('Kicker team unresolved', 422, 'KICKER_TEAM_UNRESOLVED'),
+    ('Choose an upcoming game', 422, 'INVALID_REQUEST'),
+    ('Provide both team and opponent', 422, 'INVALID_REQUEST'),
     ('Ambiguous team name', 422, 'INVALID_TEAM'),
     ('Unknown team', 422, 'INVALID_TEAM'),
     ('No matching future game', 404, 'GAME_NOT_FOUND'),
@@ -104,6 +177,16 @@ def classify(exc):
         if fragment in message:
             return status, code, message
     return 422, 'INVALID_REQUEST', message
+
+
+def _error_extra(exc):
+    """Structured help carried by resolver errors: game suggestions or the two teams."""
+    extra = {}
+    if getattr(exc, 'suggestions', None):
+        extra['suggestions'] = exc.suggestions
+    if getattr(exc, 'teams', None):
+        extra['teams'] = [team_display(code) for code in exc.teams]
+    return extra
 
 
 def _locked_loader(*args, **kwargs):
@@ -211,11 +294,14 @@ def analyze(body: AnalyzeRequest, request: Request):
     except ValueError:
         return _error(503, 'MODEL_NOT_READY', 'Frozen model artifact unavailable or failed verification')
     try:
-        team, opponent = normalize_team(body.team), normalize_team(body.opponent)
+        odds, over_odds, under_odds, odds_format = _price(body)
     except ValueError as exc:
-        return _error(422, 'INVALID_TEAM', str(exc))
-    input_notes = [f'Normalized {raw} → {code}' for raw, code in ((body.team, team), (body.opponent, opponent))
-                   if raw.upper() != code]
+        return _error(422, 'INVALID_ODDS', str(exc))
+    try:
+        team, opponent, input_notes = _teams(body.team, body.opponent, body.game_id)
+    except ValueError as exc:
+        status, code, message = classify(exc)
+        return _error(status, code, message)
     no_market = not body.include_market
     notes = []
     if body.include_market and not _market_allowed():
@@ -223,14 +309,14 @@ def analyze(body: AnalyzeRequest, request: Request):
         notes.append('Market context skipped: provider requests are limited to one per minute.')
     try:
         result = analyze_current_prop(
-            body.kicker, team, opponent, body.line, body.side, body.odds,
-            over_odds=body.over_odds, under_odds=body.under_odds, season=body.season, week=body.week,
+            body.kicker, team, opponent, body.line, body.side, odds,
+            over_odds=over_odds, under_odds=under_odds, odds_format=odds_format,
+            season=body.season, week=body.week,
             game_id=body.game_id, root=ROOT, refresh_data=body.refresh_data,
             no_market=no_market, no_weather=not body.include_weather, source_loader=_locked_loader)
     except ValueError as exc:
         status, code, message = classify(exc)
-        suggestions = getattr(exc, 'suggestions', None)
-        return _error(status, code, message, **({'suggestions': suggestions} if suggestions else {}))
+        return _error(status, code, message, **_error_extra(exc))
     except OSError:
         return _error(503, 'NFL_SOURCE_UNAVAILABLE', 'Required data could not be read or downloaded')
     quality = result['data_quality']
@@ -239,6 +325,54 @@ def analyze(body: AnalyzeRequest, request: Request):
     quality['weather_requested'] = body.include_weather
     result['input_notes'] = input_notes
     return result
+
+
+@app.post('/api/analyze-multi')
+def analyze_multi(body: MultiRequest, request: Request):
+    """2-10 selections, each through the unchanged single-analysis pipeline."""
+    if not _allow(request.client.host if request.client else 'unknown'):
+        return _error(429, 'RATE_LIMITED', 'Too many analyses; wait a minute and retry')
+    try:
+        ensure_model(ROOT)
+    except ValueError:
+        return _error(503, 'MODEL_NOT_READY', 'Frozen model artifact unavailable or failed verification')
+    bundles, contexts = {}, {}
+
+    def loader(root, season, refresh=False, now=None, clock=None):
+        # One verified NFL data load per season for the whole request (refresh at most once).
+        if season not in bundles:
+            bundles[season] = _locked_loader(root, season, refresh=body.refresh_data, now=now, clock=clock)
+        return bundles[season]
+
+    def context(target, player, **kwargs):
+        # Market context is off for selections, so context depends only on the game.
+        if target['game_id'] not in contexts:
+            contexts[target['game_id']] = collect_context(target, player, **kwargs)
+        return contexts[target['game_id']]
+
+    def analyze_one(sel):
+        team, opponent, _ = _teams(sel['team'], sel['opponent'], sel['game_id'])
+        return analyze_current_prop(
+            sel['kicker'], team, opponent, sel['line'], sel['side'], sel['decimal_odds'],
+            over_odds=sel['over_decimal_odds'], under_odds=sel['under_decimal_odds'], odds_format='decimal',
+            season=sel['season'], week=sel['week'], game_id=sel['game_id'], root=ROOT,
+            no_market=True, no_weather=not body.include_weather, source_loader=loader,
+            context_collector=context, output_dir=ANALYSES_DIR/'legs')
+
+    def describe(exc):
+        if isinstance(exc, OSError) and not isinstance(exc, CurrentSourceError):
+            return {'code': 'NFL_SOURCE_UNAVAILABLE', 'message': 'Required data could not be read or downloaded'}
+        _, code, message = classify(exc)
+        return {'code': code, 'message': message} | _error_extra(exc)
+
+    record = analyze_selections([s.model_dump() for s in body.selections], analyze_one, describe)
+    record['generated_at'] = _now().isoformat()
+    record['include_weather'] = body.include_weather
+    if record['combined_available']:
+        analysis_id = digest(record)
+        write_json(ANALYSES_DIR/analysis_id/'multi.json', record)
+        record = record | {'stored': {'id': analysis_id, 'saved_at': record['generated_at'], 'fresh': True}}
+    return record
 
 
 @app.get('/api/games')
@@ -269,26 +403,47 @@ def game_kickers(game_id: str = PathParam(pattern=GAME_ID)):
                               'sha256': players.get('sha256')}}
 
 
+def _decimal_price(market):
+    """(format, raw odds, decimal odds) for current and legacy American analyses."""
+    if market.get('odds_format') == 'decimal':
+        return 'decimal', market['decimal_odds'], market['decimal_odds']
+    return 'american', market['american_odds'], american_to_decimal(market['american_odds'])
+
+
 def _summary(analysis_id, r):
     game = r['game']
     teams = r.get('teams') or {}
     names = {code: (teams.get(code) or team_display(code))['nickname']
              for code in (game.get('home_team'), game.get('away_team')) if code}
-    return {'id': analysis_id, 'generated_at': r['provenance']['analysis_generated_at'],
+    odds_format, odds, decimal = _decimal_price(r['market'])
+    return {'kind': 'single', 'id': analysis_id, 'generated_at': r['provenance']['analysis_generated_at'],
             'kicker': r['player']['kicker_name'], 'team': game['team'], 'opponent': game['opponent'],
             'game_id': game['game_id'], 'kickoff': game.get('kickoff'),
             'matchup': f"{names.get(game.get('away_team'), game.get('away_team'))} @ "
                        f"{names.get(game.get('home_team'), game.get('home_team'))}",
-            'side': r['prop']['side'], 'line': r['prop']['line'], 'odds': r['market']['american_odds'],
+            'side': r['prop']['side'], 'line': r['prop']['line'],
+            'odds_format': odds_format, 'odds': odds, 'decimal_odds': decimal,
             'probability': r['prop']['model_side_probability'], 'expected_xpm': r['prediction']['expected_xpm']}
 
 
-def _stored(analysis_id):
+def _multi_summary(analysis_id, record):
+    combined = record['combined']
+    legs = [f"{leg['result']['player']['kicker_name']} {leg['result']['prop']['side'].title()} "
+            f"{leg['result']['prop']['line']:g}" for leg in record['selections']]
+    return {'kind': 'multi', 'id': analysis_id, 'generated_at': record['generated_at'],
+            'selection_count': combined['selection_count'], 'legs': legs,
+            'combined_decimal_odds': combined['combined_decimal_odds'],
+            'implied_probability': combined['implied_probability'],
+            'model_probability': combined['model_probability'],
+            'same_game_correlation_warning': combined['same_game_correlation_warning']}
+
+
+def _stored(analysis_id, name='analysis.json'):
     """Path of a stored analysis; the id pattern and resolution both confine it."""
     if not re.fullmatch(ANALYSIS_ID, analysis_id):
         return None
     base = ANALYSES_DIR.resolve()
-    path = (base/analysis_id/'analysis.json').resolve()
+    path = (base/analysis_id/name).resolve()
     return path if path.is_relative_to(base) and path.is_file() else None
 
 
@@ -298,13 +453,14 @@ def analyses(limit: int = Query(default=30, ge=1, le=100)):
     found = []
     if ANALYSES_DIR.is_dir():
         for child in ANALYSES_DIR.iterdir():
-            path = _stored(child.name)
-            if path:
-                found.append((path.stat().st_mtime, child.name, path))
+            for name, summarize in (('analysis.json', _summary), ('multi.json', _multi_summary)):
+                path = _stored(child.name, name)
+                if path:
+                    found.append((path.stat().st_mtime, child.name, path, summarize))
     items = []
-    for _, analysis_id, path in sorted(found, reverse=True)[:limit]:
+    for _, analysis_id, path, summarize in sorted(found, key=lambda f: f[:2], reverse=True)[:limit]:
         try:
-            items.append(_summary(analysis_id, json.loads(path.read_text(encoding='utf-8'))))
+            items.append(summarize(analysis_id, json.loads(path.read_text(encoding='utf-8'))))
         except (OSError, ValueError, KeyError, TypeError):
             continue
     return {'analyses': items}
@@ -321,6 +477,20 @@ def stored_analysis(analysis_id: str = PathParam(pattern=ANALYSIS_ID)):
         return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis could not be read')
     saved = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
     return result | {'stored': {'id': analysis_id, 'saved_at': saved}}
+
+
+@app.get('/api/multi/{analysis_id}')
+def stored_multi(analysis_id: str = PathParam(pattern=ANALYSIS_ID)):
+    """A stored multiple-selection analysis, read as saved; nothing is re-run."""
+    path = _stored(analysis_id, 'multi.json')
+    if path is None:
+        return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis not found')
+    try:
+        record = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis could not be read')
+    saved = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+    return record | {'stored': {'id': analysis_id, 'saved_at': saved}}
 
 
 @app.get('/')
