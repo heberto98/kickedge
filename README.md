@@ -199,3 +199,12 @@ El ejemplo es **DEMO / TEST FIXTURE historica de 2024**, con precio hipotetico;
 requiere el modelo local aprobado, que sigue ignorado por Git.
 Consulta [contrato y uso](docs/inference_phase7a.md) y
 [verificacion](reports/phase7a_verification.md). No se inicia Fase 7B.
+
+## Fase 7B: snapshot pregame actual
+
+`python -m kickedge analyze --kicker "Chase McLaughlin" --team TB --opponent GB --season 2026 --week 4 --line 2.5 --side over --odds +115 --over-odds +115 --under-odds -145`
+descarga/verifica fuentes nflverse actuales (cache local ignorado), resuelve
+partido y kicker, construye las 82 features con los builders historicos y
+ejecuta el motor 7A congelado. ParlayAPI y Open-Meteo son opcionales y nunca
+bloquean la prop manual. Consulta [arquitectura](docs/current_phase7b.md) y
+[verificacion](reports/phase7b_verification.md). No se inicia Fase 7C.
