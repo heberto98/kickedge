@@ -7,10 +7,10 @@ name = "kickedge"
 version = "0.1.0"
 description = "Auditable historical NFL kicker labels from nflverse"
 requires-python = ">=3.11"
-dependencies = ["duckdb>=1.4,<2", "requests>=2.32,<3", "python-dotenv>=1,<2", "numpy>=2.2,<2.3", "pandas>=2.2,<2.3", "scipy>=1.15,<1.16", "scikit-learn>=1.6,<1.7", "joblib>=1.5,<1.6", "threadpoolctl>=3.6,<4"]
+dependencies = ["duckdb>=1.4,<2", "requests>=2.32,<3", "python-dotenv>=1,<2", "numpy>=2.2,<2.3", "pandas>=2.2,<2.3", "scipy>=1.15,<1.16", "scikit-learn>=1.6,<1.7", "joblib>=1.5,<1.6", "threadpoolctl>=3.6,<4", "fastapi>=0.115,<1", "uvicorn>=0.30,<1"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<10"]
+dev = ["pytest>=8,<10", "httpx>=0.27,<1"]
 
 [project.scripts]
 kickedge = "kickedge.cli:main"
@@ -21,6 +21,7 @@ include = ["kickedge*"]
 [tool.setuptools.package-data]
 "kickedge.features" = ["contract.json"]
 "kickedge.inference" = ["release.json"]
+"kickedge.web" = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>About the model · KickEdge</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="/" aria-label="KickEdge home"><span class="mark" aria-hidden="true">KE</span>KickEdge</a>
+    <nav aria-label="Primary"><a href="/">Analyze a pick</a></nav>
+  </div>
+</header>
+<main id="main" class="wrap prose">
+  <section class="intro"><h1>About the model</h1>
+    <p>What KickEdge estimates, how it was validated, and what it cannot tell you.</p></section>
+
+  <section class="card">
+    <h2>What it predicts</h2>
+    <p>KickEdge estimates the distribution of a kicker's made extra points (XPM) in one upcoming game. From that distribution it computes the probability that your Over/Under pick wins, loses or pushes.</p>
+    <ul>
+      <li>Model: Poisson generalized linear model (GLM), regularization alpha = 0.1.</li>
+      <li>Inputs: 82 pregame predictors covering the kicker's season-to-date and recent history, the team offense, the opponent defense, rest and game context.</li>
+      <li>Fitted on the 2016–2024 seasons and then frozen. It is not retrained or recalibrated.</li>
+      <li>Every input is rebuilt from data available before kickoff (cutoff: one hour before kickoff), with the same definitions used in training.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Validation</h2>
+    <ul>
+      <li>The 2025 season was held out and never used for fitting or model selection.</li>
+      <li>One preregistered blind evaluation on 2025 was run once and passed.</li>
+      <li>On that holdout the model beat its frozen baseline on log loss (NLL), ranked probability score (RPS) and Brier score.</li>
+      <li>This is evidence about probability quality, not proof of future profitability.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Limitations</h2>
+    <ul>
+      <li>It is not a betting recommendation system. It does not find, rank or size bets.</li>
+      <li>Validation rests on a single blind holdout season.</li>
+      <li>The Poisson assumption may not capture every source of variance, and the high-XPM tail is more uncertain.</li>
+      <li>Early-season histories are sparse. Missing recent windows are handled by the frozen imputer.</li>
+      <li>The kicker's current team affiliation is not independently verified against a roster source.</li>
+      <li>Optional providers (market, weather) can fail. When shown, they are context only and are not model predictors.</li>
+      <li>Estimates depend on the freshness of the NFL source data.</li>
+      <li>There is no guarantee of future performance.</li>
+    </ul>
+  </section>
+</main>
+<footer class="wrap foot">
+  <p>KickEdge provides probabilistic analysis, not betting recommendations. Estimates are uncertain and do not guarantee future outcomes.</p>
+</footer>
+</body>
+</html>

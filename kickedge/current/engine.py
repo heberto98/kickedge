@@ -73,6 +73,7 @@ def analyze_current_prop(kicker, team, opponent, line=None, side='over', odds=No
     result['schema_version']='7b.1'
     result['game'].update({k:target[k] for k in ('home_team','away_team','venue','roof','season','week','game_type','is_home')})
     result['player']=player
+    result['features']=built['snapshot']['features']
     result['context']=optional['context']
     result['provenance']={'features':built['provenance'],'provider_timestamps':optional['provider_timestamps'],
                           'model_version':result['model']['version'],'analysis_generated_at':finished.isoformat(),

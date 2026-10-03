@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>KickEdge</title>
+<meta name="description" content="Pregame probability analysis for an extra-point (XPM) pick you are considering.">
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="/" aria-label="KickEdge home"><span class="mark" aria-hidden="true">KE</span>KickEdge</a>
+    <nav aria-label="Primary"><a href="/about">About the model</a></nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <section class="intro">
+    <h1>XPM pick analysis</h1>
+    <p>Enter an extra-point (XPM) pick you're considering. KickEdge builds a pregame snapshot and estimates its probability using the frozen model.</p>
+  </section>
+
+  <form id="pick" class="card form" novalidate>
+    <div class="grid">
+      <div class="field span2">
+        <label for="kicker">Kicker</label>
+        <input id="kicker" name="kicker" required autocomplete="off" placeholder="e.g. Chase McLaughlin" maxlength="60">
+      </div>
+      <div class="field">
+        <label for="team">Team</label>
+        <input id="team" name="team" required placeholder="TB" maxlength="3" autocapitalize="characters" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="opponent">Opponent</label>
+        <input id="opponent" name="opponent" required placeholder="GB" maxlength="3" autocapitalize="characters" autocomplete="off">
+      </div>
+      <fieldset class="field side">
+        <legend>Side</legend>
+        <div class="seg">
+          <input type="radio" id="side-over" name="side" value="over" checked><label for="side-over">Over</label>
+          <input type="radio" id="side-under" name="side" value="under"><label for="side-under">Under</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="line">XPM line</label>
+        <input id="line" name="line" required inputmode="decimal" placeholder="2.5" maxlength="4">
+      </div>
+      <div class="field">
+        <label for="odds">American odds</label>
+        <input id="odds" name="odds" required inputmode="numeric" placeholder="+115" maxlength="6">
+      </div>
+    </div>
+
+    <details class="advanced">
+      <summary>Advanced</summary>
+      <div class="grid">
+        <div class="field"><label for="season">Season</label><input id="season" name="season" inputmode="numeric" placeholder="auto" maxlength="4"></div>
+        <div class="field"><label for="week">Week</label><input id="week" name="week" inputmode="numeric" placeholder="auto" maxlength="2"></div>
+        <div class="field span2"><label for="game_id">Game ID</label><input id="game_id" name="game_id" placeholder="2026_04_GB_TB" maxlength="20" autocomplete="off"></div>
+        <div class="field"><label for="over_odds">Over odds</label><input id="over_odds" name="over_odds" inputmode="numeric" placeholder="+115" maxlength="6"></div>
+        <div class="field"><label for="under_odds">Under odds</label><input id="under_odds" name="under_odds" inputmode="numeric" placeholder="-145" maxlength="6"></div>
+      </div>
+      <p class="hint">Supply both sides of the same quote to see the no-vig comparison.</p>
+      <div class="checks">
+        <label><input type="checkbox" name="include_weather" checked> Include weather context</label>
+        <label><input type="checkbox" name="include_market"> Include market context (uses provider)</label>
+        <label><input type="checkbox" name="refresh_data"> Refresh NFL data</label>
+      </div>
+    </details>
+
+    <div class="actions">
+      <button id="submit" type="submit">Analyze pick</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+
+  <div id="error" class="card error" role="alert" hidden></div>
+  <div id="result" hidden></div>
+</main>
+
+<footer class="wrap foot">
+  <p>KickEdge provides probabilistic analysis, not betting recommendations. Estimates are uncertain and do not guarantee future outcomes.</p>
+</footer>
+</body>
+</html>
