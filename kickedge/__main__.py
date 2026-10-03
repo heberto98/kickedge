@@ -4,6 +4,9 @@ import sys
 if len(sys.argv)>1 and sys.argv[1]=='infer':
     from .inference.cli import main
     main(sys.argv[2:])
+elif len(sys.argv)>1 and sys.argv[1]=='analyze':
+    from .current.cli import main
+    main(sys.argv[2:])
 else:
     from .cli import main
     main()
