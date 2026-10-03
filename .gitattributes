@@ -1,2 +1,3 @@
 # Stable source bytes across Windows/Linux checkouts for reproducible builds.
 * text=auto eol=lf
+models/** binary
