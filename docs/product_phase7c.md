@@ -26,7 +26,10 @@ estática y el JS construye el resultado con `textContent` (sin `innerHTML`).
 | GET | `/healthz` | `{"status":"ok"}` sin I/O. |
 | GET | `/readyz` | Instala/verifica el artifact (SHA-256, metadata, contrato, versiones, estructura). 503 si falla. No descarga datos NFL. |
 | GET | `/api/model` | Tipo, versión, alpha, periodo, 82 features en orden, hash, validación ciega 2025 PASS. Sin rutas locales. |
-| POST | `/api/analyze` | Pick manual → análisis completo. |
+| POST | `/api/analyze` | Pick manual → análisis completo. Equipos por código, alias o nombre. |
+| GET | `/api/games` | Próximos partidos de la temporada actual desde el cache 7B (`?refresh=true` fuerza descarga). |
+| GET | `/api/games/{game_id}/kickers` | Kickers de ambos equipos con estado de roster nflverse. |
+| GET | `/api/analyses`, `/api/analyses/{id}` | Análisis guardados localmente; id validado (64 hex), sin volver a ejecutar nada. |
 | GET | `/`, `/about`, `/static/*` | Interfaz. |
 
 `/docs`, `/openapi.json` están desactivados.
@@ -43,9 +46,9 @@ Errores: `{"error":{"code","message"}}`, sin eco de valores ni traceback.
 
 | Código | HTTP |
 |---|---|
-| INVALID_LINE, INVALID_ODDS, INVALID_REQUEST | 422 |
-| GAME_NOT_FOUND, KICKER_NOT_FOUND | 404 |
-| GAME_AMBIGUOUS, KICKER_AMBIGUOUS, STALE_DATA, GAME_STARTED | 409 |
+| INVALID_LINE, INVALID_ODDS, INVALID_TEAM, INVALID_REQUEST | 422 |
+| GAME_AMBIGUOUS, KICKER_AMBIGUOUS, KICKER_TEAM_MISMATCH, STALE_DATA, GAME_STARTED | 409 |
+| GAME_NOT_FOUND (con `suggestions`), KICKER_NOT_FOUND, ANALYSIS_NOT_FOUND | 404 |
 | RATE_LIMITED | 429 |
 | REQUEST_TOO_LARGE / LENGTH_REQUIRED | 413 / 411 |
 | NFL_SOURCE_UNAVAILABLE, MODEL_NOT_READY | 503 |
@@ -84,9 +87,9 @@ horizontal). Página "About the model" con método, validación y limitaciones.
   la prop manual nunca llama a ParlayAPI). Como máximo una consulta de mercado por
   minuto para todo el servicio; si se excede se omite con warning. Fallos →
   `source_failures` no críticos + warning; el análisis continúa.
-- Clima: Open-Meteo solo si el venue tiene coordenadas y techo abierto. El
-  schedule de nflverse no trae coordenadas, así que normalmente queda
-  "Weather data unavailable" (no es un error).
+- Clima: Open-Meteo solo si el venue tiene coordenadas y techo abierto.
+  Desde el polish pass, `kickedge/venues.json` (versionado) aporta coordenadas y
+  tipo de techo por nombre de venue; ver [reports/product_polish.md](../reports/product_polish.md).
 
 ## Seguridad
 
