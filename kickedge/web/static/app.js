@@ -1,7 +1,7 @@
 'use strict';
-// KickEdge client: picks a game and kicker, collects the user's pick, calls
-// /api/analyze and renders the engine's own numbers. No probability or price
-// arithmetic is redone here; display only.
+// KickEdge client: single and multiple XPM selections. Prices are entered as
+// decimal odds; every probability, price comparison and combined figure comes
+// from the server (7A/7B engine). This file only collects input and displays.
 
 const $ = (id) => document.getElementById(id);
 
@@ -20,11 +20,14 @@ function h(tag, attrs, ...children) {
   return el;
 }
 
-const pct = (p, d = 1) => (p === null || p === undefined) ? '—' : (100 * p).toFixed(d) + '%';
-const num = (x, d = 2) => (x === null || x === undefined) ? '—' : Number(x).toFixed(d);
-const american = (x) => (x === null || x === undefined) ? '—' : (x > 0 ? '+' : '') + Math.round(x);
-const signedPP = (x) => (x === null || x === undefined) ? '—' : (x > 0 ? '+' : '') + x.toFixed(1) + ' pp';
+const has = (x) => x !== null && x !== undefined;
+const pct = (p, d = 1) => has(p) ? (100 * p).toFixed(d) + '%' : '—';
+const num = (x, d = 2) => has(x) ? Number(x).toFixed(d) : '—';
+const dec = (x) => has(x) ? Number(x).toFixed(2) : '—';
+const american = (x) => has(x) ? (x > 0 ? '+' : '') + Math.round(x) : '—';
+const signedPP = (x) => has(x) ? (x > 0 ? '+' : '') + x.toFixed(1) + ' pp' : '—';
 const signed = (x, d) => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(x).toFixed(d);
+const americanToDecimal = (a) => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
 
 function kickoffLabel(iso, short) {
   const d = new Date(iso);
@@ -37,19 +40,48 @@ const localTime = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.t
 
 class FieldError extends Error { constructor(field, message) { super(message); this.field = field; } }
 
-function parseOdds(text, name, required) {
-  const t = (text || '').trim();
-  if (!t) { if (required) throw new FieldError(name, 'American odds are required, e.g. +115 or -140.'); return null; }
-  if (!/^[+-]?\d{3,5}$/.test(t)) throw new FieldError(name, 'Use American odds such as +115, 115 or -140 (|odds| ≥ 100).');
-  const v = parseInt(t, 10);
-  if (Math.abs(v) < 100) throw new FieldError(name, 'American odds must be at least 100 in magnitude.');
+function parseDecimal(text, field, required) {
+  const t = (text || '').trim().replace(',', '.');
+  if (!t) { if (required) throw new FieldError(field, 'Decimal odds are required, e.g. 1.91.'); return null; }
+  if (!/^\d{1,4}(\.\d{1,4})?$/.test(t)) throw new FieldError(field, 'Use decimal odds such as 1.30, 1.91 or 2.50.');
+  const v = parseFloat(t);
+  if (!(v > 1)) throw new FieldError(field, 'Decimal odds must be greater than 1.00.');
+  if (v > 1000) throw new FieldError(field, 'Decimal odds must be at most 1000.');
   return v;
 }
 
-// ---------- state ----------
+function parseLine(text, field) {
+  const t = (text || '').trim();
+  if (!/^\d{1,2}(\.[05])?$/.test(t)) throw new FieldError(field, 'XPM line must be a whole or half number, e.g. 1.5.');
+  return parseFloat(t);
+}
 
-const state = { games: [], gamesLoaded: false, game: null, kickerTeams: [], kickersLoaded: false, kicker: null };
+// Show 1.8 as 1.80 and 2 as 2.00 without ever rounding extra digits away.
+function normalizeDecimalInput(input) {
+  const t = input.value.trim();
+  if (/^\d{1,4}(\.\d{0,2})?$/.test(t) && parseFloat(t) > 1) input.value = parseFloat(t).toFixed(2);
+}
+
+// ---------- shared game catalog ----------
+
+const catalog = { games: [], loaded: false, season: null, error: null, pickers: new Set() };
 const nickname = (teams, code) => (teams && teams[code] && teams[code].nickname) || code;
+const teamName = (teams, code) => (teams && teams[code] && teams[code].name) || code;
+
+async function loadGames() {
+  try {
+    const res = await fetch('/api/games');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data && data.error ? data.error.message : 'Games unavailable');
+    catalog.games = data.games.map((g) => ({ ...g, search: g.search.toLowerCase() }));
+    catalog.season = data.season;
+    catalog.error = null;
+  } catch (e) {
+    catalog.error = 'Upcoming games unavailable (NFL schedule could not be loaded). Use Advanced to enter the teams.';
+  }
+  catalog.loaded = true;
+  catalog.pickers.forEach((p) => p.gamesArrived());
+}
 
 // ---------- accessible combobox (ARIA 1.2 list autocomplete) ----------
 
@@ -107,152 +139,107 @@ function combobox(input, list, { options, onSelect, onType, emptyText }) {
 
 const matches = (query, haystack) => query.toLowerCase().split(/\s+/).filter(Boolean).every((t) => haystack.includes(t));
 
-function gameOptions(query) {
-  const out = []; let week = null;
-  for (const g of state.games) {
-    if (query && !matches(query, g.search)) continue;
-    if (g.week !== week) { week = g.week; out.push({ group: g.game_type === 'REG' ? `Week ${g.week}` : `${g.game_type} · Week ${g.week}` }); }
-    out.push({ value: g, label: g.display_name,
-      sub: [kickoffLabel(g.kickoff, true), g.venue].filter(Boolean).join(' · ') });
-  }
-  return out;
-}
+// ---------- game + kicker picker (one per form or selection card) ----------
+// The kicker's team is derived from the chosen kicker; it is never asked twice.
 
-function kickerOptions(query) {
-  const out = [];
-  for (const team of state.kickerTeams) {
-    const ks = team.kickers.filter((k) => !query || matches(query, k.kicker_name.toLowerCase() + ' ' + k.kicker_id.toLowerCase()));
-    if (!ks.length) continue;
-    out.push({ group: team.name });
-    for (const k of ks) out.push({ value: k, label: k.kicker_name,
-      sub: [k.roster_label, k.season_games ? `${k.season_games} game${k.season_games === 1 ? '' : 's'} this season` : 'No games this season'].join(' · ') });
-  }
-  return out;
-}
+function makePicker(el) {
+  const st = { game: null, kicker: null, kickerTeams: [], kickersLoaded: false, manualTeam: null };
+  const kickerHint = el.kickerHint.textContent;
 
-function renderTeamChoice(game) {
-  const box = $('kteam');
-  const choices = [game.away, game.home].map((t) => [
-    h('input', { type: 'radio', id: `kteam-${t.code}`, name: 'kteam', value: t.code }),
-    h('label', { for: `kteam-${t.code}` }, t.nickname)]);
-  box.replaceChildren(...choices.flat());
-  $('kteam-field').hidden = false;
-}
-
-let gameBox = null, kickerBox = null;
-
-async function selectGame(g) {
-  state.game = g; state.kicker = null; state.kickerTeams = []; state.kickersLoaded = false;
-  $('game').value = `${g.display_name} — ${kickoffLabel(g.kickoff, true)}`;
-  $('game-clear').hidden = false;
-  $('game-hint').textContent = [`Week ${g.week}`, kickoffLabel(g.kickoff), g.venue, g.roof ? `roof: ${g.roof}` : null].filter(Boolean).join(' · ');
-  $('kicker').value = '';
-  $('kicker').placeholder = 'Search the kicker, e.g. ' + (g.home ? g.home.nickname : 'name');
-  renderTeamChoice(g);
-  const hint = $('kicker-hint');
-  hint.textContent = 'Loading kickers…';
-  try {
-    const res = await fetch(`/api/games/${encodeURIComponent(g.game_id)}/kickers`);
-    const data = await res.json();
-    if (!res.ok) throw new Error(data && data.error ? data.error.message : 'Kickers unavailable');
-    if (state.game !== g) return;
-    state.kickerTeams = data.teams; state.kickersLoaded = true;
-    if (kickerBox) kickerBox.refresh();
-    const count = data.teams.reduce((a, t) => a + t.kickers.length, 0);
-    hint.textContent = count ? `${count} kicker${count === 1 ? '' : 's'} from nflverse roster and season data. Pick one, or type a name.`
-                             : 'No kickers found for this game in nflverse data. Type the name and choose the team.';
-  } catch (e) {
-    state.kickersLoaded = true;
-    hint.textContent = 'Kicker list unavailable. Type the kicker name or ID and choose the team.';
-  }
-}
-
-function clearGame() {
-  state.game = null; state.kicker = null; state.kickerTeams = [];
-  $('game').value = ''; $('game-clear').hidden = true;
-  $('kteam-field').hidden = true; $('kteam').replaceChildren();
-  if (state.games.length) $('game-hint').textContent = `${state.games.length} upcoming games. Or use Advanced for a manual matchup.`;
-  $('kicker-hint').textContent = 'Pick from the list, or type a name or nflverse ID.';
-  $('game').focus();
-}
-
-function selectKicker(k) {
-  state.kicker = k;
-  $('kicker').value = k.kicker_name;
-  const radio = $(`kteam-${k.team}`);
-  if (radio) radio.checked = true;
-  $('kicker-hint').textContent = `${k.roster_label}${k.season_games ? ` · ${k.season_games} game${k.season_games === 1 ? '' : 's'} this season` : ''}`;
-}
-
-async function initPickers() {
-  gameBox = combobox($('game'), $('game-list'), { options: gameOptions, onSelect: selectGame,
-    emptyText: () => state.gamesLoaded ? 'No upcoming game matches' : 'Loading upcoming games…',
-    onType: () => { if (state.game) { state.game = null; state.kickerTeams = []; $('game-clear').hidden = true; $('kteam-field').hidden = true; } } });
-  kickerBox = combobox($('kicker'), $('kicker-list'), { options: kickerOptions, onSelect: selectKicker,
-    emptyText: () => !state.game ? 'Choose a game first, or keep typing a name or ID' : state.kickersLoaded ? 'No kicker matches; keep typing to use a name or ID' : 'Loading kickers…',
-    onType: () => { state.kicker = null; } });
-  $('game-clear').addEventListener('click', clearGame);
-  try {
-    const res = await fetch('/api/games');
-    const data = await res.json();
-    if (!res.ok) throw new Error(data && data.error ? data.error.message : 'Games unavailable');
-    state.games = data.games.map((g) => ({ ...g, search: g.search.toLowerCase() }));
-    state.gamesLoaded = true;
-    gameBox.refresh();
-    $('game-hint').textContent = state.games.length
-      ? `${state.games.length} upcoming games in the ${data.season} schedule. Or use Advanced for a manual matchup.`
-      : 'No upcoming games in the current schedule. Use Advanced for a manual matchup.';
-  } catch (e) {
-    state.gamesLoaded = true;
-    $('game-hint').textContent = 'Upcoming games unavailable (NFL schedule could not be loaded). Use Advanced to enter the teams.';
-  }
-}
-
-// ---------- form ----------
-
-function collect(form) {
-  const f = new FormData(form);
-  const text = (k) => (f.get(k) || '').toString().trim();
-  const body = { side: text('side'), include_weather: f.has('include_weather'),
-                 include_market: f.has('include_market'), refresh_data: f.has('refresh_data') };
-  const teamOk = (v) => /^[A-Za-z0-9 .'&-]{2,40}$/.test(v);
-  if (state.game) {
-    const g = state.game, team = text('kteam');
-    if (!team) throw new FieldError('kteam', "Choose the kicker's team.");
-    Object.assign(body, { team, opponent: team === g.home_team ? g.away_team : g.home_team,
-                          game_id: g.game_id, season: g.season, week: g.week });
-  } else {
-    body.team = text('team'); body.opponent = text('opponent');
-    if (!body.team && !body.opponent && $('game')) throw new FieldError('game', 'Choose an upcoming game, or enter the teams under Advanced.');
-    if (!teamOk(body.team)) throw new FieldError('team', 'Enter a team name or abbreviation, e.g. Rams or LAR.');
-    if (!teamOk(body.opponent)) throw new FieldError('opponent', 'Enter the opponent, e.g. Eagles or PHI.');
-    for (const k of ['season', 'week']) {
-      const v = text(k);
-      if (v) { if (!/^\d{1,4}$/.test(v)) throw new FieldError(k, 'Must be a whole number.'); body[k] = parseInt(v, 10); }
+  const gameOptions = (query) => {
+    const out = []; let week = null;
+    for (const g of catalog.games) {
+      if (query && !matches(query, g.search)) continue;
+      if (g.week !== week) { week = g.week; out.push({ group: g.game_type === 'REG' ? `Week ${g.week}` : `${g.game_type} · Week ${g.week}` }); }
+      out.push({ value: g, label: g.display_name, sub: [kickoffLabel(g.kickoff, true), g.venue].filter(Boolean).join(' · ') });
     }
-    const gid = text('game_id').toUpperCase();
-    if (gid) { if (!/^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$/.test(gid)) throw new FieldError('game_id', 'Format: 2026_04_GB_TB.'); body.game_id = gid; }
-  }
-  body.kicker = state.kicker ? state.kicker.kicker_id : text('kicker').replace(/\s+/g, ' ');
-  if (body.kicker.length < 2) throw new FieldError('kicker', 'Choose or type the kicker.');
-  const line = text('line');
-  if (!/^\d{1,2}(\.[05])?$/.test(line)) throw new FieldError('line', 'XPM line must be a whole or half number, e.g. 1.5.');
-  body.line = parseFloat(line);
-  body.odds = parseOdds(text('odds'), 'odds', true);
-  const over = parseOdds(text('over_odds'), 'over_odds', false);
-  const under = parseOdds(text('under_odds'), 'under_odds', false);
-  if ((over === null) !== (under === null)) throw new FieldError(over === null ? 'over_odds' : 'under_odds', 'Supply both Over and Under odds, or neither.');
-  if (over !== null) {
-    if ((body.side === 'over' ? over : under) !== body.odds) throw new FieldError('odds', 'Odds must equal the selected side of the paired quote.');
-    body.over_odds = over; body.under_odds = under;
-  }
-  return body;
+    return out;
+  };
+  const kickerOptions = (query) => {
+    const out = [];
+    for (const team of st.kickerTeams) {
+      const ks = team.kickers.filter((k) => !query || matches(query, k.kicker_name.toLowerCase() + ' ' + k.kicker_id.toLowerCase()));
+      if (!ks.length) continue;
+      out.push({ group: team.name });
+      for (const k of ks) out.push({ value: k, label: k.kicker_name,
+        sub: [k.roster_label, k.season_games ? `${k.season_games} game${k.season_games === 1 ? '' : 's'} this season` : 'No games this season'].join(' · ') });
+    }
+    return out;
+  };
+
+  const gameBox = combobox(el.game, el.gameList, { options: gameOptions, onSelect: (g) => st.selectGame(g),
+    emptyText: () => catalog.loaded ? 'No upcoming game matches' : 'Loading upcoming games…',
+    onType: () => { if (st.game) { Object.assign(st, { game: null, kickerTeams: [], kicker: null, manualTeam: null }); el.gameClear.hidden = true; } } });
+  const kickerBox = combobox(el.kicker, el.kickerList, { options: kickerOptions, onSelect: (k) => st.selectKicker(k),
+    emptyText: () => !st.game ? 'Choose a game first, or keep typing a name or ID' : st.kickersLoaded ? 'No kicker matches; keep typing to use a name or ID' : 'Loading kickers…',
+    onType: () => { st.kicker = null; st.manualTeam = null; } });
+
+  st.selectGame = async (g) => {
+    Object.assign(st, { game: g, kicker: null, manualTeam: null, kickerTeams: [], kickersLoaded: false });
+    el.game.value = `${g.display_name} — ${kickoffLabel(g.kickoff, true)}`;
+    el.gameClear.hidden = false;
+    el.gameHint.textContent = [`Week ${g.week}`, kickoffLabel(g.kickoff), g.venue, g.roof ? `roof: ${g.roof}` : null].filter(Boolean).join(' · ');
+    el.kicker.value = '';
+    el.kicker.placeholder = 'Search the kicker, e.g. ' + (g.home ? g.home.nickname : 'name');
+    el.kickerHint.textContent = 'Loading kickers…';
+    try {
+      const res = await fetch(`/api/games/${encodeURIComponent(g.game_id)}/kickers`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data && data.error ? data.error.message : 'Kickers unavailable');
+      if (st.game !== g) return;
+      st.kickerTeams = data.teams; st.kickersLoaded = true;
+      kickerBox.refresh();
+      const count = data.teams.reduce((a, t) => a + t.kickers.length, 0);
+      el.kickerHint.textContent = count ? `${count} kicker${count === 1 ? '' : 's'} from nflverse roster and season data. Pick one, or type a name.`
+        : 'No kickers found for this game in nflverse data. Type the name; KickEdge derives the team when it can.';
+    } catch (e) {
+      st.kickersLoaded = true;
+      el.kickerHint.textContent = 'Kicker list unavailable. Type the kicker name or ID.';
+    }
+  };
+  st.selectKicker = (k) => {
+    st.kicker = k; st.manualTeam = null;
+    el.kicker.value = k.kicker_name;
+    const team = st.kickerTeams.find((t) => t.code === k.team);
+    el.kickerHint.textContent = [team ? team.name : k.team, k.roster_label,
+      k.season_games ? `${k.season_games} game${k.season_games === 1 ? '' : 's'} this season` : null].filter(Boolean).join(' · ');
+  };
+  st.clear = () => {
+    Object.assign(st, { game: null, kicker: null, manualTeam: null, kickerTeams: [], kickersLoaded: false });
+    el.game.value = ''; el.gameClear.hidden = true;
+    st.gamesArrived();
+    el.kickerHint.textContent = kickerHint;
+    el.game.focus();
+  };
+  st.gamesArrived = () => {
+    if (!st.game) el.gameHint.textContent = catalog.error || (catalog.games.length
+      ? `${catalog.games.length} upcoming games in the ${catalog.season} schedule.${el.manualNote ? ' Or use Advanced for a manual matchup.' : ''}`
+      : 'No upcoming games in the current schedule.');
+    gameBox.refresh();
+  };
+  // Request fields for the chosen game: team/opponent only when the kicker's team is known.
+  st.target = () => {
+    const g = st.game;
+    if (!g) return null;
+    const out = { game_id: g.game_id, season: g.season, week: g.week };
+    const team = st.kicker ? st.kicker.team : st.manualTeam;
+    if (team) Object.assign(out, { team, opponent: team === g.home_team ? g.away_team : g.home_team });
+    return out;
+  };
+  st.kickerValue = () => st.kicker ? st.kicker.kicker_id : el.kicker.value.trim().replace(/\s+/g, ' ');
+  el.gameClear.addEventListener('click', () => st.clear());
+  catalog.pickers.add(st);
+  if (catalog.loaded) st.gamesArrived();
+  return st;
 }
+
+// ---------- errors ----------
 
 const ERROR_TITLES = {
   GAME_NOT_FOUND: 'No upcoming game found for that matchup', GAME_AMBIGUOUS: 'Ambiguous game',
   KICKER_NOT_FOUND: 'Kicker not found', KICKER_AMBIGUOUS: 'Ambiguous kicker',
-  KICKER_TEAM_MISMATCH: 'Kicker listed on the other team', INVALID_TEAM: 'Team not recognized',
+  KICKER_TEAM_MISMATCH: 'Kicker listed on the other team', KICKER_TEAM_UNRESOLVED: "Kicker's team needed",
+  INVALID_TEAM: 'Team not recognized',
   NFL_SOURCE_UNAVAILABLE: 'NFL data source unavailable', STALE_DATA: 'Data not usable for this kickoff',
   GAME_STARTED: 'Game already started or too close to kickoff', MODEL_NOT_READY: 'Model not ready',
   INVALID_ODDS: 'Invalid odds', INVALID_LINE: 'Invalid line', RATE_LIMITED: 'Too many requests',
@@ -264,14 +251,24 @@ const ERROR_HINTS = {
   KICKER_NOT_FOUND: 'Pick the kicker from the list, or use the full name as listed by nflverse, or the stable player ID.',
   KICKER_AMBIGUOUS: 'Several players match this name. Use the stable player ID (e.g. 00-0035358).',
   KICKER_TEAM_MISMATCH: "Choose the kicker's own team, or pick the other team's kicker.",
+  KICKER_TEAM_UNRESOLVED: 'KickEdge could not tell which team this kicker plays for in this game. Choose the team once.',
   INVALID_TEAM: 'Use a team name (Rams, Los Angeles Rams) or an abbreviation (LA, LAR).',
+  INVALID_ODDS: 'Use decimal odds greater than 1.00, e.g. 1.30 or 2.50.',
   NFL_SOURCE_UNAVAILABLE: 'Required NFL data could not be downloaded or verified. Try again later.',
   STALE_DATA: 'Cached sources are newer than the pregame cutoff; analysis would not be pregame.',
   MODEL_NOT_READY: 'The frozen model artifact is missing or failed verification. No analysis was run.',
 };
 
-function showError(code, message, suggestions) {
-  const box = $('error');
+function teamButtons(teams, onPick) {
+  return h('div', { class: 'team-choice' }, teams.map((t) => {
+    const b = h('button', { type: 'button', class: 'secondary' }, `Kicks for ${t.nickname}`);
+    b.addEventListener('click', () => onPick(t.code));
+    return b;
+  }));
+}
+
+function showError(code, message, suggestions, box, extra) {
+  box = box || $('error');
   const list = (suggestions || []).length ? h('div', { class: 'suggest' },
     h('p', {}, 'Upcoming games involving these teams:'),
     h('ul', {}, suggestions.map((g) => h('li', {}, $('game')
@@ -281,11 +278,11 @@ function showError(code, message, suggestions) {
     h('h2', {}, ERROR_TITLES[code] || 'Error'),
     h('p', {}, message),
     ERROR_HINTS[code] ? h('p', { class: 'muted' }, ERROR_HINTS[code]) : null,
-    list,
+    list, extra || null,
     h('p', { class: 'code' }, code));
   box.querySelectorAll('button[data-game]').forEach((b) => b.addEventListener('click', () => {
-    const g = state.games.find((x) => x.game_id === b.dataset.game) || (suggestions || []).find((x) => x.game_id === b.dataset.game);
-    if (g) { box.hidden = true; selectGame(g); $('kicker').focus(); }
+    const g = catalog.games.find((x) => x.game_id === b.dataset.game) || (suggestions || []).find((x) => x.game_id === b.dataset.game);
+    if (g && single) { box.hidden = true; single.selectGame(g); $('kicker').focus(); }
   }));
   box.hidden = false;
   box.focus();
@@ -302,20 +299,20 @@ function markField(field, message) {
   (el.matches('input, select, textarea') ? el : el.querySelector('input') || el).focus();
 }
 
-function clearErrors() {
-  $('error').hidden = true;
-  document.querySelectorAll('.field-error').forEach((e) => e.remove());
-  document.querySelectorAll('[aria-invalid]').forEach((e) => {
+function clearErrors(scope) {
+  const root = scope || document;
+  root.querySelectorAll('.field-error').forEach((e) => e.remove());
+  root.querySelectorAll('.leg-error').forEach((e) => { e.hidden = true; e.replaceChildren(); });
+  root.querySelectorAll('[aria-invalid]').forEach((e) => {
     e.removeAttribute('aria-invalid');
-    const keep = { game: 'game-hint', kicker: 'kicker-hint' }[e.id];
-    if (keep) e.setAttribute('aria-describedby', keep); else e.removeAttribute('aria-describedby');
+    if (e.dataset.hint) e.setAttribute('aria-describedby', e.dataset.hint); else e.removeAttribute('aria-describedby');
   });
 }
 
-// ---------- rendering ----------
+// ---------- shared result helpers ----------
 
 function fmt(v, kind) {
-  if (v === null || v === undefined) return 'Not available';
+  if (!has(v)) return 'Not available';
   if (kind === 'pct') return pct(v, 1);
   if (kind === 'bool') return v ? 'Yes' : 'No';
   if (kind === 'homeaway') return v ? 'Home' : 'Away';
@@ -334,28 +331,63 @@ function chip(state) {
   return h('span', { class: 'chip ' + (STATE_CLASS[state] || 'off') }, state);
 }
 
-function storedBanner(r) {
-  if (!r.stored) return null;
-  return h('p', { class: 'banner', role: 'note' }, `Saved analysis from ${localTime(r.provenance.analysis_generated_at)}. Shown as stored; nothing was re-run.`);
+// Price of an analysis: decimal (current) or American (stored before decimal odds).
+function price(r) {
+  const m = r.market;
+  if (m.odds_format === 'decimal') return { decimal: true, label: dec(m.decimal_odds), name: 'decimal odds' };
+  return { decimal: false, label: `${american(m.american_odds)} (US, legacy; ≈ ${dec(americanToDecimal(m.american_odds))} decimal)`, name: 'American odds' };
 }
 
-function hero(r) {
+// The probability compared with the price: conditional on no push for integer lines.
+function comparable(r) {
+  const p = r.prop, conditional = p.price_probability_basis !== 'direct';
+  return { p: conditional ? p.model_probability_conditional : p.model_side_probability, conditional };
+}
+
+// Statistical feedback: price-implied vs model probability, never a recommendation.
+function feedbackText(implied, model, diffPP, priceLabel, priceName, conditional) {
+  const lead = `At ${priceName} ${priceLabel}, the price implies ${pct(implied)}. ${conditional ? 'Conditional on no push, ' : ''}KickEdge estimates ${pct(model)}.`;
+  if (Math.abs(diffPP) < 1) return `${lead} The two estimates are very close (difference ${signedPP(diffPP)}).`;
+  return `${lead} The model estimate is ${Math.abs(diffPP).toFixed(1)} percentage points ${diffPP > 0 ? 'higher' : 'lower'} than the probability implied by the price (${signedPP(diffPP)}).`;
+}
+
+function diffStat(label, diffPP) {
+  const dir = Math.abs(diffPP) < 1 ? 'close' : diffPP > 0 ? 'higher' : 'lower';
+  const word = { close: 'very close', higher: 'model higher', lower: 'model lower' }[dir];
+  return h('div', { class: `stat diff ${dir}` }, h('span', { class: 'stat-label' }, label),
+    h('span', { class: 'stat-value' }, signedPP(diffPP)), h('span', { class: 'stat-note' }, word));
+}
+
+function priceFeedback(r) {
+  const pr = price(r), c = comparable(r);
+  return feedbackText(r.market.implied_probability, c.p, r.analysis.edge_raw_pp, pr.label, pr.name, c.conditional);
+}
+
+// ---------- single analysis sections ----------
+
+function storedBanner(r) {
+  if (!r.stored || r.stored.fresh) return null;
+  const when = r.provenance ? r.provenance.analysis_generated_at : r.generated_at;
+  return h('p', { class: 'banner', role: 'note' }, `Saved analysis from ${localTime(when)}. Shown as stored; nothing was re-run.`);
+}
+
+function hero(r, ids) {
   const prop = r.prop, side = prop.side, sideName = side === 'over' ? 'Over' : 'Under';
-  const g = r.game, teams = r.teams;
+  const g = r.game, teams = r.teams, pr = price(r);
   const matchup = g.home_team && g.away_team ? `${nickname(teams, g.away_team)} @ ${nickname(teams, g.home_team)}` : `${g.team} vs ${g.opponent}`;
   const integer = Number.isInteger(prop.line);
-  return h('section', { class: 'card hero', 'aria-labelledby': 'hero-h' },
+  return h('section', { class: 'card hero', 'aria-labelledby': ids.hero },
     h('div', { class: 'hero-top' },
       h('div', { class: 'hero-id' },
-        h('h2', { id: 'hero-h' }, r.player.kicker_name),
-        h('p', { class: 'matchup' }, matchup, h('span', { class: 'muted-inline' }, ` · kicks for ${nickname(teams, g.team)}`)),
+        h('h2', { id: ids.hero }, r.player.kicker_name),
+        h('p', { class: 'matchup' }, matchup, h('span', { class: 'muted-inline' }, ` · ${teamName(teams, g.team)}`)),
         h('p', { class: 'muted' }, [kickoffLabel(g.kickoff), g.venue].filter(Boolean).join(' · '))),
       h('div', { class: 'pick' }, h('span', { class: 'eyebrow' }, 'Your pick'),
         h('span', { class: 'pick-text' }, `${sideName} ${prop.line} XPM`),
-        h('span', { class: 'pick-odds' }, american(r.market.american_odds)))),
+        h('span', { class: 'pick-odds' }, pr.decimal ? `Decimal odds ${pr.label}` : pr.label))),
     h('div', { class: 'hero-main' },
       h('div', { class: 'prob' }, h('span', { class: 'eyebrow' }, 'KickEdge probability'),
-        h('span', { class: 'prob-value', id: 'pick-probability' }, pct(prop.model_side_probability)),
+        h('span', { class: 'prob-value', id: ids.prob }, pct(prop.model_side_probability)),
         h('span', { class: 'muted' }, `that ${sideName} ${prop.line} wins`)),
       h('div', { class: 'prob xpm' }, h('span', { class: 'eyebrow' }, 'Expected XPM'),
         h('span', { class: 'prob-value small' }, num(r.prediction.expected_xpm)))),
@@ -363,10 +395,11 @@ function hero(r) {
       stat('P(Over)', pct(prop.p_over), side === 'over' ? 'sel' : ''),
       stat('P(Under)', pct(prop.p_under), side === 'under' ? 'sel' : ''),
       integer ? stat('P(Push)', pct(prop.p_push), 'push') : null),
+    h('div', { class: 'feedback', role: 'note' }, h('h3', {}, 'Statistical feedback'), h('p', {}, priceFeedback(r))),
     (r.input_notes || []).length ? h('p', { class: 'note' }, r.input_notes.join(' · ')) : null);
 }
 
-function distribution(r) {
+function distribution(r, ids) {
   const p = r.prediction.distribution.probabilities, tail = r.prediction.distribution.tail_probability;
   const line = r.prop.line, side = r.prop.side, sideName = side === 'over' ? 'Over' : 'Under';
   const top = Math.max(5, Math.floor(line) + 2);
@@ -388,8 +421,8 @@ function distribution(r) {
     if (!Number.isInteger(line) && k === Math.floor(line)) rows.push(h('div', { class: 'dist-line', 'aria-hidden': 'true' }, h('span', {}, `Line ${line}`)));
   }
   const label = bins.map(([k, name, v]) => `${name} XPM: ${pct(v)}, ${word[outcome(k)].toLowerCase()}`).join('; ');
-  return h('section', { class: 'card', 'aria-labelledby': 'dist-h' },
-    h('h2', { id: 'dist-h' }, 'XPM distribution'),
+  return h('section', { class: 'card', 'aria-labelledby': ids.dist },
+    h('h2', { id: ids.dist }, 'XPM distribution'),
     h('p', { class: 'muted' }, `Probability of each made-XPM count (Poisson, expected ${num(r.prediction.expected_xpm)}), marked for your pick: ${sideName} ${line}.`),
     h('div', { class: 'dist', role: 'img', 'aria-label': `Probability by XPM count for ${sideName} ${line}. ${label}` }, rows),
     h('p', { class: 'dist-sum' }, `Win ${pct(total('win'))} · Loss ${pct(total('loss'))}`, Number.isInteger(line) ? ` · Push ${pct(total('push'))}` : ''),
@@ -423,22 +456,21 @@ const KEY_DATA = [
     ['team_two_point_attempt_rate_before', '2-pt attempt rate', 'pct'], ['team_two_point_attempts_before', '2-pt attempts (season)', 0]]],
 ];
 
-function keyData(r) {
+function keyData(r, ids) {
   const f = r.features;
   if (!f) {
-    return h('section', { class: 'card', 'aria-labelledby': 'saw-h' }, h('h2', { id: 'saw-h' }, 'What KickEdge saw'),
+    return h('section', { class: 'card', 'aria-labelledby': ids.saw }, h('h2', { id: ids.saw }, 'What KickEdge saw'),
       h('p', { class: 'muted' }, 'Model inputs were not stored with this older analysis.'));
   }
-  return h('section', { class: 'card', 'aria-labelledby': 'saw-h' },
-    h('h2', { id: 'saw-h' }, 'What KickEdge saw'),
+  return h('section', { class: 'card', 'aria-labelledby': ids.saw },
+    h('h2', { id: ids.saw }, 'What KickEdge saw'),
     h('p', { class: 'muted' }, 'Selected model inputs from the pregame snapshot: data the model used, not causal explanations. Differences compare recent games with the season average.'),
     h('div', { class: 'groups' }, KEY_DATA.map(([title, who, rows]) => h('div', { class: 'group' },
       h('h3', {}, who ? `${title} · ${nickname(r.teams, r.game[who])}` : title),
       h('dl', {}, rows.map(([k, label, kind, base]) => {
         const v = f[k], b = base ? f[base] : null;
-        const delta = base && v !== null && v !== undefined && b !== null && b !== undefined
-          ? h('span', { class: 'delta' }, `${signed(v - b, kind)} vs season`) : null;
-        return [h('dt', {}, label), h('dd', { class: v === null || v === undefined ? 'na' : '' }, fmt(v, kind), delta)];
+        const delta = base && has(v) && has(b) ? h('span', { class: 'delta' }, `${signed(v - b, kind)} vs season`) : null;
+        return [h('dt', {}, label), h('dd', { class: has(v) ? '' : 'na' }, fmt(v, kind), delta)];
       }))))),
     h('details', {}, h('summary', {}, `View all ${Object.keys(f).length} model inputs`),
       h('div', { class: 'scroll' }, h('table', { class: 'inputs' },
@@ -455,14 +487,19 @@ function weatherState(r) {
   return w.available ? 'Available' : 'Unavailable';
 }
 
-function quality(r) {
+function rosterMessage(r) {
+  const verified = r.data_quality.kicker_current_team_verified;
+  return (r.player && r.player.roster && r.player.roster.message) ||
+    (verified ? 'Current team affiliation verified.' : 'Kicker identity is verified from NFL history, but current team affiliation could not be independently confirmed.');
+}
+
+function quality(r, ids) {
   const q = r.data_quality, f = r.features || {}, fresh = q.source_data_freshness || [];
   const oldest = fresh.length ? Math.max(...fresh.map((s) => s.age_seconds)) : null;
   const latest = q.latest_game_used, verified = q.kicker_current_team_verified;
   const games = f.kicker_games_before;
-  const roster = (r.player && r.player.roster && r.player.roster.message) ||
-    (verified ? 'Current team affiliation verified.' : 'Kicker identity is verified from NFL history, but current team affiliation could not be independently confirmed.');
-  const short = games === undefined || games === null || games >= 5 ? null
+  const roster = rosterMessage(r);
+  const short = !has(games) || games >= 5 ? null
     : `Only ${games} prior game${games === 1 ? '' : 's'} this season; ${games < 3 ? 'rolling-3 and rolling-5' : 'rolling-5'} inputs are unavailable and handled by the frozen preprocessing pipeline.`;
   const marketState = !q.market_requested ? 'Not requested' : (q.market_availability ? 'Available' : 'Unavailable');
   const stale = oldest !== null && oldest > 6 * 3600;
@@ -471,7 +508,7 @@ function quality(r) {
     ['Features', q.feature_schema_verified ? `${q.feature_count}/82` : 'Unavailable', q.feature_schema_verified ? 'ok' : 'off'],
     ['Source', oldest === null ? 'Unknown' : `${stale ? 'Stale' : 'Fresh'} · ${(oldest / 3600).toFixed(1)} h`, stale ? 'warn' : 'ok'],
     ['Kicker team', verified === true ? 'Verified' : 'Not verified'],
-    ['History', games === undefined || games === null ? '—' : `${games} game${games === 1 ? '' : 's'}`, games !== undefined && games !== null && games < 5 ? 'warn' : 'ok'],
+    ['History', has(games) ? `${games} game${games === 1 ? '' : 's'}` : '—', has(games) && games < 5 ? 'warn' : 'ok'],
     ['Weather', weatherState(r)],
     ['Market', marketState],
   ];
@@ -488,8 +525,8 @@ function quality(r) {
     ['Weather context', weatherState(r), 'Context only'],
   ];
   const warnings = q.warnings || [];
-  return h('section', { class: 'card', 'aria-labelledby': 'dq-h' },
-    h('h2', { id: 'dq-h' }, 'Data quality'),
+  return h('section', { class: 'card', 'aria-labelledby': ids.dq },
+    h('h2', { id: ids.dq }, 'Data quality'),
     h('ul', { class: 'qsum' }, summary.map(([k, v, forced]) => h('li', { class: 'qchip ' + (forced || STATE_CLASS[v] || 'off') },
       h('span', { class: 'qk' }, k), h('span', { class: 'qv' }, v)))),
     h('p', { class: verified === true ? 'qnote' : 'qnote warn' }, roster),
@@ -499,22 +536,22 @@ function quality(r) {
       warnings.length ? h('div', { class: 'notes' }, h('h3', {}, 'Notes and warnings'), h('ul', {}, warnings.map((w) => h('li', {}, w)))) : null));
 }
 
-function market(r) {
-  const m = r.market, a = r.analysis, p = r.prop;
-  const conditional = p.price_probability_basis !== 'direct';
-  const kp = conditional ? p.model_probability_conditional : p.model_side_probability;
-  return h('section', { class: 'card', 'aria-labelledby': 'mk-h' },
-    h('h2', { id: 'mk-h' }, 'Market comparison'),
-    conditional ? h('p', { class: 'muted' }, 'Integer line: price comparison is conditional on no push.') : null,
+function market(r, ids) {
+  const m = r.market, a = r.analysis, pr = price(r), c = comparable(r);
+  const fair = pr.decimal ? (has(a.fair_odds.decimal) ? dec(a.fair_odds.decimal) : '—')
+                          : (has(a.fair_odds.american) ? american(a.fair_odds.american) : '—');
+  return h('section', { class: 'card', 'aria-labelledby': ids.mk },
+    h('h2', { id: ids.mk }, 'Market comparison'),
+    c.conditional ? h('p', { class: 'muted' }, 'Integer line: price comparison is conditional on no push.') : null,
     h('div', { class: 'stats' },
-      stat('American odds', american(m.american_odds)),
-      stat('Market implied probability', pct(m.implied_probability)),
-      stat('KickEdge probability' + (conditional ? ' (no push)' : ''), pct(kp)),
-      stat('Probability difference', signedPP(a.edge_raw_pp)),
-      stat('Model fair odds', a.fair_odds.american === null ? '—' : american(a.fair_odds.american)),
-      m.no_vig_probability !== null ? stat('No-vig market probability', pct(m.no_vig_probability)) : null,
-      m.overround !== null ? stat('Overround', pct(m.overround, 2)) : null,
-      a.edge_novig_pp !== null ? stat('Difference vs no-vig', signedPP(a.edge_novig_pp)) : null),
+      pr.decimal ? stat('Decimal odds', pr.label) : stat('American odds (legacy)', american(m.american_odds)),
+      stat('Odds-implied probability', pct(m.implied_probability)),
+      stat('KickEdge probability' + (c.conditional ? ' (no push)' : ''), pct(c.p)),
+      diffStat('Probability difference', a.edge_raw_pp),
+      stat(pr.decimal ? 'Model fair odds (decimal)' : 'Model fair odds (American)', fair),
+      has(m.no_vig_probability) ? stat('No-vig market probability', pct(m.no_vig_probability)) : null,
+      has(m.overround) ? stat('Overround', pct(m.overround, 2)) : null,
+      has(a.edge_novig_pp) ? diffStat('Difference vs no-vig', a.edge_novig_pp) : null),
     h('details', {}, h('summary', {}, 'Mathematical price comparison'),
       h('p', {}, `Expected value per 1 unit under model assumptions: ${num(a.expected_value_per_unit, 3)} units.`),
       h('p', { class: 'muted' }, 'This is a mathematical output based on the model probability, not a betting recommendation.')));
@@ -531,7 +568,6 @@ function weatherBlock(r) {
   if (st === 'Not requested') return h('p', { class: 'muted' }, 'Weather not requested.');
   if (st === 'Indoor') return h('p', {}, 'Indoor / closed roof — outdoor weather is not a game condition here.');
   if (st === 'Available') {
-    const has = (x) => x !== null && x !== undefined;
     const rows = [
       ['Temperature', has(v.temperature) ? `${num(v.temperature, 0)} °C · ${num(v.temperature * 9 / 5 + 32, 0)} °F` : null],
       ['Wind', has(v.wind_speed) ? `${num(v.wind_speed, 0)} km/h · ${num(v.wind_speed / 1.609, 0)} mph` : null],
@@ -549,10 +585,12 @@ function weatherBlock(r) {
   return [h('p', { class: 'muted' }, 'Weather data unavailable.'), reason ? h('p', { class: 'muted small' }, reason) : null];
 }
 
-function context(r) {
-  const mk = (r.context && r.context.market) || {};
-  return h('section', { class: 'card', 'aria-labelledby': 'cx-h' },
-    h('h2', { id: 'cx-h' }, 'Game context'),
+function context(r, ids) {
+  const mk = (r.context && r.context.market) || {}, decimal = price(r).decimal;
+  // Provider moneylines are American; show them in the analysis's own price format.
+  const ml = (x) => !has(x) ? '—' : decimal ? dec(americanToDecimal(x)) : american(x);
+  return h('section', { class: 'card', 'aria-labelledby': ids.cx },
+    h('h2', { id: ids.cx }, 'Game context'),
     h('span', { class: 'tag' }, 'Context only — not currently used by the probability model'),
     h('div', { class: 'groups' },
       h('div', { class: 'group' }, h('h3', {}, 'Weather'), weatherBlock(r),
@@ -562,7 +600,7 @@ function context(r) {
           h('thead', {}, h('tr', {}, ['Book', 'Spread (team)', 'Total', 'ML team', 'ML opp.'].map((t) => h('th', { scope: 'col' }, t)))),
           h('tbody', {}, (mk.quotes || []).map((q) => h('tr', {}, h('td', {}, (q.provenance || {}).bookmaker || '—'),
             h('td', {}, num(q.values.game_spread, 1)), h('td', {}, num(q.values.game_total, 1)),
-            h('td', {}, american(q.values.moneyline_team)), h('td', {}, american(q.values.moneyline_opponent))))))) :
+            h('td', {}, ml(q.values.moneyline_team)), h('td', {}, ml(q.values.moneyline_opponent))))))) :
           h('p', { class: 'muted' }, r.data_quality.market_requested ? 'Market data unavailable.' : 'Market context not requested.'))));
 }
 
@@ -584,15 +622,299 @@ function details(r) {
     h('p', { class: 'muted' }, `History games used: ${(fp.history_games || []).map((g) => g.game_id).join(', ') || 'none'}`));
 }
 
+// All sections of one analysis; ids are prefixed so several can coexist on a page.
+function sections(r, prefix) {
+  const ids = { hero: `${prefix}hero-h`, prob: `${prefix}pick-probability`, dist: `${prefix}dist-h`, saw: `${prefix}saw-h`,
+                dq: `${prefix}dq-h`, mk: `${prefix}mk-h`, cx: `${prefix}cx-h` };
+  return [storedBanner(r), hero(r, ids), distribution(r, ids), keyData(r, ids), quality(r, ids), market(r, ids), context(r, ids), details(r)].filter(Boolean);
+}
+
 function render(r) {
   const box = $('result');
-  box.replaceChildren(...[storedBanner(r), hero(r), distribution(r), keyData(r), quality(r), market(r), context(r), details(r)].filter(Boolean));
+  box.replaceChildren(...sections(r, ''));
   box.hidden = false;
   const guide = $('guide');
   if (guide) guide.hidden = true;
   const heading = box.querySelector('#hero-h');
   heading.setAttribute('tabindex', '-1');
   heading.focus();
+}
+
+// ---------- multiple selections: results ----------
+
+const legTitle = (r) => `${r.player.kicker_name} · ${r.prop.side === 'over' ? 'Over' : 'Under'} ${r.prop.line} XPM`;
+const SAME_GAME_PREFIX = 'These selections belong';
+
+function legCard(leg, sameGame) {
+  const title = `Selection ${leg.index}`, hid = `mr-leg-${leg.index}`;
+  if (leg.status !== 'ok') {
+    const e = leg.error, sel = leg.input || {};
+    return h('section', { class: 'card leg-result failed', 'aria-labelledby': hid },
+      h('h3', { id: hid }, `${title} failed: ${e.code}`),
+      h('p', {}, e.message),
+      ERROR_HINTS[e.code] ? h('p', { class: 'muted' }, ERROR_HINTS[e.code]) : null,
+      sel.kicker ? h('p', { class: 'muted' }, `Input: ${sel.kicker} · ${sel.side} ${sel.line} · decimal odds ${dec(sel.decimal_odds)}`) : null);
+  }
+  const r = leg.result, g = r.game, c = comparable(r);
+  const detailsBox = h('div', { class: 'leg-detail' });
+  const more = h('details', { class: 'leg-more' }, h('summary', {}, 'Full analysis'), detailsBox);
+  more.addEventListener('toggle', () => { if (more.open && !detailsBox.childElementCount) detailsBox.append(...sections(r, `leg${leg.index}-`)); });
+  const verified = r.data_quality.kicker_current_team_verified;
+  const games = r.features ? r.features.kicker_games_before : null;
+  return h('section', { class: 'card leg-result', 'aria-labelledby': hid },
+    h('div', { class: 'leg-head' },
+      h('div', {},
+        h('p', { class: 'eyebrow' }, title),
+        h('h3', { id: hid, class: 'leg-name' }, legTitle(r)),
+        h('p', { class: 'muted' }, `${teamName(r.teams, g.team)} · ${nickname(r.teams, g.away_team)} @ ${nickname(r.teams, g.home_team)} · ${kickoffLabel(g.kickoff, true)}`)),
+      h('div', { class: 'pick' }, h('span', { class: 'eyebrow' }, 'Decimal odds'), h('span', { class: 'pick-text' }, dec(r.market.decimal_odds)))),
+    sameGame ? h('p', { class: 'leg-flag' }, `Same game as selection ${sameGame.join(', ')}: correlated legs.`) : null,
+    h('div', { class: 'stats' },
+      stat('KickEdge probability' + (c.conditional ? ' (no push)' : ''), pct(c.p), 'sel'),
+      stat('Odds-implied probability', pct(r.market.implied_probability)),
+      diffStat('Difference', r.analysis.edge_raw_pp),
+      stat('Expected XPM', num(r.prediction.expected_xpm))),
+    Number.isInteger(r.prop.line) ? h('p', { class: 'muted' }, `Integer line: P(Win) ${pct(r.prop.model_side_probability)}, P(Push) ${pct(r.prop.p_push)}, P(Loss) ${pct(r.prop.p_loss)}.`) : null,
+    h('p', { class: 'feedback-text' }, priceFeedback(r)),
+    h('ul', { class: 'qsum' },
+      h('li', { class: 'qchip ' + (verified === true ? 'ok' : 'warn') }, h('span', { class: 'qk' }, 'Kicker team'), h('span', { class: 'qv' }, verified === true ? 'Verified' : 'Not verified')),
+      has(games) ? h('li', { class: 'qchip ' + (games < 5 ? 'warn' : 'ok') }, h('span', { class: 'qk' }, 'History'), h('span', { class: 'qv' }, `${games} games`)) : null,
+      h('li', { class: 'qchip ' + (STATE_CLASS[weatherState(r)] || 'off') }, h('span', { class: 'qk' }, 'Weather'), h('span', { class: 'qv' }, weatherState(r)))),
+    more);
+}
+
+function multiSummary(rec) {
+  const c = rec.combined, failed = rec.selections.filter((l) => l.status !== 'ok');
+  if (!rec.combined_available) {
+    return h('section', { class: 'card summary', 'aria-labelledby': 'ms-h' },
+      h('h2', { id: 'ms-h' }, 'Multi-selection summary'),
+      h('p', { class: 'warnbox', role: 'alert' }, `Combined analysis unavailable: ${failed.map((l) => `selection ${l.index} failed (${l.error.code})`).join(', ')}. Correct ${failed.length === 1 ? 'it' : 'them'} and analyze again; KickEdge never combines a subset of your selections.`));
+  }
+  const diff = c.difference_pp;
+  const lead = `The combined decimal price ${dec(c.combined_decimal_odds)} implies ${pct(c.implied_probability)}. Assuming independent selections, KickEdge's approximate all-win probability is ${pct(c.model_probability)}.`;
+  const text = Math.abs(diff) < 1 ? `${lead} The two estimates are very close (difference ${signedPP(diff)}).`
+    : `${lead} The model estimate is ${Math.abs(diff).toFixed(1)} percentage points ${diff > 0 ? 'higher' : 'lower'} than the probability implied by the combined price (${signedPP(diff)}).`;
+  const sameGame = c.warnings.find((w) => w.startsWith(SAME_GAME_PREFIX));
+  return h('section', { class: 'card summary', 'aria-labelledby': 'ms-h' },
+    h('h2', { id: 'ms-h' }, 'Multi-selection summary'),
+    sameGame ? h('div', { class: 'warnbox', role: 'alert' },
+      h('strong', {}, 'Same-game selections'), h('p', {}, sameGame),
+      h('p', { class: 'muted' }, `Games with more than one selection: ${c.same_game_ids.join(', ')}`)) : null,
+    h('div', { class: 'stats' },
+      stat('Selections', String(c.selection_count)),
+      stat('Combined decimal odds', dec(c.combined_decimal_odds)),
+      stat('Price-implied probability', pct(c.implied_probability)),
+      stat('KickEdge approximate probability', pct(c.model_probability), 'sel'),
+      diffStat('Difference', diff),
+      has(c.no_loss_probability) ? stat('No-loss probability (approx.)', pct(c.no_loss_probability)) : null),
+    h('p', { class: 'approx-label' }, 'Independence approximation: the product of each selection’s win probability. Not an exact combined probability.'),
+    h('div', { class: 'feedback', role: 'note' }, h('h3', {}, 'Statistical feedback'), h('p', {}, text)),
+    h('ul', { class: 'combined-notes' }, c.warnings.filter((w) => w !== sameGame).map((w) => h('li', {}, w))));
+}
+
+function renderMulti(rec) {
+  const box = $('multi-result');
+  const byGame = {};
+  rec.selections.forEach((l) => { if (l.status === 'ok') (byGame[l.result.game.game_id] = byGame[l.result.game.game_id] || []).push(l.index); });
+  const sameGame = (l) => {
+    if (l.status !== 'ok') return null;
+    const others = byGame[l.result.game.game_id].filter((i) => i !== l.index);
+    return others.length ? others : null;
+  };
+  const banner = rec.stored && !rec.stored.fresh ? h('p', { class: 'banner', role: 'note' }, `Saved analysis from ${localTime(rec.generated_at)}. Shown as stored; nothing was re-run.`) : null;
+  box.replaceChildren(...[banner, multiSummary(rec), h('h2', { class: 'legs-title' }, 'Selections'),
+    ...rec.selections.map((l) => legCard(l, sameGame(l)))].filter(Boolean));
+  box.hidden = false;
+  const guide = $('guide');
+  if (guide) guide.hidden = true;
+  const heading = box.querySelector('#ms-h');
+  heading.setAttribute('tabindex', '-1');
+  heading.focus();
+}
+
+// ---------- multiple selections: form ----------
+
+const MAX_LEGS = 10, MIN_LEGS = 2;
+const legs = [];
+let legSeq = 0;
+
+function legField(id, label, input) {
+  return h('div', { class: 'field' }, h('label', { for: id }, label), input);
+}
+
+function addLeg() {
+  if (legs.length >= MAX_LEGS) return null;
+  const uid = ++legSeq, p = `leg${uid}`;
+  const combo = (kind, label, placeholder) => {
+    const input = h('input', { id: `${p}-${kind}`, type: 'text', role: 'combobox', 'aria-autocomplete': 'list', 'aria-expanded': 'false',
+      'aria-controls': `${p}-${kind}-list`, 'aria-describedby': `${p}-${kind}-hint`, 'data-hint': `${p}-${kind}-hint`,
+      autocomplete: 'off', spellcheck: 'false', maxlength: kind === 'kicker' ? '60' : null, placeholder });
+    const clear = kind === 'game' ? h('button', { type: 'button', class: 'clear', id: `${p}-game-clear`, 'aria-label': 'Clear selected game', hidden: true }, '×') : null;
+    const list = h('ul', { id: `${p}-${kind}-list`, role: 'listbox', 'aria-label': kind === 'game' ? 'Upcoming games' : 'Kickers', hidden: true });
+    const hint = h('p', { id: `${p}-${kind}-hint`, class: 'hint' }, kind === 'game' ? 'Loading upcoming games…' : 'The team comes with the kicker.');
+    return { node: h('div', { class: 'field combo' }, h('label', { for: input.id }, label), h('div', { class: 'combo-box' }, input, clear, list), hint), input, clear, list, hint };
+  };
+  const game = combo('game', 'Game', 'Search a team, e.g. Jaguars');
+  const kicker = combo('kicker', 'Kicker', 'Choose a game first');
+  const legend = h('legend', { class: 'leg-title' }, 'Selection');
+  const remove = h('button', { type: 'button', class: 'secondary leg-remove' }, 'Remove');
+  const odds = h('input', { id: `${p}-odds`, type: 'number', step: '0.01', min: '1.01', max: '1000', inputmode: 'decimal', placeholder: '1.91', class: 'decimal', autocomplete: 'off' });
+  const other = h('input', { id: `${p}-other`, type: 'number', step: '0.01', min: '1.01', max: '1000', inputmode: 'decimal', placeholder: '1.91', class: 'decimal', autocomplete: 'off' });
+  const card = h('fieldset', { class: 'leg', 'data-uid': uid },
+    legend,
+    h('div', { class: 'leg-tools' }, remove),
+    game.node, kicker.node,
+    h('div', { class: 'row3' },
+      h('fieldset', { class: 'field side' }, h('legend', {}, 'Side'), h('div', { class: 'seg' },
+        h('input', { type: 'radio', id: `${p}-over`, name: `${p}-side`, value: 'over', checked: true }), h('label', { for: `${p}-over` }, 'Over'),
+        h('input', { type: 'radio', id: `${p}-under`, name: `${p}-side`, value: 'under' }), h('label', { for: `${p}-under` }, 'Under'))),
+      legField(`${p}-line`, 'XPM line', h('input', { id: `${p}-line`, inputmode: 'decimal', placeholder: '1.5', maxlength: '4', autocomplete: 'off' })),
+      legField(`${p}-odds`, 'Decimal odds', odds)),
+    h('details', { class: 'advanced leg-advanced' }, h('summary', {}, 'Advanced'),
+      h('div', { class: 'grid' },
+        legField(`${p}-other`, 'Other side odds (decimal)', other),
+        legField(`${p}-team`, 'Team (manual)', h('input', { id: `${p}-team`, maxlength: '40', placeholder: 'e.g. JAX', autocomplete: 'off' })),
+        legField(`${p}-opponent`, 'Opponent (manual)', h('input', { id: `${p}-opponent`, maxlength: '40', placeholder: 'e.g. CIN', autocomplete: 'off' }))),
+      h('p', { class: 'hint' }, 'Manual teams are used only when no game is selected. Other side odds enable the no-vig comparison.')),
+    h('div', { class: 'leg-error', id: `${p}-err`, role: 'alert', hidden: true }));
+  $('legs').append(card);
+  for (const input of [odds, other]) input.addEventListener('blur', () => normalizeDecimalInput(input));
+  const picker = makePicker({ game: game.input, gameList: game.list, gameClear: game.clear, gameHint: game.hint,
+                              kicker: kicker.input, kickerList: kicker.list, kickerHint: kicker.hint });
+  const leg = { uid, card, picker, legend, remove };
+  remove.addEventListener('click', () => removeLeg(leg));
+  legs.push(leg);
+  renumberLegs();
+  return leg;
+}
+
+function removeLeg(leg) {
+  if (legs.length <= MIN_LEGS) return;
+  const index = legs.indexOf(leg);
+  catalog.pickers.delete(leg.picker);
+  leg.card.remove();
+  legs.splice(index, 1);
+  renumberLegs();
+  legs[Math.min(index, legs.length - 1)].card.querySelector('input').focus();
+}
+
+function renumberLegs() {
+  legs.forEach((leg, i) => {
+    leg.legend.textContent = `Selection ${i + 1}`;
+    leg.remove.setAttribute('aria-label', `Remove selection ${i + 1}`);
+    leg.remove.hidden = legs.length <= MIN_LEGS;
+  });
+  $('add-leg').disabled = legs.length >= MAX_LEGS;
+  $('leg-count').textContent = `${legs.length} of ${MAX_LEGS} selections${legs.length >= MAX_LEGS ? ' (maximum reached)' : ''}`;
+}
+
+function collectLeg(leg) {
+  const p = `leg${leg.uid}`, st = leg.picker, val = (s) => ($(`${p}-${s}`).value || '').trim();
+  const side = leg.card.querySelector(`input[name="${p}-side"]:checked`).value;
+  const sel = { side, line: parseLine(val('line'), `${p}-line`), decimal_odds: parseDecimal(val('odds'), `${p}-odds`, true) };
+  const otherSide = parseDecimal(val('other'), `${p}-other`, false);
+  if (otherSide !== null) Object.assign(sel, side === 'over'
+    ? { over_decimal_odds: sel.decimal_odds, under_decimal_odds: otherSide }
+    : { over_decimal_odds: otherSide, under_decimal_odds: sel.decimal_odds });
+  const target = st.target();
+  if (target) Object.assign(sel, target);
+  else {
+    const team = val('team'), opponent = val('opponent');
+    if (!team && !opponent) throw new FieldError(`${p}-game`, 'Choose the game for this selection.');
+    if (!/^[A-Za-z0-9 .'&-]{2,40}$/.test(team)) throw new FieldError(`${p}-team`, 'Enter the team, e.g. JAX.');
+    if (!/^[A-Za-z0-9 .'&-]{2,40}$/.test(opponent)) throw new FieldError(`${p}-opponent`, 'Enter the opponent, e.g. CIN.');
+    Object.assign(sel, { team, opponent });
+  }
+  sel.kicker = st.kickerValue();
+  if (sel.kicker.length < 2) throw new FieldError(`${p}-kicker`, 'Choose or type the kicker.');
+  return sel;
+}
+
+function legErrorBox(index) {
+  const leg = legs[index - 1];
+  return leg ? $(`leg${leg.uid}-err`) : null;
+}
+
+function showLegErrors(rec) {
+  rec.selections.filter((l) => l.status !== 'ok').forEach((l) => {
+    const box = legErrorBox(l.index);
+    if (!box) return;
+    const leg = legs[l.index - 1];
+    const pickTeam = l.error.teams ? teamButtons(l.error.teams, (code) => {
+      leg.picker.manualTeam = code;
+      box.replaceChildren(h('p', {}, `Team set: ${l.error.teams.find((t) => t.code === code).name}. Analyze again.`));
+    }) : null;
+    box.replaceChildren(h('p', {}, h('strong', {}, `Selection ${l.index} failed: ${l.error.code}`), ` — ${l.error.message}`), pickTeam);
+    box.hidden = false;
+  });
+}
+
+async function submitMulti(event) {
+  event.preventDefault();
+  const form = event.currentTarget, button = $('multi-submit'), status = $('multi-status');
+  if (button.disabled) return;
+  clearErrors($('panel-multi'));
+  $('multi-error').hidden = true;
+  let selections;
+  try { selections = legs.map(collectLeg); } catch (e) { if (e instanceof FieldError) { markField(e.field, e.message); return; } throw e; }
+  const f = new FormData(form);
+  button.disabled = true; form.setAttribute('aria-busy', 'true'); button.textContent = 'Analyzing…';
+  status.textContent = `Analyzing ${selections.length} selections… each one runs the full single-pick pipeline.`;
+  try {
+    const res = await fetch('/api/analyze-multi', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ selections, include_weather: f.has('include_weather'), refresh_data: f.has('refresh_data') }) });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data) {
+      const err = (data && data.error) || { code: 'INTERNAL_ERROR', message: `Request failed (${res.status}).` };
+      const m = /selections\.(\d+)\./.exec(err.message || '');
+      const legBox = m ? legErrorBox(parseInt(m[1], 10) + 1) : null;
+      if (legBox) { legBox.replaceChildren(h('p', {}, h('strong', {}, `Selection ${parseInt(m[1], 10) + 1}: ${err.code}`), ` — ${err.message}`)); legBox.hidden = false; }
+      $('multi-result').hidden = true;
+      showError(err.code, err.message, null, $('multi-error'));
+      status.textContent = '';
+    } else {
+      renderMulti(data);
+      showLegErrors(data);
+      status.textContent = data.combined_available ? 'Analysis complete.' : 'Some selections failed; see the errors.';
+      if ($('recent-list')) loadRecent();
+    }
+  } catch (e) {
+    showError('NETWORK', 'The server could not be reached. Check that KickEdge is still running.', null, $('multi-error'));
+    status.textContent = '';
+  } finally {
+    button.disabled = false; form.removeAttribute('aria-busy'); button.textContent = 'Analyze selections';
+  }
+}
+
+// ---------- tabs ----------
+
+function setMode(mode, focusTab) {
+  for (const m of ['single', 'multi']) {
+    const tab = $(`tab-${m}`), panel = $(`panel-${m}`), active = m === mode;
+    tab.setAttribute('aria-selected', active ? 'true' : 'false');
+    tab.tabIndex = active ? 0 : -1;
+    panel.hidden = !active;
+    if (active && focusTab) tab.focus();
+  }
+  // Each mode keeps its own result and error areas; only the active mode's are shown.
+  document.querySelectorAll('[data-mode]').forEach((box) => {
+    if (box.dataset.mode !== mode) {
+      if (!box.hidden) { box.dataset.parked = '1'; box.hidden = true; }
+    } else if (box.dataset.parked) { delete box.dataset.parked; box.hidden = false; }
+  });
+}
+
+function initTabs() {
+  const tabs = ['single', 'multi'];
+  tabs.forEach((m, i) => {
+    const tab = $(`tab-${m}`);
+    tab.addEventListener('click', () => setMode(m));
+    tab.addEventListener('keydown', (ev) => {
+      const move = { ArrowRight: 1, ArrowLeft: -1 }[ev.key];
+      if (move) { ev.preventDefault(); setMode(tabs[(i + move + tabs.length) % tabs.length], true); }
+      else if (ev.key === 'Home' || ev.key === 'End') { ev.preventDefault(); setMode(tabs[ev.key === 'Home' ? 0 : tabs.length - 1], true); }
+    });
+  });
 }
 
 // ---------- recent analyses ----------
@@ -604,43 +926,89 @@ async function loadRecent() {
     const data = await res.json();
     if (!res.ok) throw new Error();
     if (!data.analyses.length) { list.replaceChildren(h('li', { class: 'hint' }, 'No saved analyses yet.')); return; }
-    list.replaceChildren(...data.analyses.map((a) => h('li', {}, h('button', { type: 'button', class: 'recent-item', 'data-id': a.id },
-      h('span', { class: 'ri-main' }, `${a.kicker} — ${a.side === 'over' ? 'Over' : 'Under'} ${a.line} · ${american(a.odds)}`),
-      h('span', { class: 'ri-sub' }, `${a.matchup} · ${pct(a.probability)} · exp. ${num(a.expected_xpm)} XPM`),
-      h('span', { class: 'ri-time' }, localTime(a.generated_at))))));
-    list.querySelectorAll('button[data-id]').forEach((b) => b.addEventListener('click', () => openStored(b.dataset.id)));
+    list.replaceChildren(...data.analyses.map((a) => h('li', {}, a.kind === 'multi'
+      ? h('button', { type: 'button', class: 'recent-item', 'data-id': a.id, 'data-kind': 'multi' },
+          h('span', { class: 'ri-main' }, `${a.selection_count} selections · combined ${dec(a.combined_decimal_odds)}`),
+          h('span', { class: 'ri-sub' }, `${a.legs.join(' · ')} · approx. ${pct(a.model_probability)}${a.same_game_correlation_warning ? ' · same game' : ''}`),
+          h('span', { class: 'ri-time' }, localTime(a.generated_at)))
+      : h('button', { type: 'button', class: 'recent-item', 'data-id': a.id, 'data-kind': 'single' },
+          h('span', { class: 'ri-main' }, `${a.kicker} — ${a.side === 'over' ? 'Over' : 'Under'} ${a.line} · ${dec(a.decimal_odds)}${a.odds_format === 'american' ? ' (legacy US)' : ''}`),
+          h('span', { class: 'ri-sub' }, `${a.matchup} · ${pct(a.probability)} · exp. ${num(a.expected_xpm)} XPM`),
+          h('span', { class: 'ri-time' }, localTime(a.generated_at))))));
+    list.querySelectorAll('button[data-id]').forEach((b) => b.addEventListener('click', () => openStored(b.dataset.id, b.dataset.kind)));
   } catch (e) {
     list.replaceChildren(h('li', { class: 'hint' }, 'Recent analyses unavailable.'));
   }
 }
 
-async function openStored(id) {
+async function openStored(id, kind) {
   if (!/^[0-9a-f]{64}$/.test(id)) return;
+  const multi = kind === 'multi';
+  if ($('tab-single')) setMode(multi ? 'multi' : 'single');
+  const status = $(multi ? 'multi-status' : 'status'), errorBox = $(multi ? 'multi-error' : 'error');
   clearErrors();
-  $('status').textContent = 'Opening saved analysis…';
+  errorBox.hidden = true;
+  status.textContent = 'Opening saved analysis…';
   try {
-    const res = await fetch(`/api/analyses/${id}`);
+    const res = await fetch(`/api/${multi ? 'multi' : 'analyses'}/${id}`);
     const data = await res.json();
     if (!res.ok) {
-      showError((data && data.error && data.error.code) || 'ANALYSIS_NOT_FOUND', (data && data.error && data.error.message) || 'Saved analysis not found.');
-      $('status').textContent = '';
+      showError((data && data.error && data.error.code) || 'ANALYSIS_NOT_FOUND', (data && data.error && data.error.message) || 'Saved analysis not found.', null, errorBox);
+      status.textContent = '';
       return;
     }
-    render(data);
-    $('status').textContent = 'Saved analysis opened. Nothing was re-run.';
+    if (multi) renderMulti(data); else render(data);
+    status.textContent = 'Saved analysis opened. Nothing was re-run.';
   } catch (e) {
-    showError('NETWORK', 'The server could not be reached.');
-    $('status').textContent = '';
+    showError('NETWORK', 'The server could not be reached.', null, errorBox);
+    status.textContent = '';
   }
 }
 
-// ---------- submit ----------
+// ---------- single pick: form ----------
+
+let single = null;
+
+function collect(form) {
+  const f = new FormData(form);
+  const text = (k) => (f.get(k) || '').toString().trim();
+  const body = { side: text('side'), include_weather: f.has('include_weather'),
+                 include_market: f.has('include_market'), refresh_data: f.has('refresh_data') };
+  const teamOk = (v) => /^[A-Za-z0-9 .'&-]{2,40}$/.test(v);
+  const target = single ? single.target() : null;
+  if (target) Object.assign(body, target);
+  else {
+    body.team = text('team'); body.opponent = text('opponent');
+    if (!body.team && !body.opponent && $('game')) throw new FieldError('game', 'Choose an upcoming game, or enter the teams under Advanced.');
+    if (!teamOk(body.team)) throw new FieldError('team', 'Enter a team name or abbreviation, e.g. Rams or LAR.');
+    if (!teamOk(body.opponent)) throw new FieldError('opponent', 'Enter the opponent, e.g. Eagles or PHI.');
+    for (const k of ['season', 'week']) {
+      const v = text(k);
+      if (v) { if (!/^\d{1,4}$/.test(v)) throw new FieldError(k, 'Must be a whole number.'); body[k] = parseInt(v, 10); }
+    }
+    const gid = text('game_id').toUpperCase();
+    if (gid) { if (!/^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$/.test(gid)) throw new FieldError('game_id', 'Format: 2026_04_GB_TB.'); body.game_id = gid; }
+  }
+  body.kicker = single ? single.kickerValue() : text('kicker').replace(/\s+/g, ' ');
+  if (body.kicker.length < 2) throw new FieldError('kicker', 'Choose or type the kicker.');
+  body.line = parseLine(text('line'), 'line');
+  body.decimal_odds = parseDecimal(text('odds'), 'odds', true);
+  const over = parseDecimal(text('over_odds'), 'over_odds', false);
+  const under = parseDecimal(text('under_odds'), 'under_odds', false);
+  if ((over === null) !== (under === null)) throw new FieldError(over === null ? 'over_odds' : 'under_odds', 'Supply both Over and Under odds, or neither.');
+  if (over !== null) {
+    if ((body.side === 'over' ? over : under) !== body.decimal_odds) throw new FieldError('odds', 'Odds must equal the selected side of the paired quote.');
+    body.over_decimal_odds = over; body.under_decimal_odds = under;
+  }
+  return body;
+}
 
 async function submit(event) {
   event.preventDefault();
   const form = event.currentTarget, button = $('submit'), status = $('status');
   if (button.disabled) return;
-  clearErrors();
+  clearErrors($('panel-single') || undefined);
+  $('error').hidden = true;
   let body;
   try { body = collect(form); } catch (e) { if (e instanceof FieldError) { markField(e.field, e.message); return; } throw e; }
   button.disabled = true; form.setAttribute('aria-busy', 'true');
@@ -652,7 +1020,9 @@ async function submit(event) {
     if (!res.ok || !data) {
       const err = (data && data.error) || { code: 'INTERNAL_ERROR', message: `Request failed (${res.status}).` };
       $('result').hidden = true;
-      showError(err.code, err.message, err.suggestions);
+      // Only when the kicker's team cannot be derived is it asked for, once.
+      const extra = err.teams && single ? teamButtons(err.teams, (code) => { single.manualTeam = code; $('error').hidden = true; form.requestSubmit(); }) : null;
+      showError(err.code, err.message, err.suggestions, $('error'), extra);
       status.textContent = '';
     } else {
       render(data);
@@ -670,8 +1040,19 @@ async function submit(event) {
 document.addEventListener('DOMContentLoaded', () => {
   const form = $('pick');
   if (form) form.addEventListener('submit', submit);
-  const err = $('error');
-  if (err) err.setAttribute('tabindex', '-1');
-  if ($('game') && $('game-list')) initPickers();
+  for (const id of ['error', 'multi-error']) if ($(id)) $(id).setAttribute('tabindex', '-1');
+  document.querySelectorAll('input.decimal').forEach((input) => input.addEventListener('blur', () => normalizeDecimalInput(input)));
+  if ($('game') && $('game-list')) {
+    single = makePicker({ game: $('game'), gameList: $('game-list'), gameClear: $('game-clear'), gameHint: $('game-hint'),
+                          kicker: $('kicker'), kickerList: $('kicker-list'), kickerHint: $('kicker-hint'), manualNote: true });
+    $('game').dataset.hint = 'game-hint'; $('kicker').dataset.hint = 'kicker-hint';
+  }
+  if ($('tab-single')) initTabs();
+  if ($('multi')) {
+    $('multi').addEventListener('submit', submitMulti);
+    $('add-leg').addEventListener('click', () => { const leg = addLeg(); if (leg) leg.card.querySelector('input').focus(); });
+    addLeg(); addLeg();
+  }
+  if ($('game') || $('multi')) loadGames();
   if ($('recent-list')) loadRecent();
 });

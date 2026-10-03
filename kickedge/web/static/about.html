@@ -50,6 +50,8 @@
       <li>Early-season histories are sparse. Missing recent windows are handled by the frozen imputer.</li>
       <li>Current team affiliation is checked against nflverse player data (team and roster status) when available; game-day participation is not verified.</li>
       <li>Optional providers (market, weather) can fail. When shown, they are context only and are not model predictors. Weather uses a versioned stadium list and an Open-Meteo forecast, available only within 16 days of kickoff.</li>
+      <li>Multiple selections: each selection is analyzed exactly like a single pick. The combined probability is an approximation that multiplies the selections' win probabilities, assuming independence. KickEdge does not model correlation between selections; same-game selections are flagged and the approximation may be materially inaccurate. Integer lines can push, and parlay settlement rules vary by sportsbook.</li>
+      <li>Prices are entered as decimal odds (stake included). The implied probability of a price is 1 / decimal odds; it includes the bookmaker margin unless both sides are supplied for a no-vig comparison.</li>
       <li>Estimates depend on the freshness of the NFL source data.</li>
       <li>There is no guarantee of future performance.</li>
     </ul>

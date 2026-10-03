@@ -16,7 +16,7 @@ from test_web_polish import client, needs_model  # noqa: F401  (fixture reuse)
 
 STATIC = Path(web.__file__).with_name('static')
 BODY = {'kicker': MEVIS, 'team': 'LA', 'opponent': 'PHI', 'game_id': '2026_05_LA_PHI', 'season': 2026, 'week': 5,
-        'line': 1.5, 'side': 'over', 'odds': -333, 'include_weather': True, 'include_market': False,
+        'line': 1.5, 'side': 'over', 'decimal_odds': 1.3, 'include_weather': True, 'include_market': False,
         'refresh_data': False}
 
 FAKE_FETCH = """
@@ -52,9 +52,9 @@ window.addEventListener('load', async () => {
   key(kicker, 'ArrowDown');
   key(kicker, 'Enter');
   await sleep(20);
-  document.body.dataset.team = (document.querySelector('input[name=kteam]:checked') || {}).value || '';
+  document.body.dataset.teamSelectors = String(document.querySelectorAll('input[name=kteam], #kteam-field').length);
   document.getElementById('line').value = '1.5';
-  document.getElementById('odds').value = '-333';
+  document.getElementById('odds').value = '1.30';
   document.getElementById('submit').click();
   await sleep(200);
   document.body.dataset.posted = JSON.stringify(window.__posted);
@@ -101,7 +101,8 @@ def test_game_and_kicker_pickers_drive_a_full_analysis(client, tmp_path):  # noq
     assert _data(dom, 'done') == '1'
     assert _data(dom, 'game-options') == 'Rams @ Eagles|Rams @ Jaguars|Eagles @ Rams'
     assert _data(dom, 'active-game') == 'game-list-0' and _data(dom, 'after-escape') == 'closed'
-    assert _data(dom, 'kicker-options') == 'Harrison Mevis' and _data(dom, 'team') == 'LA'
+    assert _data(dom, 'kicker-options') == 'Harrison Mevis' and _data(dom, 'team-selectors') == '0'
+    assert json.loads(_data(dom, 'posted'))['team'] == 'LA'  # derived from the kicker, never asked
     assert json.loads(_data(dom, 'posted')) == BODY
     probability = f"{100*analysis['prop']['model_side_probability']:.1f}%"
     assert f'id="pick-probability">{probability}<' in dom
@@ -111,7 +112,7 @@ def test_game_and_kicker_pickers_drive_a_full_analysis(client, tmp_path):  # noq
     assert 'Current team affiliation verified.' in dom
     assert 'XPM per game, last 3' in dom and 'vs season' in dom
     assert 'View all 82 model inputs' in dom and '[object' not in dom
-    assert 'Harrison Mevis — Over 1.5 · -333' in dom  # recent analyses list
+    assert 'Harrison Mevis — Over 1.5 · 1.30' in dom  # recent analyses list
     assert '<section class="card guide" id="guide" aria-labelledby="guide-h" hidden=""' in dom
 
 
@@ -121,7 +122,7 @@ window.addEventListener('load', async () => {
   await sleep(100);
   document.getElementById('kicker').value = '  Harrison   Mevis ';
   document.getElementById('line').value = '2';
-  document.getElementById('odds').value = '115';
+  document.getElementById('odds').value = '2.15';
   document.getElementById('submit').click();
   await sleep(50);
   document.body.dataset.firstError = (document.querySelector('.field-error') || {}).textContent || '';
@@ -143,7 +144,7 @@ def test_manual_fallback_keeps_typed_teams_and_kicker(client, tmp_path):  # noqa
     assert _data(dom, 'first-error') == 'Choose an upcoming game, or enter the teams under Advanced.'
     posted = json.loads(_data(dom, 'posted'))
     assert posted['team'] == 'LAR' and posted['opponent'] == 'phi' and posted['week'] == 5
-    assert posted['kicker'] == 'Harrison Mevis' and posted['line'] == 2 and posted['odds'] == 115
+    assert posted['kicker'] == 'Harrison Mevis' and posted['line'] == 2 and posted['decimal_odds'] == 2.15
     assert 'game_id' not in posted
     assert 'Upcoming games unavailable' in dom
 

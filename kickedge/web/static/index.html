@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <title>KickEdge</title>
-<meta name="description" content="Pregame probability analysis for an extra-point (XPM) pick you are considering.">
+<meta name="description" content="Pregame probability analysis for extra-point (XPM) selections you are considering.">
 <link rel="stylesheet" href="/static/style.css">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <script src="/static/app.js" defer></script>
@@ -22,9 +22,15 @@
 <main id="main" class="wrap page">
   <section class="intro">
     <h1>XPM pick analysis</h1>
-    <p>Enter an extra-point (XPM) pick you're considering. KickEdge builds a pregame snapshot and estimates its probability using the frozen model.</p>
+    <p>Enter extra-point (XPM) selections you're considering. KickEdge builds a pregame snapshot and estimates each probability using the frozen model.</p>
   </section>
 
+  <div class="tabs" role="tablist" aria-label="Analysis mode">
+    <button type="button" role="tab" id="tab-single" aria-controls="panel-single" aria-selected="true">Single pick</button>
+    <button type="button" role="tab" id="tab-multi" aria-controls="panel-multi" aria-selected="false" tabindex="-1">Multiple selections</button>
+  </div>
+
+  <section id="panel-single" class="panel" role="tabpanel" aria-labelledby="tab-single">
     <form id="pick" class="card form" novalidate>
       <div class="field combo">
         <label for="game">Upcoming game</label>
@@ -46,13 +52,8 @@
                  maxlength="60" placeholder="Choose a game first, or type a name">
           <ul id="kicker-list" role="listbox" aria-label="Kickers" hidden></ul>
         </div>
-        <p id="kicker-hint" class="hint">Pick from the list, or type a name or nflverse ID.</p>
+        <p id="kicker-hint" class="hint">Pick from the list, or type a name or nflverse ID. The team comes with the kicker.</p>
       </div>
-
-      <fieldset class="field" id="kteam-field" hidden>
-        <legend>Kicker's team</legend>
-        <div class="seg" id="kteam"></div>
-      </fieldset>
 
       <div class="row3">
         <fieldset class="field side">
@@ -64,11 +65,11 @@
         </fieldset>
         <div class="field">
           <label for="line">XPM line</label>
-          <input id="line" name="line" required inputmode="decimal" placeholder="2.5" maxlength="4" autocomplete="off">
+          <input id="line" name="line" required inputmode="decimal" placeholder="1.5" maxlength="4" autocomplete="off">
         </div>
         <div class="field">
-          <label for="odds">American odds</label>
-          <input id="odds" name="odds" required inputmode="text" placeholder="+115 or -140" maxlength="6" autocomplete="off">
+          <label for="odds">Decimal odds</label>
+          <input id="odds" name="odds" type="number" step="0.01" min="1.01" max="1000" required inputmode="decimal" placeholder="1.91" autocomplete="off" class="decimal">
         </div>
       </div>
 
@@ -81,8 +82,8 @@
           <div class="field"><label for="season">Season</label><input id="season" name="season" inputmode="numeric" placeholder="auto" maxlength="4"></div>
           <div class="field"><label for="week">Week</label><input id="week" name="week" inputmode="numeric" placeholder="auto" maxlength="2"></div>
           <div class="field span2"><label for="game_id">Game ID</label><input id="game_id" name="game_id" placeholder="2026_04_GB_TB" maxlength="20" autocomplete="off"></div>
-          <div class="field"><label for="over_odds">Over odds</label><input id="over_odds" name="over_odds" inputmode="text" placeholder="+115" maxlength="6"></div>
-          <div class="field"><label for="under_odds">Under odds</label><input id="under_odds" name="under_odds" inputmode="text" placeholder="-145" maxlength="6"></div>
+          <div class="field"><label for="over_odds">Over odds (decimal)</label><input id="over_odds" name="over_odds" type="number" step="0.01" min="1.01" max="1000" inputmode="decimal" placeholder="1.91" class="decimal"></div>
+          <div class="field"><label for="under_odds">Under odds (decimal)</label><input id="under_odds" name="under_odds" type="number" step="0.01" min="1.01" max="1000" inputmode="decimal" placeholder="1.91" class="decimal"></div>
         </div>
         <p class="hint">Supply both sides of the same quote to see the no-vig comparison.</p>
         <div class="checks">
@@ -97,9 +98,34 @@
         <p id="status" class="status" role="status" aria-live="polite"></p>
       </div>
     </form>
+  </section>
 
-  <div id="error" class="card error" role="alert" hidden></div>
-  <div id="result" hidden></div>
+  <section id="panel-multi" class="panel" role="tabpanel" aria-labelledby="tab-multi" hidden>
+    <form id="multi" class="card form" novalidate>
+      <p class="hint">Add 2 to 10 selections. Each one is analyzed exactly like a single pick; the combined probability is an approximation that assumes independent selections.</p>
+      <div id="legs" class="legs"></div>
+      <div class="multi-actions">
+        <button type="button" id="add-leg" class="secondary">+ Add selection</button>
+        <span id="leg-count" class="hint" aria-live="polite"></span>
+      </div>
+      <details class="advanced">
+        <summary>Options</summary>
+        <div class="checks">
+          <label><input type="checkbox" name="include_weather" checked> Include weather context</label>
+          <label><input type="checkbox" name="refresh_data"> Refresh NFL data</label>
+        </div>
+      </details>
+      <div class="actions">
+        <button id="multi-submit" type="submit">Analyze selections</button>
+        <p id="multi-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </section>
+
+  <div id="error" class="card error" role="alert" data-mode="single" hidden></div>
+  <div id="result" data-mode="single" hidden></div>
+  <div id="multi-error" class="card error" role="alert" data-mode="multi" hidden></div>
+  <div id="multi-result" data-mode="multi" hidden></div>
 
   <aside class="side-col" aria-label="Guide and recent analyses">
     <section class="card guide" id="guide" aria-labelledby="guide-h">
@@ -107,10 +133,10 @@
       <ol>
         <li>Choose a game</li>
         <li>Choose the kicker</li>
-        <li>Enter your XPM line and odds</li>
+        <li>Enter your XPM line and decimal odds</li>
         <li>Analyze</li>
       </ol>
-      <p class="hint">KickEdge estimates the probability of the pick you bring. It does not suggest picks.</p>
+      <p class="hint">KickEdge estimates the probability of the selections you bring. It does not suggest picks.</p>
     </section>
     <section class="card recent" id="recent" aria-labelledby="recent-h">
       <h2 id="recent-h">Recent analyses</h2>
