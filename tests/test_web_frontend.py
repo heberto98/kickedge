@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
 
 import pytest
 from fastapi.testclient import TestClient
@@ -55,6 +56,25 @@ def _browser():
     pytest.skip('No headless Chromium-based browser available')
 
 
+def dump_dom(tmp_path, page, *, budget_ms=None, timeout=120):
+    """Run headless Chromium once and return the serialized DOM.
+
+    Each launch gets its own profile directory. Chromium is a per-profile
+    singleton: when another process still holds the same --user-data-dir (a stale
+    run reusing --basetemp), the new process forwards its command line, exits with
+    code 21 and prints nothing. A unique profile makes every run independent.
+    """
+    profile = tempfile.mkdtemp(prefix='edge-profile-', dir=tmp_path)
+    command = [_browser(), '--headless=new', '--disable-gpu', '--no-first-run', f'--user-data-dir={profile}']
+    if budget_ms:
+        command.append(f'--virtual-time-budget={budget_ms}')
+    out = subprocess.run(command + ['--dump-dom', Path(page).as_uri()], capture_output=True, text=True,
+                         encoding='utf-8', errors='replace', timeout=timeout)
+    assert '<body' in out.stdout, (f'Browser returned no DOM (exit code {out.returncode}; 21 means the profile '
+                                   f'was held by another browser process). stderr: {out.stderr[-500:]}')
+    return out.stdout
+
+
 def _render(tmp_path, script):
     """Load the real app.js in a harness page and dump the DOM after it runs."""
     harness = tmp_path/'harness.html'
@@ -63,11 +83,7 @@ def _render(tmp_path, script):
                        '<form id="pick"><button id="submit"></button><p id="status"></p></form>'
                        '<div id="error" hidden></div><div id="result" hidden></div>'
                        '<script src="app.js"></script><script>' + script + '</script></body></html>', encoding='utf-8')
-    out = subprocess.run([_browser(), '--headless=new', '--disable-gpu', '--no-first-run',
-                          f'--user-data-dir={tmp_path/"profile"}', '--dump-dom', harness.as_uri()],
-                         capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
-    assert '<body' in out.stdout, out.stderr[-500:]
-    return out.stdout
+    return dump_dom(tmp_path, harness, timeout=90)
 
 
 def test_result_renders_probability_distribution_warnings_and_inputs(client, tmp_path):  # noqa: F811

@@ -5,13 +5,12 @@ import json
 from pathlib import Path
 import re
 import shutil
-import subprocess
 
 import pytest
 
 from kickedge.web import app as web
 from polish_data import MEVIS
-from test_web_frontend import _browser
+from test_web_frontend import dump_dom
 from test_web_polish import client, needs_model  # noqa: F401  (fixture reuse)
 
 STATIC = Path(web.__file__).with_name('static')
@@ -73,12 +72,7 @@ def _page(tmp_path, routes, driver):
     html = html.replace('</body>', scripts + '</body>')
     page = tmp_path/'index.html'
     page.write_text(html, encoding='utf-8')
-    out = subprocess.run([_browser(), '--headless=new', '--disable-gpu', '--no-first-run',
-                          f'--user-data-dir={tmp_path/"profile"}', '--virtual-time-budget=15000',
-                          '--dump-dom', page.as_uri()],
-                         capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
-    assert '<body' in out.stdout, out.stderr[-500:]
-    return out.stdout
+    return dump_dom(tmp_path, page, budget_ms=15000)
 
 
 def _data(dom, name):

@@ -5,12 +5,11 @@ import json
 from pathlib import Path
 import re
 import shutil
-import subprocess
 
 from kickedge.web import app as web
 from polish_data import ELLIOTT, MEVIS
 from test_decimal_multi import client  # noqa: F401  (fixture reuse)
-from test_web_frontend import _browser
+from test_web_frontend import dump_dom
 
 STATIC = Path(web.__file__).with_name('static')
 
@@ -40,13 +39,9 @@ def page(tmp_path, routes, driver):
     html = html.replace('</body>', f'<script>window.__routes = {json.dumps(routes)};{FAKE_FETCH}</script>'
                                    f'<script src="app.js"></script><script>{driver}</script></body>')
     (tmp_path/'index.html').write_text(html, encoding='utf-8')
-    out = subprocess.run([_browser(), '--headless=new', '--disable-gpu', '--no-first-run',
-                          f'--user-data-dir={tmp_path/"profile"}', '--virtual-time-budget=20000',
-                          '--dump-dom', (tmp_path/'index.html').as_uri()],
-                         capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
-    assert '<body' in out.stdout, out.stderr[-500:]
-    assert 'data-done="1"' in out.stdout, 'driver did not finish'
-    return out.stdout
+    dom = dump_dom(tmp_path, tmp_path/'index.html', budget_ms=20000)
+    assert 'data-done="1"' in dom, 'driver did not finish'
+    return dom
 
 
 def data(dom, name):
