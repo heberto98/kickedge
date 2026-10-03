@@ -1,11 +1,108 @@
-# KickEdge — núcleo histórico
+# KickEdge
+
+KickEdge estima la probabilidad de un pick de **extra points convertidos (XPM)**
+de un kicker NFL que **el usuario ya está considerando**. El usuario aporta
+kicker, partido, línea, lado (Over/Under) y cuota americana. KickEdge construye
+un snapshot pregame con datos actuales de nflverse, ejecuta el modelo congelado y
+muestra la probabilidad del pick, la distribución XPM, los datos usados, la
+calidad de datos y una comparación neutral con el precio.
+
+**Qué NO es:** no es un sistema de picks. No busca ni ordena apuestas, no dice
+BET/PASS, no recomienda stake, no usa Kelly ni gestiona bankroll. La decisión es
+siempre del usuario.
+
+## Arquitectura y flujo
+
+```
+Navegador (HTML/CSS/JS sin framework)
+  -> FastAPI  kickedge/web        validación, errores HTTP, rate limit, estáticos
+  -> 7B       kickedge/current    cache nflverse, partido, kicker, 82 features
+  -> 7A       kickedge/inference  modelo verificado por SHA-256, distribución, odds
+```
+
+Una sola fuente de verdad: las features salen de los builders históricos
+(`kickedge/features`) y toda la matemática de probabilidad/odds/no-vig/EV de
+`kickedge/inference`. La web no recalcula nada.
+
+## Modelo y validación
+
+- Poisson GLM, alpha = 0.1, 82 predictores pregame, refit 2016–2024, congelado.
+- Validación ciega preregistrada en 2025 (no usada para ajustar): **PASS**; mejora
+  NLL, RPS y Brier frente al baseline congelado.
+- Clima y mercado **no** son predictores: se muestran solo como contexto.
+- Artifact versionado en `models/phase5/`, fijado por SHA-256 en
+  `kickedge/inference/release.json`; se instala y verifica al arrancar.
+
+## Uso local
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt
+.\.venv\Scripts\python.exe -m pip install --no-deps -e .
+.\.venv\Scripts\python.exe -m kickedge.web          # http://127.0.0.1:8000
+```
+
+Abre `http://127.0.0.1:8000`, escribe kicker, equipo, rival, línea, lado y cuota,
+y pulsa **Analyze pick**. La primera consulta descarga y cachea los datos nflverse
+de la temporada (`data/cache/current`, ignorado por Git); las siguientes reutilizan
+el cache durante 6 h. "Refresh NFL data" fuerza una descarga nueva. El modelo se
+instala solo desde `models/phase5` si falta `data/models/phase5`.
+
+Variables de entorno (todas opcionales):
+
+| Variable | Uso |
+|---|---|
+| `PARLAY_API_KEY` | Contexto de mercado opcional (ParlayAPI). Sin ella el mercado queda "unavailable" y el análisis manual funciona igual. Solo servidor. |
+| `PORT`, `HOST` | Puerto/host de `python -m kickedge.web` (por defecto 8000 / 127.0.0.1). |
+| `KICKEDGE_ROOT` | Directorio de trabajo para datos y cache (por defecto el actual). |
+
+CLI equivalente:
+`python -m kickedge analyze --kicker "Chase McLaughlin" --team TB --opponent GB --season 2026 --week 4 --line 2.5 --side over --odds +115`
+
+API: `GET /healthz`, `GET /readyz`, `GET /api/model`, `POST /api/analyze`
+(detalles en [docs/product_phase7c.md](docs/product_phase7c.md)).
+
+## Deployment
+
+`render.yaml` define un único Web Service en Render: build con
+`requirements.lock.txt`, start con `uvicorn kickedge.web.app:app --port $PORT`,
+health check `/readyz`. El filesystem puede ser efímero: el artifact se reinstala
+desde Git verificando SHA-256 y el cache nflverse se recrea bajo demanda.
+`PARLAY_API_KEY` se configura solo en el dashboard de Render.
+
+## Limitaciones
+
+- No es un sistema de recomendación de apuestas; las estimaciones son inciertas.
+- Una sola temporada de holdout ciego; supuesto Poisson; cola alta de XPM más incierta.
+- Historias de inicio de temporada escasas (rolling NULL resueltos por el imputer congelado).
+- La afiliación actual del kicker no se verifica contra rosters.
+- Proveedores opcionales pueden fallar; el clima casi nunca está disponible porque
+  el schedule de nflverse no trae coordenadas del estadio.
+- Las predicciones dependen de la frescura de los datos fuente. Sin garantía de rendimiento futuro.
+
+## Tests y estructura
+
+`python -m pytest -q` (547 tests; los de interfaz usan Edge/Chrome headless si existe).
+
+```
+kickedge/ingest, transform, build   datos históricos nflverse y labels
+kickedge/features                   builders de features + contrato de 82 columnas
+kickedge/modeling, validation       entrenamiento (fases 5–6, ya congelado)
+kickedge/inference                  motor 7A: carga verificada, distribución, odds
+kickedge/current                    pipeline 7B: datos actuales -> snapshot
+kickedge/web                        API FastAPI + interfaz estática (7C)
+models/phase5                       artifact congelado versionado
+docs/, reports/                     metodología y verificación por fase
+```
+
+## Núcleo histórico (pipeline de datos)
 
 Dataset local **2015–2025**, temporada regular y playoffs, en Python + DuckDB/Parquet.
 La unidad del label es `(game_id, team, player_id)`; XPM y XPA requieren acuerdo
 entre player stats y el conteo PBP. **La población es observada después del partido**,
 no una lista de titulares conocidos antes del kickoff. Incluye ceros demostrables.
 
-Incluye features historicas y adaptadores opcionales de mercado/clima con controles temporales. No contiene modelos entrenados, interfaz ni deployment.
+Incluye features historicas y adaptadores opcionales de mercado/clima con controles temporales. Las fases siguientes (5–7C) añaden el modelo congelado, la inferencia y el producto web.
 
 ## Ejecutar
 
@@ -208,3 +305,7 @@ partido y kicker, construye las 82 features con los builders historicos y
 ejecuta el motor 7A congelado. ParlayAPI y Open-Meteo son opcionales y nunca
 bloquean la prop manual. Consulta [arquitectura](docs/current_phase7b.md) y
 [verificacion](reports/phase7b_verification.md). No se inicia Fase 7C.
+
+## Fase 7C: producto web, API y deployment
+
+Ver [producto](docs/product_phase7c.md) y [verificación](reports/phase7c_verification.md).
