@@ -19,6 +19,7 @@ kickedge = "kickedge.cli:main"
 include = ["kickedge*"]
 
 [tool.setuptools.package-data]
+"kickedge" = ["venues.json"]
 "kickedge.features" = ["contract.json"]
 "kickedge.inference" = ["release.json"]
 "kickedge.web" = ["static/*"]

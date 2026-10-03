@@ -1,0 +1,603 @@
+{
+ "schema_version": 1,
+ "verified_at": "2026-10-03T08:00:00+00:00",
+ "coverage": "Every venue named in the nflverse 2024-2026 schedules. Matching is by venue name and aliases; stadium ids are cross-checks only.",
+ "coordinates_source": "Wikipedia primary page coordinates via the MediaWiki API (action=query, prop=coordinates), retrieved 2026-10-03. No runtime geocoding.",
+ "roof_source": "Physical roof type: the set of roof values nflverse recorded for completed games 2016-2025 at that stadium id, otherwise the venue description noted per venue.",
+ "venues": [
+  {
+   "slug": "mercedes-benz-stadium",
+   "name": "Mercedes-Benz Stadium",
+   "city": "Atlanta, GA",
+   "latitude": 33.75555556,
+   "longitude": -84.4,
+   "roof": "retractable",
+   "roof_evidence": "nflverse completed games 2016-2025: open, closed",
+   "stadium_ids": [
+    "ATL97"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Mercedes-Benz Stadium"
+  },
+  {
+   "slug": "mt-bank-stadium",
+   "name": "M&T Bank Stadium",
+   "city": "Baltimore, MD",
+   "latitude": 39.27805556,
+   "longitude": -76.62277778,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "BAL00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "M&T Bank Stadium"
+  },
+  {
+   "slug": "gillette-stadium",
+   "name": "Gillette Stadium",
+   "city": "Foxborough, MA",
+   "latitude": 42.091,
+   "longitude": -71.264,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "BOS00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Gillette Stadium"
+  },
+  {
+   "slug": "highmark-stadium",
+   "name": "Highmark Stadium",
+   "city": "Orchard Park, NY",
+   "latitude": 42.77305556,
+   "longitude": -78.79222222,
+   "roof": "outdoors",
+   "roof_evidence": "Wikipedia: opened 2026, playing field uncovered (partial roof over seats)",
+   "stadium_ids": [
+    "BUF00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Highmark Stadium"
+  },
+  {
+   "slug": "bank-of-america-stadium",
+   "name": "Bank of America Stadium",
+   "city": "Charlotte, NC",
+   "latitude": 35.22583333,
+   "longitude": -80.85277778,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "CAR00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Bank of America Stadium"
+  },
+  {
+   "slug": "soldier-field",
+   "name": "Soldier Field",
+   "city": "Chicago, IL",
+   "latitude": 41.8623,
+   "longitude": -87.6167,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "CHI98"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Soldier Field"
+  },
+  {
+   "slug": "paycor-stadium",
+   "name": "Paycor Stadium",
+   "city": "Cincinnati, OH",
+   "latitude": 39.095,
+   "longitude": -84.516,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "CIN00"
+   ],
+   "aliases": [
+    "Paul Brown Stadium"
+   ],
+   "wikipedia_title": "Paycor Stadium"
+  },
+  {
+   "slug": "huntington-bank-field",
+   "name": "Huntington Bank Field",
+   "city": "Cleveland, OH",
+   "latitude": 41.50611111,
+   "longitude": -81.69944444,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "CLE00"
+   ],
+   "aliases": [
+    "FirstEnergy Stadium"
+   ],
+   "wikipedia_title": "Huntington Bank Field"
+  },
+  {
+   "slug": "att-stadium",
+   "name": "AT&T Stadium",
+   "city": "Arlington, TX",
+   "latitude": 32.74777778,
+   "longitude": -97.09277778,
+   "roof": "retractable",
+   "roof_evidence": "nflverse completed games 2016-2025: open, closed",
+   "stadium_ids": [
+    "DAL00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "AT&T Stadium"
+  },
+  {
+   "slug": "empower-field",
+   "name": "Empower Field at Mile High",
+   "city": "Denver, CO",
+   "latitude": 39.74388889,
+   "longitude": -105.02,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "DEN00"
+   ],
+   "aliases": [
+    "Sports Authority Field at Mile High"
+   ],
+   "wikipedia_title": "Empower Field at Mile High"
+  },
+  {
+   "slug": "ford-field",
+   "name": "Ford Field",
+   "city": "Detroit, MI",
+   "latitude": 42.34,
+   "longitude": -83.04555556,
+   "roof": "dome",
+   "roof_evidence": "nflverse completed games 2016-2025: dome",
+   "stadium_ids": [
+    "DET00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Ford Field"
+  },
+  {
+   "slug": "lambeau-field",
+   "name": "Lambeau Field",
+   "city": "Green Bay, WI",
+   "latitude": 44.50138889,
+   "longitude": -88.06222222,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "GNB00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Lambeau Field"
+  },
+  {
+   "slug": "nrg-stadium",
+   "name": "NRG Stadium",
+   "city": "Houston, TX",
+   "latitude": 29.68472222,
+   "longitude": -95.41083333,
+   "roof": "retractable",
+   "roof_evidence": "nflverse completed games 2016-2025: open, closed",
+   "stadium_ids": [
+    "HOU00"
+   ],
+   "aliases": [
+    "Reliant Stadium"
+   ],
+   "wikipedia_title": "Reliant Stadium (redirect target of NRG Stadium)"
+  },
+  {
+   "slug": "lucas-oil-stadium",
+   "name": "Lucas Oil Stadium",
+   "city": "Indianapolis, IN",
+   "latitude": 39.76005556,
+   "longitude": -86.16380556,
+   "roof": "retractable",
+   "roof_evidence": "nflverse completed games 2016-2025: open, closed",
+   "stadium_ids": [
+    "IND00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Lucas Oil Stadium"
+  },
+  {
+   "slug": "everbank-stadium",
+   "name": "EverBank Stadium",
+   "city": "Jacksonville, FL",
+   "latitude": 30.32388889,
+   "longitude": -81.6375,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "JAX00"
+   ],
+   "aliases": [
+    "EverBank Field",
+    "TIAA Bank Stadium",
+    "TIAA Bank Field"
+   ],
+   "wikipedia_title": "EverBank Stadium"
+  },
+  {
+   "slug": "arrowhead-stadium",
+   "name": "GEHA Field at Arrowhead Stadium",
+   "city": "Kansas City, MO",
+   "latitude": 39.04888889,
+   "longitude": -94.48388889,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "KAN00"
+   ],
+   "aliases": [
+    "Arrowhead Stadium"
+   ],
+   "wikipedia_title": "Arrowhead Stadium"
+  },
+  {
+   "slug": "sofi-stadium",
+   "name": "SoFi Stadium",
+   "city": "Inglewood, CA",
+   "latitude": 33.953,
+   "longitude": -118.339,
+   "roof": "dome",
+   "roof_evidence": "nflverse completed games 2016-2025: dome (fixed translucent roof)",
+   "stadium_ids": [
+    "LAX01"
+   ],
+   "aliases": [],
+   "wikipedia_title": "SoFi Stadium"
+  },
+  {
+   "slug": "wembley-stadium",
+   "name": "Wembley Stadium",
+   "city": "London, UK",
+   "latitude": 51.5556,
+   "longitude": -0.2794,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "LON00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Wembley Stadium"
+  },
+  {
+   "slug": "tottenham-hotspur-stadium",
+   "name": "Tottenham Hotspur Stadium",
+   "city": "London, UK",
+   "latitude": 51.6044,
+   "longitude": -0.0664,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "LON02"
+   ],
+   "aliases": [
+    "Tottenham Stadium"
+   ],
+   "wikipedia_title": "Tottenham Hotspur Stadium"
+  },
+  {
+   "slug": "bernabeu",
+   "name": "Santiago Bernabéu Stadium",
+   "city": "Madrid, Spain",
+   "latitude": 40.45306,
+   "longitude": -3.68835,
+   "roof": "retractable",
+   "roof_evidence": "Wikipedia: retractable roof football stadium; no completed NFL game in nflverse",
+   "stadium_ids": [
+    "MAD01"
+   ],
+   "aliases": [
+    "Bernabeu",
+    "Bernabéu",
+    "Estadio Santiago Bernabéu"
+   ],
+   "wikipedia_title": "Bernabéu (stadium)"
+  },
+  {
+   "slug": "melbourne-cricket-ground",
+   "name": "Melbourne Cricket Ground",
+   "city": "Melbourne, Australia",
+   "latitude": -37.82,
+   "longitude": 144.98333333,
+   "roof": "outdoors",
+   "roof_evidence": "Open-air ground (field uncovered); nflverse future-game label \"dome\" disregarded; no completed NFL game in nflverse",
+   "stadium_ids": [
+    "MEL00"
+   ],
+   "aliases": [
+    "MCG"
+   ],
+   "wikipedia_title": "Melbourne Cricket Ground"
+  },
+  {
+   "slug": "estadio-azteca",
+   "name": "Estadio Banorte (Azteca)",
+   "city": "Mexico City, Mexico",
+   "latitude": 19.303,
+   "longitude": -99.1505,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "MEX00"
+   ],
+   "aliases": [
+    "Azteca Stadium",
+    "Estadio Azteca",
+    "Estadio Banorte"
+   ],
+   "wikipedia_title": "Estadio Azteca"
+  },
+  {
+   "slug": "hard-rock-stadium",
+   "name": "Hard Rock Stadium",
+   "city": "Miami Gardens, FL",
+   "latitude": 25.95805556,
+   "longitude": -80.23888889,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "MIA00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Hard Rock Stadium"
+  },
+  {
+   "slug": "us-bank-stadium",
+   "name": "U.S. Bank Stadium",
+   "city": "Minneapolis, MN",
+   "latitude": 44.974,
+   "longitude": -93.258,
+   "roof": "dome",
+   "roof_evidence": "nflverse completed games 2016-2025: dome",
+   "stadium_ids": [
+    "MIN01"
+   ],
+   "aliases": [],
+   "wikipedia_title": "U.S. Bank Stadium"
+  },
+  {
+   "slug": "allianz-arena",
+   "name": "Allianz Arena",
+   "city": "Munich, Germany",
+   "latitude": 48.218775,
+   "longitude": 11.62475278,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors (as GER00); nflverse 2026 future-game label \"dome\" disregarded",
+   "stadium_ids": [
+    "GER00",
+    "MUN01"
+   ],
+   "aliases": [
+    "FC Bayern Munich Stadium",
+    "Munich Football Arena"
+   ],
+   "wikipedia_title": "Allianz Arena"
+  },
+  {
+   "slug": "nissan-stadium",
+   "name": "Nissan Stadium",
+   "city": "Nashville, TN",
+   "latitude": 36.16638889,
+   "longitude": -86.77138889,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "NAS00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Nissan Stadium (Nashville)"
+  },
+  {
+   "slug": "caesars-superdome",
+   "name": "Caesars Superdome",
+   "city": "New Orleans, LA",
+   "latitude": 29.95083333,
+   "longitude": -90.08111111,
+   "roof": "dome",
+   "roof_evidence": "nflverse completed games 2016-2025: dome",
+   "stadium_ids": [
+    "NOR00"
+   ],
+   "aliases": [
+    "Mercedes-Benz Superdome",
+    "Louisiana Superdome"
+   ],
+   "wikipedia_title": "Caesars Superdome"
+  },
+  {
+   "slug": "metlife-stadium",
+   "name": "MetLife Stadium",
+   "city": "East Rutherford, NJ",
+   "latitude": 40.81361111,
+   "longitude": -74.07444444,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "NYC01"
+   ],
+   "aliases": [],
+   "wikipedia_title": "MetLife Stadium"
+  },
+  {
+   "slug": "stade-de-france",
+   "name": "Stade de France",
+   "city": "Saint-Denis, France",
+   "latitude": 48.9244,
+   "longitude": 2.36,
+   "roof": "outdoors",
+   "roof_evidence": "Open-air stadium (roof covers stands, field uncovered); nflverse future-game label \"dome\" disregarded; no completed NFL game in nflverse",
+   "stadium_ids": [
+    "PAR00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Stade de France"
+  },
+  {
+   "slug": "lincoln-financial-field",
+   "name": "Lincoln Financial Field",
+   "city": "Philadelphia, PA",
+   "latitude": 39.90083333,
+   "longitude": -75.1675,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "PHI00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Lincoln Financial Field"
+  },
+  {
+   "slug": "state-farm-stadium",
+   "name": "State Farm Stadium",
+   "city": "Glendale, AZ",
+   "latitude": 33.528,
+   "longitude": -112.263,
+   "roof": "retractable",
+   "roof_evidence": "nflverse completed games 2016-2025: closed, open",
+   "stadium_ids": [
+    "PHO00"
+   ],
+   "aliases": [
+    "University of Phoenix Stadium"
+   ],
+   "wikipedia_title": "State Farm Stadium"
+  },
+  {
+   "slug": "acrisure-stadium",
+   "name": "Acrisure Stadium",
+   "city": "Pittsburgh, PA",
+   "latitude": 40.44666667,
+   "longitude": -80.01583333,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "PIT00"
+   ],
+   "aliases": [
+    "Heinz Field"
+   ],
+   "wikipedia_title": "Acrisure Stadium"
+  },
+  {
+   "slug": "maracana",
+   "name": "Maracanã Stadium",
+   "city": "Rio de Janeiro, Brazil",
+   "latitude": -22.9122,
+   "longitude": -43.2303,
+   "roof": "outdoors",
+   "roof_evidence": "Open-air stadium (roof covers stands, field uncovered); nflverse future-game label \"open\"; no completed NFL game in nflverse",
+   "stadium_ids": [
+    "RIO00"
+   ],
+   "aliases": [
+    "Maracana Stadium",
+    "Maracana",
+    "Estádio do Maracanã"
+   ],
+   "wikipedia_title": "Maracanã Stadium"
+  },
+  {
+   "slug": "arena-corinthians",
+   "name": "Arena Corinthians",
+   "city": "São Paulo, Brazil",
+   "latitude": -23.54527778,
+   "longitude": -46.47416667,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "SAO00"
+   ],
+   "aliases": [
+    "Neo Química Arena"
+   ],
+   "wikipedia_title": "Arena Corinthians"
+  },
+  {
+   "slug": "lumen-field",
+   "name": "Lumen Field",
+   "city": "Seattle, WA",
+   "latitude": 47.5952,
+   "longitude": -122.3316,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "SEA00"
+   ],
+   "aliases": [
+    "CenturyLink Field"
+   ],
+   "wikipedia_title": "Lumen Field"
+  },
+  {
+   "slug": "levis-stadium",
+   "name": "Levi's Stadium",
+   "city": "Santa Clara, CA",
+   "latitude": 37.403,
+   "longitude": -121.97,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "SFO01"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Levi's Stadium"
+  },
+  {
+   "slug": "raymond-james-stadium",
+   "name": "Raymond James Stadium",
+   "city": "Tampa, FL",
+   "latitude": 27.97583333,
+   "longitude": -82.50333333,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "TAM00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Raymond James Stadium"
+  },
+  {
+   "slug": "allegiant-stadium",
+   "name": "Allegiant Stadium",
+   "city": "Las Vegas, NV",
+   "latitude": 36.09055556,
+   "longitude": -115.18388889,
+   "roof": "dome",
+   "roof_evidence": "nflverse completed games 2016-2025: dome",
+   "stadium_ids": [
+    "VEG00"
+   ],
+   "aliases": [],
+   "wikipedia_title": "Allegiant Stadium"
+  },
+  {
+   "slug": "northwest-stadium",
+   "name": "Northwest Stadium",
+   "city": "Landover, MD",
+   "latitude": 38.90777778,
+   "longitude": -76.86444444,
+   "roof": "outdoors",
+   "roof_evidence": "nflverse completed games 2016-2025: outdoors",
+   "stadium_ids": [
+    "WAS00"
+   ],
+   "aliases": [
+    "FedExField",
+    "FedEx Field"
+   ],
+   "wikipedia_title": "Northwest Stadium"
+  }
+ ]
+}
