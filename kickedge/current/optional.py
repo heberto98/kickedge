@@ -10,17 +10,9 @@ from datetime import datetime, timedelta, timezone
 import math
 import re
 
+from kickedge.teams import team_code
 
-_TEAM_NAMES = dict(zip(
-    ('ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LV LAC LA '
-     'MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS').split(),
-    ('Arizona Cardinals|Atlanta Falcons|Baltimore Ravens|Buffalo Bills|Carolina Panthers|'
-     'Chicago Bears|Cincinnati Bengals|Cleveland Browns|Dallas Cowboys|Denver Broncos|'
-     'Detroit Lions|Green Bay Packers|Houston Texans|Indianapolis Colts|Jacksonville Jaguars|'
-     'Kansas City Chiefs|Las Vegas Raiders|Los Angeles Chargers|Los Angeles Rams|Miami Dolphins|'
-     'Minnesota Vikings|New England Patriots|New Orleans Saints|New York Giants|New York Jets|'
-     'Philadelphia Eagles|Pittsburgh Steelers|Seattle Seahawks|San Francisco 49ers|'
-     'Tampa Bay Buccaneers|Tennessee Titans|Washington Commanders').split('|')))
+
 _SPORTSBOOKS = {'fliff', 'draftkings', 'fanduel', 'caesars', 'bovada', 'pinnacle'}
 
 
@@ -46,14 +38,7 @@ def _text(value):
 
 
 def _team(value):
-    text = _text(value)
-    aliases = {'lar': 'LA', 'oak': 'LV', 'sd': 'LAC', 'stl': 'LA', 'wsh': 'WAS'}
-    if text in aliases:
-        return aliases[text]
-    for code, name in _TEAM_NAMES.items():
-        if text in {code.casefold(), name.casefold()}:
-            return code
-    return None
+    return team_code(value)
 
 
 def _event_matches(row, target):
@@ -226,9 +211,11 @@ def collect_context(target: dict, player: dict, *, line: float | None, now: date
             roof = _text(target.get('roof'))
             roof = 'outdoors' if roof == 'outdoor' else roof
             latitude, longitude = _number(target.get('latitude')), _number(target.get('longitude'))
+            # Venue metadata (kickedge/venues.json) when resolve_target supplied it.
             venue = dict(game_id=target['game_id'], roof_type=roof, latitude=latitude, longitude=longitude,
-                         source='nflverse/schedules', source_sha256=target.get('schedule_sha256'),
-                         observed_at=target.get('schedule_fetched_at'))
+                         source=target.get('venue_source', 'nflverse/schedules'),
+                         source_sha256=target.get('venue_source_sha256', target.get('schedule_sha256')),
+                         observed_at=target.get('venue_observed_at', target.get('schedule_fetched_at')))
             evidence = None
             if roof in {'dome', 'closed'}:
                 warnings.append('Indoor venue: outdoor weather is not a game condition.')
@@ -236,6 +223,8 @@ def collect_context(target: dict, player: dict, *, line: float | None, now: date
                 warnings.append('Venue roof exposure is unresolved; weather skipped.')
             elif not target.get('venue') or latitude is None or longitude is None or not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
                 warnings.append('Venue coordinates are unresolved; weather skipped.')
+            elif (kickoff.date() - start.date()).days >= 16:
+                warnings.append('Weather forecast not yet available: Open-Meteo covers the next 16 days.')
             else:
                 factory = weather_factory or OpenMeteoClient
                 evidence = factory(timeout=10).forecast(latitude, longitude, target['kickoff'])

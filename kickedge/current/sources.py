@@ -183,7 +183,12 @@ def _prepare(config, selected, paths, now):
             schedules.append(g)
         player_columns = {r[0] for r in con.execute('DESCRIBE players_all').fetchall()}
         position = 'position' if 'position' in player_columns else 'NULL::VARCHAR AS position'
-        players = records(con,f'SELECT gsis_id kicker_id,display_name,{position} FROM players_all WHERE gsis_id IS NOT NULL ORDER BY gsis_id')
+        # Roster fields as published at capture time: affiliation checks only, never features.
+        roster = ','.join(expr if column in player_columns else f'NULL::{kind} AS {alias}' for column,expr,kind,alias in (
+            ('latest_team','team_code(latest_team) latest_team','VARCHAR','latest_team'),
+            ('status','status roster_status','VARCHAR','roster_status'),
+            ('last_season','TRY_CAST(last_season AS INTEGER) last_season','INTEGER','last_season')))
+        players = records(con,f'SELECT gsis_id kicker_id,display_name,{position},{roster} FROM players_all WHERE gsis_id IS NOT NULL ORDER BY gsis_id')
         required = {g['game_id'] for g in calendar if
                     g.get('home_score') is not None or g.get('away_score') is not None or
                     (g['scheduled_kickoff'] and instant(g['scheduled_kickoff'])+timedelta(hours=24) <= now)}

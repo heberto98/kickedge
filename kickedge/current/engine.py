@@ -6,9 +6,16 @@ from pathlib import Path
 from kickedge.inference.engine import analyze
 from kickedge.inference.odds import analyze_prop
 from kickedge.io import write_json
+from kickedge.teams import team_display
+from .catalog import kicker_affiliation
 from .snapshot import resolve_target, resolve_kicker, build_snapshot, timestamp, digest
 from .sources import load_current_sources
 from .optional import collect_context
+
+
+def current_season(now):
+    """NFL season containing ``now``: January/February belong to the prior season."""
+    return now.year-(now.month<3)
 
 
 def select_quote(quotes, line, side, odds, over_odds, under_odds, bookmaker=None):
@@ -52,13 +59,19 @@ def analyze_current_prop(kicker, team, opponent, line=None, side='over', odds=No
     elif line is not None:
         analyze_prop(1.,line,side,100)
     if season is None:
-        season=started.year-(started.month<3)
+        season=current_season(started)
     loader=source_loader or load_current_sources
     bundle=loader(root,season,refresh=refresh_data,now=started,clock=clock)
     now=timestamp(clock())
     target=resolve_target(bundle,team,opponent,season=season,week=week,game_id=game_id,now=now)
     cutoff=min(now,timestamp(target['kickoff'])-timedelta(minutes=60))
     player=resolve_kicker(bundle,kicker,target,cutoff=cutoff)
+    # Roster evidence is data quality only; a clear opponent listing stops the analysis.
+    affiliation=kicker_affiliation(bundle,player['kicker_id'],target)
+    if affiliation['conflict']:
+        raise ValueError(affiliation['message'])
+    player=player|{'current_team_verified':affiliation['verified'],'roster':affiliation,
+                   'warnings':[] if affiliation['verified'] else [affiliation['message']]}
     built=build_snapshot(bundle,target,player,now=now,cutoff=cutoff)
     collector=context_collector or collect_context
     optional=collector(target,player,line=line,now=now,no_market=no_market,no_weather=no_weather,
@@ -72,6 +85,8 @@ def analyze_current_prop(kicker, team, opponent, line=None, side='over', odds=No
         raise ValueError('Target kickoff passed during collection; pregame analysis unavailable')
     result['schema_version']='7b.1'
     result['game'].update({k:target[k] for k in ('home_team','away_team','venue','roof','season','week','game_type','is_home')})
+    result['game'].update(venue_city=target.get('venue_city'),venue_roof_type=target.get('venue_roof_type'))
+    result['teams']={code:team_display(code) for code in (target['home_team'],target['away_team'])}
     result['player']=player
     result['features']=built['snapshot']['features']
     result['context']=optional['context']
@@ -84,7 +99,7 @@ def analyze_current_prop(kicker, team, opponent, line=None, side='over', odds=No
         weather_availability=optional['context']['weather']['available'],prop_availability=quote['availability'],
         source_failures=optional['source_failures'],warnings=list(dict.fromkeys(warnings)),
         historical_event_chronology_verified=True,
-        pregame_availability_verified=True)
+        pregame_availability_verified=True,market_requested=not no_market,weather_requested=not no_weather)
     # A deterministic content key retains every distinct snapshot/result without overwrite.
     directory=Path(output_dir) if output_dir is not None else root/'data/current/analyses'
     directory=directory/digest(result)

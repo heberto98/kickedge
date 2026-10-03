@@ -11,6 +11,9 @@ from kickedge.features.team import TeamFeatureBuilder
 from kickedge.features.temporal import temporal_evidence_valid
 from kickedge.inference.contracts import FeatureSnapshot
 from kickedge.modeling.dataset import predictor_columns
+from kickedge.teams import normalize_team
+from kickedge.venues import venue_context
+from .catalog import upcoming_games
 
 
 def timestamp(value):
@@ -37,10 +40,21 @@ def _schedule_source(bundle):
     return rows[0]
 
 
+class GameNotFound(ValueError):
+    """No analyzable game; carries upcoming games involving either team."""
+
+    def __init__(self, message, suggestions=()):
+        super().__init__(message)
+        self.suggestions = list(suggestions)
+
+
 def resolve_target(bundle, team, opponent, *, season, now, week=None, game_id=None, replay=False):
-    """Match only explicit schedule identities; multiple upcoming meetings fail."""
+    """Match only explicit schedule identities; multiple upcoming meetings fail.
+
+    Team input is normalized to canonical nflverse codes (LAR -> LA, JAC -> JAX).
+    """
     now = timestamp(now)
-    team, opponent = team.strip().upper(), opponent.strip().upper()
+    team, opponent = normalize_team(team), normalize_team(opponent)
     if team == opponent or season != bundle['season']:
         raise ValueError('Invalid target season or matchup')
     candidates = []
@@ -56,13 +70,19 @@ def resolve_target(bundle, team, opponent, *, season, now, week=None, game_id=No
             continue
         candidates.append(row)
     if not candidates:
-        raise ValueError('No matching future game; matchup invalid or game already started')
+        suggestions = [] if replay else [g for g in upcoming_games(bundle, now)
+                                         if {team, opponent} & {g['home_team'], g['away_team']}][:8]
+        raise GameNotFound('No matching future game; matchup invalid or game already started', suggestions)
     if len(candidates) != 1:
         raise ValueError('Target game ambiguous; provide week or game-id')
     row = candidates[0]
     source = _schedule_source(bundle)
+    venue = venue_context(row)
+    if venue:
+        # Venue evidence = schedule assignment + static metadata: the later capture counts.
+        venue['venue_observed_at'] = max(venue['venue_observed_at'], source['fetched_at'], key=timestamp)
     return {k: row.get(k) for k in ('game_id', 'season', 'week', 'game_type', 'home_team',
-            'away_team', 'venue', 'roof', 'latitude', 'longitude')} | {
+            'away_team', 'venue', 'roof', 'latitude', 'longitude', 'stadium_id')} | venue | {
         'kickoff': row['scheduled_kickoff'], 'scheduled_kickoff': row['scheduled_kickoff'],
         'team': team, 'opponent': opponent, 'is_home': team == row['home_team'],
         'schedule_sha256': source['sha256'], 'schedule_fetched_at': source['fetched_at']}
