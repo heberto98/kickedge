@@ -26,27 +26,44 @@ estática y el JS construye el resultado con `textContent` (sin `innerHTML`).
 | GET | `/healthz` | `{"status":"ok"}` sin I/O. |
 | GET | `/readyz` | Instala/verifica el artifact (SHA-256, metadata, contrato, versiones, estructura). 503 si falla. No descarga datos NFL. |
 | GET | `/api/model` | Tipo, versión, alpha, periodo, 82 features en orden, hash, validación ciega 2025 PASS. Sin rutas locales. |
-| POST | `/api/analyze` | Pick manual → análisis completo. Equipos por código, alias o nombre. |
+| POST | `/api/analyze` | Pick manual → análisis completo. Cuota decimal (`decimal_odds`) o americana legacy (`odds`). Equipos por código, alias o nombre; con `game_id` el equipo se deriva del kicker. |
+| POST | `/api/analyze-multi` | 2–10 selecciones (solo cuotas decimales), cada una con el pipeline individual; resumen combinado con aproximación de independencia. |
 | GET | `/api/games` | Próximos partidos de la temporada actual desde el cache 7B (`?refresh=true` fuerza descarga). |
 | GET | `/api/games/{game_id}/kickers` | Kickers de ambos equipos con estado de roster nflverse. |
-| GET | `/api/analyses`, `/api/analyses/{id}` | Análisis guardados localmente; id validado (64 hex), sin volver a ejecutar nada. |
+| GET | `/api/analyses`, `/api/analyses/{id}`, `/api/multi/{id}` | Análisis guardados (single y multi); id validado (64 hex), sin volver a ejecutar nada. |
 | GET | `/`, `/about`, `/static/*` | Interfaz. |
 
 `/docs`, `/openapi.json` están desactivados.
 
-`POST /api/analyze` (campos extra rechazados):
+`POST /api/analyze` (campos extra rechazados). Formato principal, cuotas decimales;
+el equipo se deriva del kicker cuando se da `game_id`:
 
 ```json
-{"kicker":"Chase McLaughlin","team":"TB","opponent":"GB","season":2026,"week":4,
- "game_id":null,"line":2.5,"side":"over","odds":115,"over_odds":115,"under_odds":-145,
+{"kicker":"00-0039498","game_id":"2026_04_LA_PHI","line":1.5,"side":"over",
+ "decimal_odds":1.30,"over_decimal_odds":1.30,"under_decimal_odds":3.40,
  "refresh_data":false,"include_weather":true,"include_market":false}
 ```
+
+Compatibilidad: sigue aceptando `odds`/`over_odds`/`under_odds` americanas (y
+`team`/`opponent` explícitos); nunca mezcla formatos (`INVALID_ODDS`).
+
+`POST /api/analyze-multi`:
+
+```json
+{"selections":[{"kicker":"00-0039409","game_id":"2026_04_JAX_CIN","line":1.5,"side":"over","decimal_odds":1.35},
+               {"kicker":"00-0037692","game_id":"2026_04_DAL_HOU","line":1.5,"side":"over","decimal_odds":1.40}],
+ "include_weather":true,"refresh_data":false}
+```
+
+Respuesta: `selections[]` (cada una `status` ok con el `result` individual completo, o
+error con `code`/`message`), `combined` (o `null` si alguna falla) y `stored.id`.
+Ver [reports/final_multi_decimal_polish.md](../reports/final_multi_decimal_polish.md).
 
 Errores: `{"error":{"code","message"}}`, sin eco de valores ni traceback.
 
 | Código | HTTP |
 |---|---|
-| INVALID_LINE, INVALID_ODDS, INVALID_TEAM, INVALID_REQUEST | 422 |
+| INVALID_LINE, INVALID_ODDS, INVALID_TEAM, INVALID_REQUEST, KICKER_TEAM_UNRESOLVED (con `teams`) | 422 |
 | GAME_AMBIGUOUS, KICKER_AMBIGUOUS, KICKER_TEAM_MISMATCH, STALE_DATA, GAME_STARTED | 409 |
 | GAME_NOT_FOUND (con `suggestions`), KICKER_NOT_FOUND, ANALYSIS_NOT_FOUND | 404 |
 | RATE_LIMITED | 429 |
@@ -62,9 +79,12 @@ P(Push si la línea es entera), (3) distribución 0–4 y 5+ en barras CSS con
 del snapshot por kicker/ofensiva/defensa rival/contexto, y desplegable con las 82
 entradas (NULL indicado como resuelto por el imputer congelado), (5) data quality
 con estados Verified/Available/Warning/Unavailable/Not verified, notas y
-warnings reales, (6) market comparison: odds, implied, probabilidad KickEdge
-(condicional a no-push en líneas enteras), diferencia en pp, fair odds; con ambos
-lados, no-vig, overround y diferencia vs no-vig. EV queda en un desplegable
+warnings reales, (6) market comparison: cuota decimal, probabilidad implícita
+(1/cuota), probabilidad KickEdge (condicional a no-push en líneas enteras),
+diferencia en pp, cuota justa decimal (1/p); con ambos lados, no-vig, overround y
+diferencia vs no-vig. Un párrafo de "Statistical feedback" bajo la probabilidad
+resume implícita vs modelo y la diferencia, sin recomendar. Los análisis legacy
+con cuotas americanas se muestran en su formato con el equivalente decimal. EV queda en un desplegable
 "Mathematical price comparison" con aviso de no-recomendación. Contexto de clima
 y mercado (spread, total, moneyline por book) etiquetado
 "Context only — not currently used by the probability model". "Data details"

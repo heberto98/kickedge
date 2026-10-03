@@ -2,10 +2,11 @@
 
 KickEdge estima la probabilidad de un pick de **extra points convertidos (XPM)**
 de un kicker NFL que **el usuario ya está considerando**. El usuario aporta
-partido, kicker, lado (Over/Under), línea y cuota americana. KickEdge construye
-un snapshot pregame con datos actuales de nflverse, ejecuta el modelo congelado y
-muestra la probabilidad del pick, la distribución XPM, los datos usados, la
-calidad de datos y una comparación neutral con el precio.
+partido, kicker, lado (Over/Under), línea y **cuota decimal** (por ejemplo 1.91).
+KickEdge construye un snapshot pregame con datos actuales de nflverse, ejecuta el
+modelo congelado y muestra la probabilidad del pick, la distribución XPM, los datos
+usados, la calidad de datos y una comparación neutral con el precio. También analiza
+**varias selecciones** a la vez (2–10), cada una con el mismo pipeline individual.
 
 **Qué NO es:** no es un sistema de picks. No busca ni ordena apuestas, no dice
 BET/PASS, no recomienda stake, no usa Kelly ni gestiona bankroll. La decisión es
@@ -57,26 +58,59 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt
 ```
 
-### Flujo
+### Flujo: Single pick
 
 1. **Upcoming game:** busca y elige el partido (`ram`, `eagles`, `LAR`, `week 4`).
    La lista sale del schedule nflverse cacheado, solo partidos futuros, en orden
    cronológico y con hora local del navegador.
 2. **Kicker:** al elegir el partido aparecen los kickers de ambos equipos
    (roster nflverse y quienes han pateado esta temporada), con su estado
-   (`Active roster`, `Practice squad`, ...). Elegirlo fija su equipo; también se
-   puede escribir un nombre o ID manualmente.
-3. **Over/Under, línea y cuota** (`+115`, `115` o `-110`) y **Analyze pick**.
+   (`Active roster`, `Practice squad`, ...). **El equipo sale del kicker elegido**
+   y se muestra como dato ("Los Angeles Rams · Active roster"); no se pide dos veces.
+   Si escribes un kicker a mano, KickEdge deriva su equipo (roster, luego partidos
+   de la temporada); solo si no puede, te pide elegirlo una vez.
+3. **Side** (Over/Under), **XPM line** y **Decimal odds** (`1.30`, `1.91`, `2.00`;
+   se aceptan `1.8` o `2`, que se muestran como `1.80` y `2.00`).
+4. **Analyze pick.**
 
 Teclado: flechas, `Enter` y `Escape` en ambas listas. `Advanced` conserva la
-entrada manual (equipo/rival, temporada, semana, game id, cuotas de ambos lados,
-contexto de mercado y clima, refresh de datos).
+entrada manual (equipo/rival, temporada, semana, game id, cuotas decimales de
+ambos lados para no-vig, contexto de mercado y clima, refresh de datos).
 
-**Aliases de equipos:** una sola capa (`kickedge/teams.py`) normaliza códigos y
-nombres a los códigos canónicos de nflverse: `LAR`→`LA`, `JAC`→`JAX`,
-`WSH`→`WAS`, `OAK`→`LV`, `SD`→`LAC`, `Rams`, `Los Angeles Rams`, etc. Nombres
-compartidos (`Los Angeles`, `New York`) no se adivinan. Si un partido no existe,
-el error lista los próximos partidos de ambos equipos, y se pueden elegir con un clic.
+**Cuotas decimales:** formato principal de la interfaz (stake incluido, siempre
+mayor que 1). Probabilidad implícita = `1 / cuota` (2.00 → 50.0 %, 1.50 → 66.7 %,
+1.91 → 52.4 %); beneficio por unidad si gana = `cuota − 1`; cuota justa del modelo =
+`1 / p` (en líneas enteras, `p` condicional a no-push). Los análisis guardados antes
+con cuotas americanas siguen abriéndose y se muestran como "legacy US" con su
+equivalente decimal (`+A → 1 + A/100`, `−A → 1 + 100/A`). La API y la CLI siguen
+aceptando cuotas americanas por compatibilidad.
+
+### Flujo: Multiple selections
+
+1. Pestaña **Multiple selections**: empieza con 2 selecciones; **+ Add selection**
+   añade hasta 10 y **Remove** quita cualquiera (se renumeran sin perder datos).
+2. En cada selección: partido, kicker (el equipo se deriva igual que en Single),
+   Over/Under, línea y cuota decimal; `Advanced` por selección: cuota del otro lado
+   y equipos manuales.
+3. **Analyze selections.**
+
+Cada selección pasa por **exactamente** el mismo pipeline que un Single pick (mismo
+snapshot de 82 features, mismo modelo, misma probabilidad); los datos NFL se cargan
+una vez por petición y el clima una vez por partido. El resultado muestra cada
+selección (probabilidad KickEdge, probabilidad implícita, diferencia, expected XPM y
+feedback) y un resumen combinado:
+
+- **Cuota decimal combinada** = producto de las cuotas; **probabilidad implícita
+  combinada** = `1 / cuota combinada` (1.50 × 1.40 = 2.10 → 47.6 %).
+- **Probabilidad aproximada de KickEdge** = producto de las probabilidades de que
+  cada selección gane (todas ganan). **Supone independencia**: KickEdge no modela
+  correlación entre selecciones. Selecciones del **mismo partido** (mismo `game_id`)
+  generan un aviso visible: pueden estar correlacionadas y la aproximación puede ser
+  muy inexacta.
+- Líneas enteras pueden hacer push: se informa la probabilidad de que todas ganen
+  (y la de no perder ninguna), sin simular reglas de parlay de cada casa.
+- Si alguna selección falla (p. ej. `KICKER_NOT_FOUND`), se indica en esa selección
+  y **no** se calcula el combinado sobre un subconjunto.
 
 ### Resultado
 
@@ -86,6 +120,13 @@ distribución con la línea marcada (Win/Loss/Push por conteo), "What KickEdge s
 temporada, sin adjetivos), las 82 entradas auditables, calidad de datos compacta,
 comparación neutral con el precio y detalles técnicos. El EV queda en un
 desplegable secundario.
+
+**Feedback estadístico:** debajo de la probabilidad, un párrafo compara la
+probabilidad que implica la cuota con la que estima KickEdge, por ejemplo: "At
+decimal odds 1.30, the price implies 76.9%. KickEdge estimates 64.5%. The model
+estimate is 12.4 percentage points lower than the probability implied by the
+price." Nunca dice si conviene apostar; las diferencias llevan signo y texto
+("model higher/lower"), no solo color.
 
 **Afiliación del kicker:** se verifica con los datos de jugadores de nflverse
 (`latest_team`, `status`, `last_season`) ya descargados. Si coincide con el roster
@@ -101,7 +142,7 @@ de precipitación, condición), disponible dentro de 16 días. Domo/techo cerrad
 "Indoor / closed roof". Techo retráctil sin estado confirmado: no se muestra
 clima exterior. El clima es solo contexto y **no** entra al modelo.
 
-**Análisis recientes:** cada análisis se guarda localmente en
+**Análisis recientes:** cada análisis (single o multi) se guarda localmente en
 `data/current/analyses/<sha256>/` (ignorado por Git). El panel "Recent analyses"
 los lista y los reabre tal como se guardaron, sin volver a consultar proveedores.
 
@@ -117,13 +158,15 @@ La primera consulta del día descarga y cachea los datos nflverse de la temporad
 (`data/cache/current`); después se reutiliza el cache durante 6 h. El modelo se
 instala solo desde `models/phase5` si falta `data/models/phase5`, verificando SHA-256.
 
-CLI equivalente (acepta los mismos aliases):
+CLI equivalente (acepta los mismos aliases; conserva cuotas americanas por compatibilidad):
 `python -m kickedge analyze --kicker "Harrison Mevis" --team LAR --opponent PHI --season 2026 --week 4 --line 1.5 --side over --odds -333`
 
 API local: `GET /healthz`, `/readyz`, `/api/model`, `/api/games`,
-`/api/games/{game_id}/kickers`, `/api/analyses`, `/api/analyses/{id}` y
-`POST /api/analyze` (ver [docs/product_phase7c.md](docs/product_phase7c.md) y
-[reports/product_polish.md](reports/product_polish.md)).
+`/api/games/{game_id}/kickers`, `/api/analyses`, `/api/analyses/{id}`,
+`/api/multi/{id}`, `POST /api/analyze` y `POST /api/analyze-multi` (ver
+[docs/product_phase7c.md](docs/product_phase7c.md),
+[reports/product_polish.md](reports/product_polish.md) y
+[reports/final_multi_decimal_polish.md](reports/final_multi_decimal_polish.md)).
 
 `render.yaml` se conserva del cierre de 7C, pero KickEdge se usa solo localmente;
 no hace falta ningún servicio en la nube.
@@ -137,12 +180,14 @@ no hace falta ningún servicio en la nube.
   participación real el día del partido no se verifica.
 - Clima: solo dentro de 16 días del kickoff; estadios con techo retráctil sin
   estado publicado no muestran clima exterior.
+- Selecciones múltiples: la probabilidad combinada es una aproximación que supone
+  independencia; selecciones del mismo partido pueden estar correlacionadas.
 - Proveedores opcionales pueden fallar sin bloquear el análisis.
 - Las predicciones dependen de la frescura de los datos fuente. Sin garantía de rendimiento futuro.
 
 ## Tests y estructura
 
-`python -m pytest -q` (619 tests; los de interfaz usan Edge/Chrome headless si existe).
+`python -m pytest -q` (685 tests; los de interfaz usan Edge/Chrome headless si existe).
 
 ```
 start-kickedge.bat                  lanzador local de Windows
@@ -150,7 +195,7 @@ kickedge/ingest, transform, build   datos históricos nflverse y labels
 kickedge/features                   builders de features + contrato de 82 columnas
 kickedge/modeling, validation       entrenamiento (fases 5–6, ya congelado)
 kickedge/inference                  motor 7A: carga verificada, distribución, odds
-kickedge/current                    pipeline 7B: datos actuales -> snapshot; catalog (partidos, kickers, roster)
+kickedge/current                    pipeline 7B: datos actuales -> snapshot; catalog (partidos, kickers, roster); multi (combinado)
 kickedge/teams.py                   metadata y aliases de equipos
 kickedge/venues.py, venues.json     estadios versionados (coordenadas, techo)
 kickedge/web                        API FastAPI + interfaz estática
