@@ -417,3 +417,12 @@ bloquean la prop manual. Consulta [arquitectura](docs/current_phase7b.md) y
 ## Fase 7C: producto web, API y deployment
 
 Ver [producto](docs/product_phase7c.md) y [verificación](reports/phase7c_verification.md).
+
+## V2: carryover, retadores y validación forward 2026
+
+V1 sigue como campeón. V2 (carryover de temporada previa, GLM/boosting/estructural)
+se evaluó con walk-forward 2020–2025 y una única evaluación forward 2026 después de
+congelar; ningún candidato pasó la regla registrada y la muestra forward fue menor que
+la exigida. Artefactos V2 versionados aparte en `models/v2/`; V1 sin cambios. Ver
+[comparación](reports/v2_model_comparison.md), [forward 2026 y mercado](reports/v2_forward_2026_validation.md),
+[sesgo](reports/v2_bias_audit.md) e [inicio de temporada](reports/v2_early_season_audit.md).
