@@ -48,8 +48,8 @@
       <li>Validation rests on a single blind holdout season.</li>
       <li>The Poisson assumption may not capture every source of variance, and the high-XPM tail is more uncertain.</li>
       <li>Early-season histories are sparse. Missing recent windows are handled by the frozen imputer.</li>
-      <li>The kicker's current team affiliation is not independently verified against a roster source.</li>
-      <li>Optional providers (market, weather) can fail. When shown, they are context only and are not model predictors.</li>
+      <li>Current team affiliation is checked against nflverse player data (team and roster status) when available; game-day participation is not verified.</li>
+      <li>Optional providers (market, weather) can fail. When shown, they are context only and are not model predictors. Weather uses a versioned stadium list and an Open-Meteo forecast, available only within 16 days of kickoff.</li>
       <li>Estimates depend on the freshness of the NFL source data.</li>
       <li>There is no guarantee of future performance.</li>
     </ul>
