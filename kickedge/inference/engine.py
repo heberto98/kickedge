@@ -11,7 +11,8 @@ from .odds import analyze_prop
 
 
 def analyze(snapshot, line, side, odds, *, over_odds=None, under_odds=None,
-            source=None, timestamp=None, model_dir='data/models/phase5', metadata_overrides=None):
+            source=None, timestamp=None, model_dir='data/models/phase5', metadata_overrides=None,
+            odds_format='american'):
     if isinstance(snapshot,FeatureSnapshot):
         # Dataclass dictionaries can be mutated by callers: validate at the boundary again.
         snapshot=FeatureSnapshot.from_mapping({'features':snapshot.features,'metadata':snapshot.metadata,
@@ -30,7 +31,7 @@ def analyze(snapshot, line, side, odds, *, over_odds=None, under_odds=None,
         except (TypeError,ValueError):
             raise ValueError('Prop timestamp must be ISO format with timezone') from None
     # Validate quote independently before loading the artifact, without modifying features.
-    analyze_prop(1.,line,side,odds,over_odds,under_odds)
+    analyze_prop(1.,line,side,odds,over_odds,under_odds,odds_format=odds_format)
     frozen=load_model(model_dir)
     frame=snapshot.to_frame()
     mean=float(frozen.predict(frame)[0])
@@ -39,7 +40,7 @@ def analyze(snapshot, line, side, odds, *, over_odds=None, under_odds=None,
     tail=float(distribution['tail'][0])
     if not all(math.isfinite(p) and p>=0 for p in [*probabilities,tail]) or not math.isclose(sum(probabilities)+tail,1,abs_tol=1e-12):
         raise ValueError('Model produced an invalid count distribution')
-    quote=analyze_prop(mean,line,side,odds,over_odds,under_odds,source,timestamp)
+    quote=analyze_prop(mean,line,side,odds,over_odds,under_odds,source,timestamp,odds_format=odds_format)
     outcomes=[quote['prop'][k] for k in ('p_over','p_under','p_push')]
     if not all(math.isfinite(p) and p>=0 for p in outcomes) or not math.isclose(sum(outcomes),1,abs_tol=1e-12):
         raise ValueError('Invalid prop settlement probabilities')
@@ -54,7 +55,7 @@ def analyze(snapshot, line, side, odds, *, over_odds=None, under_odds=None,
         warnings.append('Negative overround in supplied pair; verify same event/line/book/time and quote completeness')
     if over_odds is not None:
         warnings.append('Paired prices are caller-supplied; common event/line/book/time is not independently verified')
-    if quote['analysis']['fair_odds']['american'] is None:
+    if quote['analysis']['fair_odds']['reason'] is not None:
         warnings.append(quote['analysis']['fair_odds']['reason'])
     warnings.append('EV and edge are mathematical outputs under model probabilities, not a betting recommendation')
     demo=bool(snapshot.provenance.get('demo') or snapshot.provenance.get('kind')=='DEMO / TEST FIXTURE')

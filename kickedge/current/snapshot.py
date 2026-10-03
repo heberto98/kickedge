@@ -88,6 +88,39 @@ def resolve_target(bundle, team, opponent, *, season, now, week=None, game_id=No
         'schedule_sha256': source['sha256'], 'schedule_fetched_at': source['fetched_at']}
 
 
+class KickerTeamUnresolved(ValueError):
+    """The kicker's team in the selected game cannot be derived; carries both teams."""
+
+    def __init__(self, message, teams=()):
+        super().__init__(message)
+        self.teams = list(teams)
+
+
+def resolve_kicker_team(bundle, kicker, game_id, *, now):
+    """(team, opponent) of a kicker in a scheduled game, never guessed.
+
+    Current roster (nflverse latest_team for this season) wins; otherwise the
+    team the kicker kicked for most recently this season. Identity rules are
+    those of resolve_kicker (ambiguous or unknown names fail).
+    """
+    row = next((r for r in bundle['schedules'] if r['game_id'] == game_id), None)
+    if row is None:
+        raise GameNotFound('No matching future game; matchup invalid or game already started')
+    teams = (row['away_team'], row['home_team'])
+    pid = resolve_kicker(bundle, kicker, {'game_id': game_id, 'season': row['season'], 'team': None},
+                         cutoff=now)['kicker_id']
+    roster = next((p for p in bundle['players'] if (p.get('kicker_id') or p.get('player_id')) == pid), {})
+    team = roster.get('latest_team') if roster.get('last_season') == row['season'] else None
+    if team not in teams:
+        played = [(timestamp(g['source']['actual_kickoff']), k['team']) for g in bundle['games']
+                  if g['season'] == row['season'] and timestamp(g['source']['actual_kickoff']) < timestamp(now)
+                  for k in g['kickers'] if k['kicker_id'] == pid and k['team'] in teams]
+        if not played:
+            raise KickerTeamUnresolved("Kicker team unresolved for this game; choose the kicker's team", teams)
+        team = max(played)[1]
+    return team, next(t for t in teams if t != team)
+
+
 def resolve_kicker(bundle, kicker, target, *, cutoff):
     """Resolve the user-specified player. Prior team is never a current roster claim."""
     candidates = {}
