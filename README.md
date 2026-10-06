@@ -177,6 +177,39 @@ individuales (fuente `multi_leg`, separadas de Single y posiblemente correlacion
 y, por grupo independiente vs same-game, el evento "all legs win" frente a la
 probabilidad combinada aproximada, que asume independencia.
 
+**Tracking flow:** Analyze → Track → Refresh results → auto-settle → performance.
+Al abrir la web (y con el botón **Refresh results**) KickEdge revisa los datos nflverse
+ya aprobados, respetando el cache de 6 h, y liquida solos los picks y legs cuyo partido
+está completado (play END GAME) cuando el kicker trackeado tiene un único label
+reconciliado por dos fuentes (mismo ID estable y equipo; un 0 solo si la fuente lo
+verifica con participación observada). Si falta algo, el pick sigue OPEN con un aviso
+(`AUTO_SETTLEMENT_UNRESOLVED`); nunca se adivina ni se sustituye al kicker. El
+settlement automático guarda `settlement_source=auto_nflverse`, partido, hash y hora de
+la fuente, y se registra en `data/current/monitoring/settlement_log.jsonl`. **Settle**
+manual sigue como respaldo; un resultado manual nunca se reemplaza (si no coincide con
+nflverse aparece `MANUAL_RESULT_DIFFERS_FROM_SOURCE`) y **Correct result** funciona
+igual sobre resultados automáticos. Cada settlement muestra su fuente: Auto — nflverse,
+Manual o Corrected.
+
+**Data freshness / Performance / Monitoring:** la tarjeta Data freshness muestra cuándo
+se descargaron los datos NFL, el último partido y semana completos, la política de
+cutoff y el modelo, con avisos si la fuente tiene más de 6 h o falta un partido que ya
+debería haber terminado. La pestaña **Performance** usa solo picks trackeados (nunca
+análisis recientes sin trackear): probabilidad media, frecuencia observada y Brier
+(pushes excluidos), buckets de calibración con gráfico, rangos de probabilidad, por
+línea y por semana, siempre con n y "Small sample" si n < 20; Singles y legs de Multi
+por separado, y multis independientes vs same-game por separado. Un snapshot de
+monitoreo (`data/current/monitoring/snapshots/`) se escribe solo si algo cambió, e
+incluye el hash del modelo V1 y la referencia "84 / 150 observations at last V2 audit"
+con el conteo de observaciones 2026 elegibles por label (no evalúa V2).
+
+**Prediction movement / Compare XPM lines:** si la misma selección (partido, kicker,
+lado, línea) se analizó varias veces, el resultado muestra el movimiento del modelo
+(probabilidad y expected XPM por snapshot, con los inputs que cambiaron, sin atribuir
+causas) y, aparte, el de las cuotas que tú ingresaste. "Compare XPM lines" muestra
+P(Over), P(Under), P(Push) y cuota justa para 0.5–4.5 con la misma distribución del
+análisis, sin volver a ejecutar el modelo.
+
 Variables de entorno (todas opcionales):
 
 | Variable | Uso |
@@ -197,7 +230,10 @@ API local: `GET /healthz`, `/readyz`, `/api/model`, `/api/games`,
 `/api/multi/{id}`, `/api/tracked`, `/api/tracked/{id}`, `POST /api/analyze`,
 `POST /api/analyze-multi`, `POST /api/tracked`, `POST /api/tracked/{id}/settle`,
 `POST /api/tracked/{id}/correct`, `/api/tracked-multi`, `/api/tracked-multi/{id}`,
-`POST /api/tracked-multi` y `POST /api/tracked-multi/{id}/legs/{n}/settle|correct` (ver
+`POST /api/tracked-multi`, `POST /api/tracked-multi/{id}/legs/{n}/settle|correct`,
+`POST /api/tracking/refresh-results`, `/api/performance`, `/api/monitoring`,
+`/api/prediction-movement/{id}` y `/api/line-comparison/{id}` (ver
+[reports/tracking_monitoring_update.md](reports/tracking_monitoring_update.md),
 [docs/product_phase7c.md](docs/product_phase7c.md),
 [reports/product_polish.md](reports/product_polish.md) y
 [reports/final_multi_decimal_polish.md](reports/final_multi_decimal_polish.md)).
