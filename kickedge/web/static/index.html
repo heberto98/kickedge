@@ -28,6 +28,7 @@
   <div class="tabs" role="tablist" aria-label="Analysis mode">
     <button type="button" role="tab" id="tab-single" aria-controls="panel-single" aria-selected="true">Single pick</button>
     <button type="button" role="tab" id="tab-multi" aria-controls="panel-multi" aria-selected="false" tabindex="-1">Multiple selections</button>
+    <button type="button" role="tab" id="tab-performance" aria-controls="panel-performance" aria-selected="false" tabindex="-1">Performance</button>
   </div>
 
   <section id="panel-single" class="panel" role="tabpanel" aria-labelledby="tab-single">
@@ -122,6 +123,14 @@
     </form>
   </section>
 
+  <section id="panel-performance" class="panel" role="tabpanel" aria-labelledby="tab-performance" hidden>
+    <section class="card" aria-labelledby="perf-h">
+      <h2 id="perf-h">Model performance</h2>
+      <p class="hint">Official tracked picks only (frozen before kickoff), with their latest effective results. Recent analyses that were not tracked are never counted. This measures the frozen V1 model; nothing is refitted or recalibrated.</p>
+    </section>
+    <div id="perf-body"><p class="hint">Loading performance…</p></div>
+  </section>
+
   <div id="error" class="card error" role="alert" data-mode="single" hidden></div>
   <div id="result" data-mode="single" hidden></div>
   <div id="multi-error" class="card error" role="alert" data-mode="multi" hidden></div>
@@ -138,9 +147,18 @@
       </ol>
       <p class="hint">KickEdge estimates the probability of the selections you bring. It does not suggest picks.</p>
     </section>
+    <section class="card freshness" id="freshness" aria-labelledby="freshness-h">
+      <h2 id="freshness-h">Data freshness</h2>
+      <div id="freshness-body"><p class="hint">Checking NFL data…</p></div>
+    </section>
     <section class="card tracked" id="tracked" aria-labelledby="tracked-h">
       <h2 id="tracked-h">Tracked picks</h2>
       <p class="hint">Official predictions frozen before kickoff. Recent analyses below are only saved analyses.</p>
+      <div class="refresh-row">
+        <button type="button" class="secondary" id="refresh-results">Refresh results</button>
+        <p id="refresh-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+      <ul id="refresh-warnings" class="warn-list" aria-label="Result warnings" hidden></ul>
       <div class="tracked-tabs" role="group" aria-label="Tracked pick type">
         <button type="button" class="secondary" id="tracked-tab-single" aria-pressed="true" aria-controls="tracked-body">Single</button>
         <button type="button" class="secondary" id="tracked-tab-multi" aria-pressed="false" aria-controls="tracked-multi-body">Multi</button>

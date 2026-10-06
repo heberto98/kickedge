@@ -19,13 +19,13 @@ from fastapi import FastAPI, Path as PathParam, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_validator
 
 from kickedge.current.catalog import kicker_candidates, upcoming_games
 from kickedge.current.engine import analyze_current_prop, current_season
 from kickedge.current.multi import MAX_SELECTIONS, MIN_SELECTIONS, analyze_selections
 from kickedge.current.optional import collect_context
-from kickedge.current import multi_tracking, tracking
+from kickedge.current import auto_settlement, monitoring, movement, multi_tracking, performance, tracking
 from kickedge.current.snapshot import digest
 from kickedge.current.sources import CurrentSourceError, load_current_sources
 from kickedge.inference.odds import american_to_decimal
@@ -38,6 +38,7 @@ STATIC = Path(__file__).with_name('static')
 ANALYSES_DIR = ROOT/'data/current/analyses'
 TRACKED_DIR = ROOT/'data/current/tracked'
 TRACKED_MULTI_DIR = ROOT/'data/current/tracked_multi'
+MONITORING_DIR = ROOT/'data/current/monitoring'
 GAME_ID = r'^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$'
 ANALYSIS_ID = r'^[0-9a-f]{64}$'
 MAX_BODY_BYTES = 4096
@@ -641,6 +642,102 @@ def correct_multi_leg(body: CorrectRequest, leg: LegNumber, tracking_id: str = P
         return _tracking_error(exc)
     except (OSError, ValueError, KeyError, TypeError):
         return _error(404, 'PICK_NOT_FOUND', 'Tracked multi could not be read')
+
+
+class RefreshRequest(BaseModel):
+    """Refresh results honours the six-hour source cache unless a download is explicitly requested."""
+    model_config = ConfigDict(extra='forbid')
+    refresh_data: StrictBool = False
+
+
+def _manifest_fetched_at(season):
+    """Capture time of the last cached nflverse download (display only; never trusted as data)."""
+    try:
+        manifest = json.loads((ROOT/'data/cache/current'/str(season)/'sources.json').read_text(encoding='utf-8'))
+        return manifest['fetched_at'] if isinstance(manifest.get('fetched_at'), str) else None
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+
+
+@app.post('/api/tracking/refresh-results')
+def refresh_results(body: RefreshRequest | None = None):
+    """Auto-settle tracked selections whose games nflverse shows as completed, then update
+    performance, freshness and the monitoring snapshot. A source failure changes nothing.
+    The body is optional: an empty POST is a plain refresh that honours the source cache."""
+    body = body or RefreshRequest()
+    now = _now()
+    season = current_season(now)
+    with _tracking_lock:
+        seasons = auto_settlement.seasons_needed(TRACKED_DIR, TRACKED_MULTI_DIR, now) | {season}
+    bundles, failures = {}, {}
+    for year in sorted(seasons):
+        try:
+            bundles[year] = _locked_loader(ROOT, year, refresh=body.refresh_data and year == season, now=now)
+        except (CurrentSourceError, OSError):
+            failures[year] = 'NFL data could not be loaded or verified; tracked picks were left unchanged.'
+    current = bundles.get(season)
+    fresh = monitoring.freshness(current, now, fetched_at=_manifest_fetched_at(season), failure=failures.get(season))
+    forward_bundle = bundles.get(monitoring.FORWARD_REFERENCE['season'])
+    forward = monitoring.forward_status(monitoring.label_eligible_count(forward_bundle) if forward_bundle else None)
+    with _tracking_lock:
+        report = auto_settlement.settle_open(TRACKED_DIR, TRACKED_MULTI_DIR, bundles, failures, now,
+                                             MONITORING_DIR/auto_settlement.LOG)
+        board = performance.dashboard(tracking.list_tracked(TRACKED_DIR), multi_tracking.list_tracked(TRACKED_MULTI_DIR))
+        if current is not None:
+            snapshot, written = monitoring.record_snapshot(MONITORING_DIR, monitoring.snapshot_content(board, fresh, forward), now)
+        else:
+            snapshot, written = monitoring.latest_snapshot(MONITORING_DIR), False
+    return {'checked_at': now.isoformat(), 'report': report, 'freshness': fresh, 'performance': board,
+            'monitoring': {'forward_validation': forward, 'latest_snapshot_at': (snapshot or {}).get('generated_at'),
+                           'snapshot_written': written}}
+
+
+@app.get('/api/performance')
+def performance_dashboard():
+    """Performance of tracked selections only; reads local records, never the source."""
+    with _tracking_lock:
+        return performance.dashboard(tracking.list_tracked(TRACKED_DIR), multi_tracking.list_tracked(TRACKED_MULTI_DIR))
+
+
+@app.get('/api/monitoring')
+def monitoring_status():
+    """Latest local monitoring snapshot and the V2 forward-validation reference (no V2 evaluation)."""
+    latest = monitoring.latest_snapshot(MONITORING_DIR)
+    count = ((latest or {}).get('forward_validation') or {}).get('label_eligible_completed_observations')
+    return {'latest_snapshot': latest, 'snapshots': monitoring.snapshot_count(MONITORING_DIR),
+            'forward_validation': monitoring.forward_status(count), 'model': monitoring.model_identity()}
+
+
+@app.get('/api/prediction-movement/{item_id}')
+def prediction_movement(item_id: str = PathParam(pattern=ANALYSIS_ID)):
+    """Saved-analysis history of the selection of a stored analysis or a tracked pick."""
+    path = _stored(item_id)
+    try:
+        if path is not None:
+            fields = tracking.prediction_fields(json.loads(path.read_text(encoding='utf-8')))
+            item = {'kind': 'analysis', 'id': item_id}
+        else:
+            fields = tracking.load(TRACKED_DIR, item_id)['pick']
+            item = {'kind': 'tracked_pick', 'id': item_id}
+    except tracking.TrackingError as exc:
+        if exc.code == 'PICK_NOT_FOUND':
+            return _error(404, 'NOT_FOUND', 'No stored analysis or tracked pick with this id')
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(404, 'NOT_FOUND', 'Stored analysis could not be read')
+    return movement.movement(ANALYSES_DIR, movement.selection_key(fields)) | {'item': item}
+
+
+@app.get('/api/line-comparison/{analysis_id}')
+def line_comparison(analysis_id: str = PathParam(pattern=ANALYSIS_ID)):
+    """Several XPM lines from the stored analysis' own distribution; the model is not re-run."""
+    path = _stored(analysis_id)
+    if path is None:
+        return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis not found')
+    try:
+        return movement.line_comparison(json.loads(path.read_text(encoding='utf-8'))) | {'analysis_id': analysis_id}
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(422, 'INVALID_ANALYSIS', 'This stored analysis cannot be compared across lines')
 
 
 @app.get('/')

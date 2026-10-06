@@ -36,7 +36,8 @@ nav a:hover { color: var(--text); }
 
 /* layout: the side column follows the result in the DOM (last on phones) and is
    placed beside the form on wide screens. */
-.page { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); column-gap: 16px; align-items: start; }
+/* The panel row is flexible so a tall side column grows it, never the tabs row above the form. */
+.page { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); grid-template-rows: auto auto 1fr; column-gap: 16px; align-items: start; }
 .intro { grid-column: 1 / -1; }
 .tabs { grid-column: 1; grid-row: 2; display: flex; gap: 4px; margin-top: 16px; border-bottom: 1px solid var(--line); }
 .panel { grid-column: 1; grid-row: 3; min-width: 0; }
@@ -144,7 +145,7 @@ button.secondary:disabled { opacity: .5; cursor: not-allowed; }
 .tracked-summary .stat { padding: 8px 10px; }
 .tracked h3 { font-size: 13px; margin: 14px 0 0; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
 .tracked-item { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
-.tracked-item .status { font-size: 12px; font-weight: 700; }
+.tracked-item .status { font-size: 12px; font-weight: 700; flex: none; }   /* not the form status flex basis */
 .status.win { color: var(--accent); }
 .status.loss { color: var(--warn); }
 .settle-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; font-size: 13px; }
@@ -161,6 +162,36 @@ button.secondary:disabled { opacity: .5; cursor: not-allowed; }
 .multi-legs { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .multi-legs > li { border-top: 1px solid var(--line); padding-top: 6px; display: flex; flex-direction: column; gap: 2px; }
 .tracked .group-title { font-size: 12px; font-weight: 700; margin: 10px 0 0; }
+
+/* results refresh, freshness, performance, movement */
+.refresh-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.refresh-row button { min-height: 36px; padding: 6px 14px; font-size: 13px; }
+.refresh-row .status { font-size: 12px; }
+.warn-list { margin: 8px 0 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+.warn-list li { margin: 4px 0; }
+.warn-list code { color: var(--warn); font-size: 11px; }
+.fresh-dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 8px 0 0; font-size: 13px; }
+.fresh-dl dt { color: var(--muted); }
+.fresh-dl dd { margin: 0; overflow-wrap: anywhere; font-weight: 600; }
+.result-source { font-size: 12px; color: var(--muted); }
+.perf-section > summary { font-size: 15px; }
+.perf-section h3 { margin-top: 16px; }
+.perf-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 10px 0; }
+.perf-stats .stat { padding: 8px 10px; }
+.perf-stats .stat-value { font-size: 17px; }
+td.small, .small-sample { color: var(--warn); font-size: 12px; }
+tr.sel td { background: var(--accent-soft); }
+.chart { display: block; width: 100%; max-width: 260px; height: auto; margin: 8px 0; }
+.chart.wide { max-width: 520px; }
+.chart .axis { stroke: var(--line); stroke-width: .5; fill: none; }
+.chart .diag { stroke: var(--off); stroke-width: .5; stroke-dasharray: 2 2; fill: none; }
+.chart .line { stroke: var(--accent); stroke-width: 1; fill: none; }
+.chart .dot { fill: var(--accent); fill-opacity: .7; }
+.chart text { fill: var(--muted); font-size: 4px; }
+.movement-list { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; }
+.movement-list li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.movement-list .delta { color: var(--muted); }
+.monitor-ref { font-weight: 650; }
 
 /* errors */
 .error { border-color: var(--bad); }
@@ -293,6 +324,7 @@ td { font-variant-numeric: tabular-nums; }
 }
 @media (max-width: 640px) {
   .card { padding: 16px; }
+  .perf-stats { grid-template-columns: 1fr 1fr; }
   .intro h1 { font-size: 22px; }
   .row3 { grid-template-columns: 1fr 1fr; }
   .row3 .side { grid-column: span 2; }

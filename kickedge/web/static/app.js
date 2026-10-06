@@ -749,10 +749,12 @@ function trackedItem(t) {
   if (s) {
     children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `SETTLED — ${s.result}`, t.corrected ? h('span', { class: 'chip warn' }, 'Corrected') : null),
       h('span', { class: 'ri-sub' }, `Actual XPM: ${s.actual_xpm} · Result: ${s.result}`),
+      h('span', { class: 'result-source' }, `Result source: ${resultSourceLabel(t.result_source)}`),
       t.corrected ? correctionHistory(t) : null, correctForm(p.tracking_id.slice(0, 12), `/api/tracked/${p.tracking_id}/correct`, loadTracked));
   }
   else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
   else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(p.tracking_id.slice(0, 12), `/api/tracked/${p.tracking_id}/settle`, loadTracked));
+  children.push(movementDetails(p.tracking_id));
   return h('li', { class: 'tracked-item' }, children);
 }
 
@@ -826,6 +828,7 @@ function trackedLeg(m, l) {
   if (s) {
     children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `Actual XPM: ${s.actual_xpm} · ${s.result}`,
       l.corrected ? h('span', { class: 'chip warn' }, 'Corrected') : null),
+      h('span', { class: 'result-source' }, `Result source: ${resultSourceLabel(l.result_source)}`),
       l.corrected ? correctionHistory(l) : null, correctForm(key, `${base}/correct`, loadTrackedMulti));
   } else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
   else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(key, `${base}/settle`, loadTrackedMulti));
@@ -890,10 +893,270 @@ function setTrackedTab(kind) {
   $('tracked-multi-body').hidden = !multi;
 }
 
+// ---------- results refresh and data freshness ----------
+
+const RESULT_SOURCES = { auto_nflverse: 'Auto — nflverse', manual: 'Manual', corrected: 'Corrected' };
+const resultSourceLabel = (source) => RESULT_SOURCES[source] || '—';
+const WARNING_TEXT = {
+  AUTO_SETTLEMENT_UNRESOLVED: 'Not settled automatically',
+  MANUAL_RESULT_DIFFERS_FROM_SOURCE: 'Recorded result differs from nflverse',
+  TRACKED_GAME_PENDING_IN_SOURCE: 'Game should have ended; not completed in nflverse yet',
+  SOURCE_UNAVAILABLE: 'NFL data unavailable',
+};
+
+function ago(iso) {
+  const ms = new Date() - new Date(iso);
+  if (!Number.isFinite(ms)) return '—';
+  const minutes = Math.max(0, Math.round(ms / 60000));
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = minutes / 60;
+  return hours < 48 ? `${Math.round(hours)} h ago` : `${Math.round(hours / 24)} days ago`;
+}
+
+function warningItem(w) {
+  const who = w.kicker ? `${w.kicker} · ${w.game_id}${w.leg ? ` · leg ${w.leg}` : ''}` : '';
+  let text = WARNING_TEXT[w.code] || w.code;
+  if (w.code === 'MANUAL_RESULT_DIFFERS_FROM_SOURCE') text += `: recorded ${w.recorded_xpm} XPM, nflverse ${w.source_xpm} XPM (nothing changed)`;
+  else if (w.detail) text += `: ${w.detail}`;
+  return h('li', {}, h('code', {}, w.code), ' ', [who, text].filter(Boolean).join(' — '));
+}
+
+function renderFreshness(f) {
+  const box = $('freshness-body');
+  if (!box) return;
+  const game = f.latest_completed_game;
+  const rows = [
+    ['NFL data fetched', f.nfl_data_fetched_at ? `${ago(f.nfl_data_fetched_at)} · ${localTime(f.nfl_data_fetched_at)}` : 'Unknown'],
+    ['Latest completed game', game ? game.game_id : 'None yet'],
+    ['Latest completed week', has(f.latest_completed_week) ? `Week ${f.latest_completed_week}` : '—'],
+    ['Model', `${f.model.name} · ${f.model.version}`]];
+  box.replaceChildren(...[h('dl', { class: 'fresh-dl' }, rows.map(([k, v]) => [h('dt', {}, k), h('dd', {}, v)])),
+    h('p', { class: 'hint' }, `Feature cutoff policy: ${f.feature_cutoff_policy}`),
+    f.warnings.length ? h('ul', { class: 'warn-list' }, f.warnings.map((w) =>
+      h('li', {}, h('code', {}, w.code), ' ', w.detail + (w.game_ids ? ` (${w.game_ids.join(', ')})` : '')))) : null].filter(Boolean));
+}
+
+async function refreshResults(button) {
+  const status = $('refresh-status'), list = $('refresh-warnings');
+  if (button) button.disabled = true;
+  if (status) status.textContent = 'Checking nflverse for completed games…';
+  try {
+    const res = await fetch('/api/tracking/refresh-results', { method: 'POST' });   // no payload: a plain, cache-respecting refresh
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data) throw new Error();
+    renderFreshness(data.freshness);
+    const report = data.report, n = report.settled.length;
+    if (status) {
+      status.textContent = n ? `${n} result${n === 1 ? '' : 's'} settled automatically from nflverse.`
+        : `No new results${report.pending.length ? `; ${report.pending.length} awaiting completed games in nflverse` : ''}.`;
+    }
+    if (list) {
+      list.replaceChildren(...report.warnings.map(warningItem));
+      list.hidden = !report.warnings.length;
+    }
+    loadTracked();
+    loadTrackedMulti();
+    if ($('panel-performance') && !$('panel-performance').hidden) loadPerformance();
+  } catch (e) {
+    if (status) status.textContent = 'Results could not be refreshed; tracked picks are unchanged.';
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+// ---------- small SVG charts (no library; colours come from CSS classes) ----------
+
+function svg(tag, attrs, ...children) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs || {})) if (has(v)) el.setAttribute(k, v);
+  for (const c of children.flat()) if (has(c)) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+
+function calibrationChart(buckets) {
+  const pos = (p) => 10 + 85 * p;
+  return svg('svg', { class: 'chart', viewBox: '0 0 100 100', role: 'img', 'aria-label': 'Calibration: average predicted probability against observed frequency, by bucket' },
+    svg('path', { class: 'axis', d: 'M10 5 V95 H95' }),
+    svg('path', { class: 'diag', d: `M${pos(0)} ${100 - pos(0)} L${pos(1)} ${100 - pos(1)}` }),
+    buckets.map((b) => svg('circle', { class: 'dot', cx: pos(b.average_probability).toFixed(2), cy: (100 - pos(b.observed_frequency)).toFixed(2),
+                                       r: (1.5 + Math.sqrt(b.graded)).toFixed(2) }, svg('title', {}, `${b.bucket}: n=${b.graded}`))),
+    svg('text', { x: 52, y: 99.5, 'text-anchor': 'middle' }, 'Predicted'),
+    svg('text', { x: 4, y: 50, 'text-anchor': 'middle', transform: 'rotate(-90 4 50)' }, 'Observed'));
+}
+
+function timelineChart(points) {
+  const values = points.map((p) => p.probability), low = Math.min(...values) - 0.02, high = Math.max(...values) + 0.02;
+  const x = (i) => points.length === 1 ? 50 : 6 + 88 * i / (points.length - 1), y = (p) => 22 - 18 * (p - low) / (high - low);
+  return svg('svg', { class: 'chart wide', viewBox: '0 0 100 26', role: 'img', 'aria-label': 'KickEdge probability across saved analyses' },
+    svg('polyline', { class: 'line', points: points.map((p, i) => `${x(i).toFixed(2)},${y(p.probability).toFixed(2)}`).join(' ') }),
+    points.map((p, i) => svg('circle', { class: 'dot', cx: x(i).toFixed(2), cy: y(p.probability).toFixed(2), r: 1.4 },
+      svg('title', {}, `${localTime(p.generated_at)}: ${pct(p.probability)}`))));
+}
+
+// ---------- prediction movement and line comparison ----------
+
+// Changes below 0.05 pp print as ±0.0 pp instead of a signed zero.
+const movePP = (x) => Math.abs(x) < 0.05 ? '±0.0 pp' : signedPP(x);
+
+function movementBody(m) {
+  const points = m.model_movement, parts = [];
+  if (points.length > 1) {
+    const list = h('ol', { class: 'movement-list' }, points.map((p) => h('li', {}, `${localTime(p.generated_at)} — ${pct(p.probability)} · exp. ${num(p.expected_xpm)} XPM`,
+        has(p.change_from_previous_pp) ? h('span', { class: 'delta' }, ` (${movePP(p.change_from_previous_pp)})`) : null,
+        p.input_changes && p.input_changes.length ? h('details', {}, h('summary', {}, `Inputs that changed (${p.input_changes.length})`),
+          h('ul', { class: 'warn-list' }, p.input_changes.map((c) => h('li', {}, `${c.feature}: ${has(c.before) ? c.before : 'N/A'} → ${has(c.after) ? c.after : 'N/A'}`)))) : null)));
+    const first = points[0], last = points[points.length - 1];
+    parts.push(h('h3', {}, 'Model movement'), timelineChart(points),
+      h('p', {}, `${localTime(first.generated_at)}: ${pct(first.probability)} → ${localTime(last.generated_at)}: ${pct(last.probability)}`),
+      h('p', { class: 'hint' }, `Change from first: ${movePP(m.change_from_first_pp)} · Change from previous: ${movePP(m.change_from_previous_pp)}`),
+      points.length > 3 ? h('details', {}, h('summary', {}, `All ${points.length} model points`), list) : list);
+  }
+  if (m.price_movement.length) {
+    parts.push(h('h3', {}, 'Price movement (odds you entered)'),
+      h('ol', { class: 'movement-list' }, m.price_movement.map((p) => h('li', {}, `${localTime(p.generated_at)} — decimal ${dec(p.decimal_odds)} (implies ${pct(p.implied_probability)})`))));
+  }
+  parts.push(h('p', { class: 'hint' }, m.note));
+  return parts;
+}
+
+async function fetchMovement(id) {
+  const res = await fetch(`/api/prediction-movement/${id}`);
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data) throw new Error();
+  return data;
+}
+
+// Shown only when the same selection was analysed more than once with different inputs or prices.
+function movementCard(r) {
+  if (!r.stored || !/^[0-9a-f]{64}$/.test(r.stored.id)) return null;
+  const card = h('section', { class: 'card movement', 'aria-labelledby': 'movement-h', hidden: true },
+    h('h2', { id: 'movement-h' }, 'Prediction movement'));
+  fetchMovement(r.stored.id).then((m) => {
+    if (m.model_movement.length < 2 && !m.price_movement.length) return;
+    card.append(h('p', { class: 'muted' }, `${m.analyses} saved analyses of this selection, oldest first.`), ...movementBody(m));
+    card.hidden = false;
+  }).catch(() => {});
+  return card;
+}
+
+function movementDetails(trackingId) {
+  const body = h('div', {}, h('p', { class: 'hint' }, 'Loading…'));
+  const box = h('details', { class: 'history' }, h('summary', {}, 'Prediction movement'), body);
+  box.addEventListener('toggle', () => {
+    if (!box.open || box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    fetchMovement(trackingId).then((m) => body.replaceChildren(...(m.model_movement.length < 2 && !m.price_movement.length
+      ? [h('p', { class: 'hint' }, 'Analysed once with these inputs: no movement.')] : movementBody(m))))
+      .catch(() => body.replaceChildren(h('p', { class: 'hint' }, 'Movement unavailable.')));
+  });
+  return box;
+}
+
+function lineComparison(r) {
+  if (!r.stored || !/^[0-9a-f]{64}$/.test(r.stored.id)) return null;
+  const body = h('div', {}, h('p', { class: 'hint' }, 'Loading…'));
+  const box = h('details', { class: 'card lines' }, h('summary', {}, 'Compare XPM lines'), body);
+  box.addEventListener('toggle', async () => {
+    if (!box.open || box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    try {
+      const res = await fetch(`/api/line-comparison/${r.stored.id}`);
+      const c = await res.json();
+      if (!res.ok) throw new Error();
+      body.replaceChildren(
+        h('p', { class: 'muted' }, `Same model distribution (expected ${num(c.expected_xpm)} XPM). Probabilities only; to evaluate a price, analyse that line as a new single pick.`),
+        h('div', { class: 'scroll' }, h('table', {},
+          h('thead', {}, h('tr', {}, ['Line', 'Over', 'Under', 'Push', 'Fair odds Over', 'Fair odds Under'].map((t) => h('th', { scope: 'col' }, t)))),
+          h('tbody', {}, c.lines.map((l) => h('tr', { class: l.line === c.analysed_line ? 'sel' : null },
+            h('td', {}, `${l.line.toFixed(1)}${l.line === c.analysed_line ? ' (analysed)' : ''}`), h('td', {}, pct(l.p_over)), h('td', {}, pct(l.p_under)),
+            h('td', {}, l.push_possible ? pct(l.p_push) : '—'), h('td', {}, dec(l.fair_decimal_over)), h('td', {}, dec(l.fair_decimal_under))))))),
+        h('p', { class: 'hint' }, 'Fair odds are 1 / probability; for whole-number lines they are conditional on no push, as in the single analysis.'));
+    } catch (e) {
+      body.replaceChildren(h('p', { class: 'hint' }, 'Line comparison unavailable.'));
+    }
+  });
+  return box;
+}
+
+// ---------- performance dashboard ----------
+
+function perfStats(s) {
+  return h('div', { class: 'perf-stats' },
+    stat('Settled', `${s.settled} of ${s.tracked}`), stat('Graded (no push)', String(s.graded)),
+    stat('Avg. predicted', pct(s.average_probability)), stat('Observed frequency', pct(s.observed_frequency)),
+    stat('Brier score', num(s.brier_score, 3)), s.pushes ? stat('Pushes excluded', String(s.pushes)) : null);
+}
+
+function perfTable(first, rows, label) {
+  if (!rows.length) return h('p', { class: 'hint' }, 'No settled selections yet.');
+  return h('div', { class: 'scroll' }, h('table', {},
+    h('thead', {}, h('tr', {}, [first, 'n', 'Avg. predicted', 'Observed', 'Brier', ''].map((t) => h('th', { scope: 'col' }, t)))),
+    h('tbody', {}, rows.map((r) => h('tr', {}, h('td', {}, label(r)), h('td', {}, String(r.graded)), h('td', {}, pct(r.average_probability)),
+      h('td', {}, pct(r.observed_frequency)), h('td', {}, num(r.brier_score, 3)), h('td', { class: 'small' }, r.small_sample ? 'Small sample' : ''))))));
+}
+
+function perfSection(title, s, open, note) {
+  const parts = [h('summary', {}, `${title} — ${s.graded} graded`), perfStats(s)];
+  if (note) parts.push(h('p', { class: 'hint' }, note));
+  if (s.graded) {
+    if (s.small_sample) parts.push(h('p', { class: 'small-sample' }, `Small sample (n < 20): treat these figures as noisy, not as conclusions.`));
+    parts.push(h('h3', {}, 'Calibration'), calibrationChart(s.calibration),
+      perfTable('Bucket', s.calibration, (r) => r.bucket),
+      h('h3', {}, 'By probability range'), perfTable('Range', s.by_range, (r) => r.range),
+      h('h3', {}, 'By line'), perfTable('Line', s.by_line, (r) => `${r.line} XPM`),
+      h('h3', {}, 'By week'), perfTable('Week', s.by_week, (r) => `${r.season} · Week ${r.week}`));
+  }
+  return h('details', { class: 'card perf-section', open: open || null }, parts);
+}
+
+function multiPerf(d) {
+  const row = (name, g) => h('tr', {}, h('td', {}, name), h('td', {}, String(g.settled)), h('td', {}, String(g.all_legs_won)),
+    h('td', {}, String(g.has_loss)), h('td', {}, String(g.no_loss_with_push)), h('td', {}, pct(g.average_combined_probability)),
+    h('td', {}, pct(g.observed_all_win_frequency)), h('td', {}, num(g.all_win_brier_score, 3)), h('td', { class: 'small' }, g.small_sample && g.settled ? 'Small sample' : ''));
+  return h('details', { class: 'card perf-section' }, h('summary', {}, `Whole multis — ${d.counts.multis_settled} settled`),
+    h('div', { class: 'scroll' }, h('table', {},
+      h('thead', {}, h('tr', {}, ['Group', 'Settled', 'All legs won', 'Has loss', 'No-loss with push', 'Avg. combined prob.', 'All-win freq.', 'All-win Brier', ''].map((t) => h('th', { scope: 'col' }, t)))),
+      h('tbody', {}, row('Independent-game multis', d.multis.independent_games), row('Same-game / correlated multis', d.multis.same_game_correlated)))),
+    h('p', { class: 'hint' }, `${d.combined_note} Same-game multis are kept separate and never mixed into the independent-game figures.`));
+}
+
+function monitoringCard(m) {
+  const f = m.forward_validation, latest = m.latest_snapshot;
+  return h('section', { class: 'card', 'aria-labelledby': 'monitor-h' }, h('h2', { id: 'monitor-h' }, 'Monitoring status'),
+    h('p', { class: 'monitor-ref' }, f.message),
+    has(f.label_eligible_completed_observations) ? h('p', { class: 'hint' },
+      `Label-eligible completed ${f.season} kicker-games now: ${f.label_eligible_completed_observations} / ${f.threshold} (upper bound; a V2 audit also applies history-release rules).`) : null,
+    f.threshold_message ? h('p', { class: 'banner', role: 'note' }, f.threshold_message) : null,
+    h('p', { class: 'hint' }, latest ? `Latest monitoring snapshot: ${localTime(latest.generated_at)} (${m.snapshots} saved, written only when results or completed weeks change).` : 'No monitoring snapshot yet.'),
+    h('p', { class: 'hint' }, `Model: ${m.model.name} · ${m.model.version} · SHA-256 ${m.model.artifact_sha256.slice(0, 12)}…`));
+}
+
+async function loadPerformance() {
+  const body = $('perf-body');
+  if (!body) return;
+  try {
+    const [pr, mr] = await Promise.all([fetch('/api/performance'), fetch('/api/monitoring')]);
+    const d = await pr.json(), m = await mr.json();
+    if (!pr.ok || !mr.ok) throw new Error();
+    const c = d.counts;
+    body.replaceChildren(
+      h('section', { class: 'card' }, h('div', { class: 'perf-stats' }, stat('Singles tracked', String(c.singles_tracked)),
+        stat('Singles settled', String(c.singles_settled)), stat('Multi legs settled', String(c.multi_legs_settled)),
+        stat('Multis settled', String(c.multis_settled))),
+        h('p', { class: 'hint' }, `${d.probability_basis} Lower Brier is better. Buckets and groups with n < ${d.small_sample_threshold} are marked "Small sample".`)),
+      perfSection('Single tracked picks', d.single, true),
+      perfSection('Multi legs', d.multi_legs, false, d.multi_legs.note),
+      perfSection('All individual tracked selections', d.all_individual, false, d.all_individual.note),
+      multiPerf(d), monitoringCard(m));
+  } catch (e) {
+    body.replaceChildren(h('p', { class: 'hint' }, 'Performance unavailable.'));
+  }
+}
+
 function render(r) {
   const box = $('result');
-  const parts = sections(r, ''), bar = trackBar(r);
-  if (bar) parts.splice(parts.findIndex((el) => el.classList.contains('hero')) + 1, 0, bar);  // right below the pick
+  const parts = sections(r, ''), extra = [trackBar(r), movementCard(r), lineComparison(r)].filter(Boolean);
+  parts.splice(parts.findIndex((el) => el.classList.contains('hero')) + 1, 0, ...extra);  // right below the pick
   box.replaceChildren(...parts);
   box.hidden = false;
   const guide = $('guide');
@@ -1151,8 +1414,11 @@ async function submitMulti(event) {
 
 // ---------- tabs ----------
 
+const MODES = ['single', 'multi', 'performance'];
+
 function setMode(mode, focusTab) {
-  for (const m of ['single', 'multi']) {
+  for (const m of MODES) {
+    if (!$(`tab-${m}`)) continue;
     const tab = $(`tab-${m}`), panel = $(`panel-${m}`), active = m === mode;
     tab.setAttribute('aria-selected', active ? 'true' : 'false');
     tab.tabIndex = active ? 0 : -1;
@@ -1165,10 +1431,11 @@ function setMode(mode, focusTab) {
       if (!box.hidden) { box.dataset.parked = '1'; box.hidden = true; }
     } else if (box.dataset.parked) { delete box.dataset.parked; box.hidden = false; }
   });
+  if (mode === 'performance') loadPerformance();
 }
 
 function initTabs() {
-  const tabs = ['single', 'multi'];
+  const tabs = MODES.filter((m) => $(`tab-${m}`));
   tabs.forEach((m, i) => {
     const tab = $(`tab-${m}`);
     tab.addEventListener('click', () => setMode(m));
@@ -1323,5 +1590,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $('tracked-tab-single').addEventListener('click', () => setTrackedTab('single'));
     $('tracked-tab-multi').addEventListener('click', () => setTrackedTab('multi'));
     loadTrackedMulti();
+  }
+  if ($('refresh-results')) {
+    $('refresh-results').addEventListener('click', () => refreshResults($('refresh-results')));
+    refreshResults($('refresh-results'));       // checks completed games on open; the source cache rules apply
   }
 });

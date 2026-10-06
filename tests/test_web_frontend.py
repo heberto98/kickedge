@@ -56,7 +56,7 @@ def _browser():
     pytest.skip('No headless Chromium-based browser available')
 
 
-def dump_dom(tmp_path, page, *, budget_ms=None, timeout=120):
+def dump_dom(tmp_path, page, *, budget_ms=None, timeout=120, window_size=None):
     """Run headless Chromium once and return the serialized DOM.
 
     Each launch gets its own profile directory. Chromium is a per-profile
@@ -68,6 +68,8 @@ def dump_dom(tmp_path, page, *, budget_ms=None, timeout=120):
     command = [_browser(), '--headless=new', '--disable-gpu', '--no-first-run', f'--user-data-dir={profile}']
     if budget_ms:
         command.append(f'--virtual-time-budget={budget_ms}')
+    if window_size:
+        command.append(f'--window-size={window_size[0]},{window_size[1]}')
     out = subprocess.run(command + ['--dump-dom', Path(page).as_uri()], capture_output=True, text=True,
                          encoding='utf-8', errors='replace', timeout=timeout)
     assert '<body' in out.stdout, (f'Browser returned no DOM (exit code {out.returncode}; 21 means the profile '
