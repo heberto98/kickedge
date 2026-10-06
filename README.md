@@ -161,7 +161,21 @@ reciente es el resultado efectivo y el historial se ve en "View correction
 history". El panel muestra Open/Settled y, con picks liquidados, la
 probabilidad media, la frecuencia observada y el Brier score (pushes excluidos;
 con línea entera se usa la probabilidad condicionada a no push). Sin stake, ROI ni
-recomendaciones: solo calidad de las probabilidades. Multi no se trackea todavía.
+recomendaciones: solo calidad de las probabilidades.
+
+**Tracked multis:** después de un análisis Multi, "Track multi" congela en
+`data/current/tracked_multi/<id>/manifest.json` (ignorado por Git, hash de
+integridad) las cuotas y probabilidades combinadas, los avisos de independencia y
+same-game, y cada selección con los mismos campos que un pick Single. Solo si
+ninguna selección llegó a su kickoff; la misma combinación (partido, kicker, lado,
+línea y cuota de cada leg) devuelve el original. Cada leg se liquida por separado
+después de su kickoff y admite "Correct result" auditado igual que Single
+(`legs/<n>/settlement.json` y `corrections/`). Estados: OPEN, PARTIALLY SETTLED,
+SETTLED; resultado descriptivo ALL LEGS WON, HAS LOSS o NO-LOSS WITH PUSH (nunca se
+recalcula el pago con push: las reglas del sportsbook varían). Métricas: legs
+individuales (fuente `multi_leg`, separadas de Single y posiblemente correlacionadas)
+y, por grupo independiente vs same-game, el evento "all legs win" frente a la
+probabilidad combinada aproximada, que asume independencia.
 
 Variables de entorno (todas opcionales):
 
@@ -181,8 +195,9 @@ CLI equivalente (acepta los mismos aliases; conserva cuotas americanas por compa
 API local: `GET /healthz`, `/readyz`, `/api/model`, `/api/games`,
 `/api/games/{game_id}/kickers`, `/api/analyses`, `/api/analyses/{id}`,
 `/api/multi/{id}`, `/api/tracked`, `/api/tracked/{id}`, `POST /api/analyze`,
-`POST /api/analyze-multi`, `POST /api/tracked`, `POST /api/tracked/{id}/settle` y
-`POST /api/tracked/{id}/correct` (ver
+`POST /api/analyze-multi`, `POST /api/tracked`, `POST /api/tracked/{id}/settle`,
+`POST /api/tracked/{id}/correct`, `/api/tracked-multi`, `/api/tracked-multi/{id}`,
+`POST /api/tracked-multi` y `POST /api/tracked-multi/{id}/legs/{n}/settle|correct` (ver
 [docs/product_phase7c.md](docs/product_phase7c.md),
 [reports/product_polish.md](reports/product_polish.md) y
 [reports/final_multi_decimal_polish.md](reports/final_multi_decimal_polish.md)).

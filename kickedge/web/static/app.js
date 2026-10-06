@@ -666,8 +666,9 @@ function trackBar(r) {
   return h('section', { class: 'card track-bar', 'aria-label': 'Track pick' }, button, status);
 }
 
-function settleForm(p) {
-  const id = `settle-${p.tracking_id.slice(0, 12)}`;
+// key: unique element id stem; url: settle/correct endpoint; reload: refreshes the owning panel.
+function settleForm(key, url, reload) {
+  const id = `settle-${key}`;
   const input = h('input', { id, type: 'number', min: '0', max: '20', step: '1', inputmode: 'numeric', required: true });
   const note = h('span', { class: 'ri-sub', role: 'status' });
   const form = h('form', { class: 'settle-form' }, h('label', { for: id }, 'Actual XPM'), input,
@@ -680,11 +681,11 @@ function settleForm(p) {
       return;
     }
     try {
-      const res = await fetch(`/api/tracked/${p.tracking_id}/settle`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                                                        body: JSON.stringify({ actual_xpm: value }) });
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                     body: JSON.stringify({ actual_xpm: value }) });
       const data = await res.json().catch(() => null);
       if (!res.ok) { note.textContent = (data && data.error && data.error.message) || `Settle failed (${res.status}).`; return; }
-      loadTracked();
+      reload();
     } catch (e) {
       note.textContent = 'The server could not be reached.';
     }
@@ -694,8 +695,8 @@ function settleForm(p) {
 
 const CORRECT_PROMPT = 'Correct this settled result?\nThe original settlement will remain in the audit history.';
 
-function correctForm(p) {
-  const id = `correct-${p.tracking_id.slice(0, 12)}`;
+function correctForm(key, url, reload) {
+  const id = `correct-${key}`;
   const input = h('input', { id, type: 'number', min: '0', max: '20', step: '1', inputmode: 'numeric', required: true });
   const reason = h('input', { id: id + '-reason', type: 'text', maxlength: '200', placeholder: 'e.g. Entered wrong result' });
   const note = h('span', { class: 'ri-sub', role: 'status' });
@@ -720,11 +721,10 @@ function correctForm(p) {
     const body = { actual_xpm: value, confirm: true };
     if (reason.value.trim()) body.reason = reason.value.trim();
     try {
-      const res = await fetch(`/api/tracked/${p.tracking_id}/correct`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                                                         body: JSON.stringify(body) });
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json().catch(() => null);
       if (!res.ok) { note.textContent = (data && data.error && data.error.message) || `Correction failed (${res.status}).`; return; }
-      loadTracked();
+      reload();
     } catch (e) {
       note.textContent = 'The server could not be reached.';
     }
@@ -749,10 +749,10 @@ function trackedItem(t) {
   if (s) {
     children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `SETTLED — ${s.result}`, t.corrected ? h('span', { class: 'chip warn' }, 'Corrected') : null),
       h('span', { class: 'ri-sub' }, `Actual XPM: ${s.actual_xpm} · Result: ${s.result}`),
-      t.corrected ? correctionHistory(t) : null, correctForm(p));
+      t.corrected ? correctionHistory(t) : null, correctForm(p.tracking_id.slice(0, 12), `/api/tracked/${p.tracking_id}/correct`, loadTracked));
   }
   else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
-  else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(p));
+  else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(p.tracking_id.slice(0, 12), `/api/tracked/${p.tracking_id}/settle`, loadTracked));
   return h('li', { class: 'tracked-item' }, children);
 }
 
@@ -779,6 +779,115 @@ async function loadTracked() {
   } catch (e) {
     body.replaceChildren(h('p', { class: 'hint' }, 'Tracked picks unavailable.'));
   }
+}
+
+// ---------- official multi tracking ----------
+
+function trackMultiBar(rec) {
+  if (!rec.combined_available || !rec.stored || !/^[0-9a-f]{64}$/.test(rec.stored.id) || !$('tracked-multi-body')) return null;
+  const started = rec.selections.some((l) => new Date(l.result.game.kickoff) <= new Date());
+  const status = h('p', { class: 'muted', role: 'status' }, started
+    ? 'At least one selection has reached kickoff: the multi can only be tracked before every game starts.'
+    : 'Track multi freezes every selection and the combined figures as an official prediction, to evaluate later.');
+  const button = h('button', { type: 'button', class: 'secondary', disabled: started }, 'Track multi');
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    status.textContent = 'Tracking…';
+    try {
+      const res = await fetch('/api/tracked-multi', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                                     body: JSON.stringify({ analysis_id: rec.stored.id }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) {
+        status.textContent = (data && data.error && data.error.message) || `Tracking failed (${res.status}).`;
+        button.disabled = false;
+        return;
+      }
+      const m = data.manifest;
+      status.textContent = data.already_tracked
+        ? `Already tracked on ${localTime(m.created_at)}; the original multi is unchanged.`
+        : `Tracked: ${m.selection_count}-leg multi frozen at ${pct(m.approximate_kickedge_combined_probability)} (approx.).`;
+      button.textContent = 'Tracked';
+      setTrackedTab('multi');
+      loadTrackedMulti();
+    } catch (e) {
+      status.textContent = 'The server could not be reached.';
+      button.disabled = false;
+    }
+  });
+  return h('section', { class: 'card track-bar', 'aria-label': 'Track multi' }, button, status);
+}
+
+function trackedLeg(m, l) {
+  const p = l.leg, s = l.settlement, key = `${m.tracking_id.slice(0, 10)}-${p.leg}`;
+  const base = `/api/tracked-multi/${m.tracking_id}/legs/${p.leg}`;
+  const children = [h('span', { class: 'ri-main' }, p.kicker),
+    h('span', { class: 'ri-sub' }, `${sideLabel(p.side)} ${p.line} XPM · ${p.team} vs ${p.opponent} · ${dec(p.decimal_odds)}`),
+    h('span', { class: 'ri-sub' }, `KickEdge: ${pct(p.kickedge_probability)} · kickoff ${kickoffLabel(p.kickoff, true)}`)];
+  if (s) {
+    children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `Actual XPM: ${s.actual_xpm} · ${s.result}`,
+      l.corrected ? h('span', { class: 'chip warn' }, 'Corrected') : null),
+      l.corrected ? correctionHistory(l) : null, correctForm(key, `${base}/correct`, loadTrackedMulti));
+  } else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
+  else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(key, `${base}/settle`, loadTrackedMulti));
+  return h('li', {}, children);
+}
+
+function trackedMultiItem(t) {
+  const m = t.manifest;
+  const status = t.status + (t.outcome ? ` — ${t.outcome}` : t.status === 'PARTIALLY SETTLED' ? ` (${t.settled_legs}/${m.selection_count} legs)` : '');
+  return h('li', { class: 'tracked-item' },
+    h('span', { class: 'ri-main' }, `${m.selection_count}-leg multi`,
+      m.same_game_correlation_warning ? h('span', { class: 'chip warn' }, 'Same game') : null),
+    h('span', { class: 'ri-sub' }, `Combined odds: ${dec(m.combined_decimal_odds)} · KickEdge approximate probability: ${pct(m.approximate_kickedge_combined_probability)}`),
+    h('span', { class: 'status ' + (t.outcome === 'ALL LEGS WON' ? 'win' : t.outcome === 'HAS LOSS' ? 'loss' : '') }, `Status: ${status}`),
+    t.push_note ? h('span', { class: 'ri-sub' }, t.push_note) : null,
+    h('ul', { class: 'multi-legs' }, t.legs.map((l) => trackedLeg(m, l))));
+}
+
+function multiGroupStats(title, g) {
+  if (!g.tracked) return [];
+  const parts = [h('p', { class: 'group-title' }, `${title}: ${g.tracked} tracked · ${g.settled} settled`)];
+  if (g.settled) {
+    parts.push(h('div', { class: 'tracked-summary' }, stat('All legs won', g.all_legs_won), stat('Has loss', g.has_loss),
+      stat('No-loss with push', g.no_loss_with_push)),
+    h('div', { class: 'tracked-summary' }, stat('Avg. combined prob.', pct(g.average_combined_probability)),
+      stat('All-win freq.', pct(g.observed_all_win_frequency)), stat('All-win Brier', num(g.all_win_brier_score, 3))));
+  }
+  return parts;
+}
+
+async function loadTrackedMulti() {
+  const body = $('tracked-multi-body');
+  if (!body) return;
+  try {
+    const res = await fetch('/api/tracked-multi');
+    const data = await res.json();
+    if (!res.ok) throw new Error();
+    const sm = data.summary;
+    if (!sm.tracked) { body.replaceChildren(h('p', { class: 'hint' }, 'No tracked multis yet.')); return; }
+    const lg = sm.legs;
+    const parts = [...multiGroupStats('Independent-game multis', sm.multis.independent_games),
+      ...multiGroupStats('Same-game / correlated multis', sm.multis.same_game_correlated),
+      h('p', { class: 'hint' }, `${sm.combined_note} Same-game multis are reported separately.`)];
+    if (lg.graded) {
+      parts.push(h('p', { class: 'group-title' }, 'Individual legs (source: multi legs)'),
+        h('div', { class: 'tracked-summary' }, stat('Avg. probability', pct(lg.average_probability)),
+          stat('Observed freq.', pct(lg.observed_frequency)), stat('Brier score', num(lg.brier_score, 3))),
+        h('p', { class: 'hint' }, `Sample: ${lg.graded} settled leg${lg.graded === 1 ? '' : 's'}${lg.pushes ? ` (${lg.pushes} push${lg.pushes === 1 ? '' : 'es'} excluded)` : ''}. ${lg.note} Small samples can be noisy.`));
+    }
+    parts.push(h('ul', { class: 'recent-list' }, data.multis.map(trackedMultiItem)));
+    body.replaceChildren(...parts);
+  } catch (e) {
+    body.replaceChildren(h('p', { class: 'hint' }, 'Tracked multis unavailable.'));
+  }
+}
+
+function setTrackedTab(kind) {
+  const multi = kind === 'multi';
+  $('tracked-tab-single').setAttribute('aria-pressed', String(!multi));
+  $('tracked-tab-multi').setAttribute('aria-pressed', String(multi));
+  $('tracked-body').hidden = multi;
+  $('tracked-multi-body').hidden = !multi;
 }
 
 function render(r) {
@@ -876,7 +985,7 @@ function renderMulti(rec) {
     return others.length ? others : null;
   };
   const banner = rec.stored && !rec.stored.fresh ? h('p', { class: 'banner', role: 'note' }, `Saved analysis from ${localTime(rec.generated_at)}. Shown as stored; nothing was re-run.`) : null;
-  box.replaceChildren(...[banner, multiSummary(rec), h('h2', { class: 'legs-title' }, 'Selections'),
+  box.replaceChildren(...[banner, multiSummary(rec), trackMultiBar(rec), h('h2', { class: 'legs-title' }, 'Selections'),
     ...rec.selections.map((l) => legCard(l, sameGame(l)))].filter(Boolean));
   box.hidden = false;
   const guide = $('guide');
@@ -1210,4 +1319,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if ($('game') || $('multi')) loadGames();
   if ($('recent-list')) loadRecent();
   loadTracked();
+  if ($('tracked-tab-single')) {
+    $('tracked-tab-single').addEventListener('click', () => setTrackedTab('single'));
+    $('tracked-tab-multi').addEventListener('click', () => setTrackedTab('multi'));
+    loadTrackedMulti();
+  }
 });

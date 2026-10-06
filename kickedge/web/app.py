@@ -25,7 +25,7 @@ from kickedge.current.catalog import kicker_candidates, upcoming_games
 from kickedge.current.engine import analyze_current_prop, current_season
 from kickedge.current.multi import MAX_SELECTIONS, MIN_SELECTIONS, analyze_selections
 from kickedge.current.optional import collect_context
-from kickedge.current import tracking
+from kickedge.current import multi_tracking, tracking
 from kickedge.current.snapshot import digest
 from kickedge.current.sources import CurrentSourceError, load_current_sources
 from kickedge.inference.odds import american_to_decimal
@@ -37,6 +37,7 @@ ROOT = Path(os.environ.get('KICKEDGE_ROOT', '.')).resolve()
 STATIC = Path(__file__).with_name('static')
 ANALYSES_DIR = ROOT/'data/current/analyses'
 TRACKED_DIR = ROOT/'data/current/tracked'
+TRACKED_MULTI_DIR = ROOT/'data/current/tracked_multi'
 GAME_ID = r'^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$'
 ANALYSIS_ID = r'^[0-9a-f]{64}$'
 MAX_BODY_BYTES = 4096
@@ -518,7 +519,8 @@ class CorrectRequest(BaseModel):
 
 _TRACKING_STATUS = {'INVALID_TRACKING_ID': 422, 'INVALID_ACTUAL_XPM': 422, 'INVALID_REASON': 422, 'PICK_NOT_FOUND': 404,
                     'GAME_STARTED': 409, 'NOT_STARTED': 409, 'ALREADY_SETTLED': 409, 'PICK_TAMPERED': 409,
-                    'NOT_SETTLED': 409, 'NO_CHANGE': 409, 'CORRECTION_CONFLICT': 409, 'INVALID_PICK': 422}
+                    'NOT_SETTLED': 409, 'NO_CHANGE': 409, 'CORRECTION_CONFLICT': 409, 'INVALID_PICK': 422,
+                    'LEG_NOT_FOUND': 404}
 _tracking_lock = threading.Lock()
 
 
@@ -580,6 +582,65 @@ def correct_pick(body: CorrectRequest, tracking_id: str = PathParam(pattern=trac
         return _tracking_error(exc)
     except (OSError, ValueError):
         return _error(404, 'PICK_NOT_FOUND', 'Tracked pick could not be read')
+
+
+@app.post('/api/tracked-multi')
+def track_multi(body: TrackRequest):
+    """Freeze a saved multi analysis before any leg starts; the client sends only its id."""
+    path = _stored(body.analysis_id, 'multi.json')
+    if path is None:
+        return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored multi analysis not found')
+    try:
+        record = json.loads(path.read_text(encoding='utf-8'))
+        with _tracking_lock:
+            return multi_tracking.track(TRACKED_MULTI_DIR, record, body.analysis_id, _now())
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError, IndexError):
+        return _error(422, 'INVALID_PICK', 'This saved multi analysis cannot be tracked')
+
+
+@app.get('/api/tracked-multi')
+def tracked_multis():
+    """Tracked multis with leg-level and multi-level metrics; read only."""
+    return multi_tracking.list_tracked(TRACKED_MULTI_DIR)
+
+
+@app.get('/api/tracked-multi/{tracking_id}')
+def tracked_multi(tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    try:
+        return multi_tracking.load(TRACKED_MULTI_DIR, tracking_id)
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked multi could not be read')
+
+
+LegNumber = Annotated[int, PathParam(ge=1, le=MAX_SELECTIONS)]
+
+
+@app.post('/api/tracked-multi/{tracking_id}/legs/{leg}/settle')
+def settle_multi_leg(body: SettleRequest, leg: LegNumber, tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    """Settle one leg once, after its kickoff; the manifest is never modified."""
+    try:
+        with _tracking_lock:
+            return multi_tracking.settle_leg(TRACKED_MULTI_DIR, tracking_id, leg, body.actual_xpm, _now())
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked multi could not be read')
+
+
+@app.post('/api/tracked-multi/{tracking_id}/legs/{leg}/correct')
+def correct_multi_leg(body: CorrectRequest, leg: LegNumber, tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    """Append an audited correction to one settled leg."""
+    try:
+        with _tracking_lock:
+            return multi_tracking.correct_leg(TRACKED_MULTI_DIR, tracking_id, leg, body.actual_xpm, _now(), body.reason)
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked multi could not be read')
 
 
 @app.get('/')

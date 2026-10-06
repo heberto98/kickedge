@@ -140,7 +140,13 @@
     </section>
     <section class="card tracked" id="tracked" aria-labelledby="tracked-h">
       <h2 id="tracked-h">Tracked picks</h2>
+      <p class="hint">Official predictions frozen before kickoff. Recent analyses below are only saved analyses.</p>
+      <div class="tracked-tabs" role="group" aria-label="Tracked pick type">
+        <button type="button" class="secondary" id="tracked-tab-single" aria-pressed="true" aria-controls="tracked-body">Single</button>
+        <button type="button" class="secondary" id="tracked-tab-multi" aria-pressed="false" aria-controls="tracked-multi-body">Multi</button>
+      </div>
       <div id="tracked-body"><p class="hint">No tracked picks yet.</p></div>
+      <div id="tracked-multi-body" hidden><p class="hint">No tracked multis yet.</p></div>
     </section>
     <section class="card recent" id="recent" aria-labelledby="recent-h">
       <h2 id="recent-h">Recent analyses</h2>

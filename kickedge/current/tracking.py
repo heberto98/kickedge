@@ -51,16 +51,11 @@ def _decimal_odds(market):
     return 'american', market['american_odds'], american_to_decimal(market['american_odds'])
 
 
-def freeze_pick(analysis, analysis_id, now):
-    """The immutable pick record of a stored single analysis, only before kickoff."""
+def prediction_fields(analysis):
+    """What one analysis said before kickoff: selection, price, probabilities, model and data quality."""
     game, prop, quality = analysis['game'], analysis['prop'], analysis['data_quality']
-    if now >= _instant(game['kickoff']):
-        raise TrackingError('GAME_STARTED', 'Kickoff has passed; only pregame analyses can be tracked')
     odds_format, odds, decimal = _decimal_odds(analysis['market'])
-    identity = {'game_id': game['game_id'], 'kicker_id': game['kicker_id'], 'side': prop['side'],
-                'line': prop['line'], 'decimal_odds': decimal}
-    pick = {'tracking_id': digest(identity), 'created_at': now.isoformat(), 'analysis_id': analysis_id,
-            'game_id': game['game_id'], 'kickoff': game['kickoff'], 'season': game.get('season'), 'week': game.get('week'),
+    return {'game_id': game['game_id'], 'kickoff': game['kickoff'], 'season': game.get('season'), 'week': game.get('week'),
             'kicker': analysis['player']['kicker_name'], 'kicker_id': game['kicker_id'],
             'team': game['team'], 'opponent': game['opponent'],
             'home_team': game.get('home_team'), 'away_team': game.get('away_team'),
@@ -74,6 +69,24 @@ def freeze_pick(analysis, analysis_id, now):
             'analysis_generated_at': analysis['provenance']['analysis_generated_at'],
             'feature_cutoff': game.get('cutoff'),
             'data_quality': {k: quality.get(k) for k in QUALITY_FLAGS} | {'warnings': list(quality.get('warnings', []))}}
+
+
+def selection_identity(fields):
+    """Logical identity of a priced selection: game, kicker, side, line and decimal odds."""
+    return [fields['game_id'], fields['kicker_id'], fields['side'], fields['line'], fields['decimal_odds']]
+
+
+def started(kickoff, now):
+    return now >= _instant(kickoff)
+
+
+def freeze_pick(analysis, analysis_id, now):
+    """The immutable pick record of a stored single analysis, only before kickoff."""
+    fields = prediction_fields(analysis)
+    if started(fields['kickoff'], now):
+        raise TrackingError('GAME_STARTED', 'Kickoff has passed; only pregame analyses can be tracked')
+    identity = dict(zip(('game_id', 'kicker_id', 'side', 'line', 'decimal_odds'), selection_identity(fields)))
+    pick = {'tracking_id': digest(identity), 'created_at': now.isoformat(), 'analysis_id': analysis_id} | fields
     return pick | {'integrity_sha256': digest(pick)}
 
 
@@ -84,7 +97,7 @@ def outcome(side, line, actual_xpm):
     return 'WIN' if (actual_xpm > line) == (side == 'over') else 'LOSS'
 
 
-def _directory(base, tracking_id):
+def tracked_directory(base, tracking_id):
     if not isinstance(tracking_id, str) or not re.fullmatch(TRACKING_ID, tracking_id):
         raise TrackingError('INVALID_TRACKING_ID', 'Invalid tracking id')
     base = Path(base).resolve()
@@ -94,7 +107,7 @@ def _directory(base, tracking_id):
     return path
 
 
-def _create(path, record):
+def create_json(path, record):
     """Write a new JSON file; never replaces an existing one."""
     path.parent.mkdir(parents=True, exist_ok=True)
     data = (json.dumps(record, indent=2, allow_nan=False) + '\n').encode('utf-8')
@@ -103,24 +116,27 @@ def _create(path, record):
         handle.write(data)
 
 
-def _read_pick(directory):
-    pick = json.loads((directory/PICK).read_text(encoding='utf-8'))
-    frozen = {k: v for k, v in pick.items() if k != 'integrity_sha256'}
-    if digest(frozen) != pick.get('integrity_sha256') or pick.get('tracking_id') != directory.name:
-        raise TrackingError('PICK_TAMPERED', 'Tracked pick failed its integrity check')
-    return pick
+def read_frozen(path, directory, what='Tracked pick'):
+    """A frozen record whose integrity hash and tracking id still match."""
+    record = json.loads(path.read_text(encoding='utf-8'))
+    frozen = {k: v for k, v in record.items() if k != 'integrity_sha256'}
+    if digest(frozen) != record.get('integrity_sha256') or record.get('tracking_id') != directory.name:
+        raise TrackingError('PICK_TAMPERED', f'{what} failed its integrity check')
+    return record
 
 
 def track(base, analysis, analysis_id, now):
     """Freeze a pick; tracking the same pick again returns the original unchanged."""
     pick = freeze_pick(analysis, analysis_id, now)
-    directory = _directory(base, pick['tracking_id'])
+    directory = tracked_directory(base, pick['tracking_id'])
     try:
-        _create(directory/PICK, pick)
+        create_json(directory/PICK, pick)
     except FileExistsError:
         return load(base, pick['tracking_id']) | {'already_tracked': True}
     return load(base, pick['tracking_id']) | {'already_tracked': False}
 
+
+# ---------- settlement and audited corrections of one selection (a pick or a multi leg) ----------
 
 def _corrections(directory, pick, original):
     """Correction history in order; each entry must continue from the previous effective result."""
@@ -138,23 +154,20 @@ def _corrections(directory, pick, original):
     return history
 
 
-def load(base, tracking_id):
-    """Frozen pick, original settlement, correction history and the effective settlement."""
-    directory = _directory(base, tracking_id)
-    if not (directory/PICK).is_file():
-        raise TrackingError('PICK_NOT_FOUND', 'Tracked pick not found')
-    pick = _read_pick(directory)
+def settlement_state(folder, selection):
+    """Original settlement, correction history and the effective (latest) settlement of one selection."""
     original, history, effective = None, [], None
-    if (directory/SETTLEMENT).is_file():
-        original = json.loads((directory/SETTLEMENT).read_text(encoding='utf-8'))
-        history = _corrections(directory, pick, original)
+    if (folder/SETTLEMENT).is_file():
+        original = json.loads((folder/SETTLEMENT).read_text(encoding='utf-8'))
+        if original.get('result') != outcome(selection['side'], selection['line'], original.get('actual_xpm')):
+            raise TrackingError('PICK_TAMPERED', 'Settlement failed its consistency check')
+        history = _corrections(folder, selection, original)
         effective = dict(original)
         if history:
             latest = history[-1]
             effective |= {'actual_xpm': latest['new_actual_xpm'], 'result': latest['new_result'],
                           'corrected_at': latest['corrected_at']}
-    return {'pick': pick, 'settlement': effective, 'original_settlement': original, 'corrections': history,
-            'corrected': bool(history), 'status': 'SETTLED' if original else 'OPEN'}
+    return {'settlement': effective, 'original_settlement': original, 'corrections': history, 'corrected': bool(history)}
 
 
 def _actual(actual_xpm):
@@ -163,45 +176,75 @@ def _actual(actual_xpm):
     return actual_xpm
 
 
+def _reason(reason):
+    if reason is None:
+        return None
+    if not isinstance(reason, str) or len(reason.strip()) > MAX_REASON:
+        raise TrackingError('INVALID_REASON', f'Reason must be text of at most {MAX_REASON} characters')
+    return ' '.join(reason.split()) or None
+
+
+def settle_selection(folder, selection, state, actual_xpm, now, noun='pick'):
+    """Write settlement.json once, after the selection's kickoff."""
+    _actual(actual_xpm)
+    if state['settlement']:
+        raise TrackingError('ALREADY_SETTLED', f'This {noun} is already settled')
+    if not started(selection['kickoff'], now):
+        raise TrackingError('NOT_STARTED', f'A {noun} can be settled only after kickoff')
+    settlement = {'settled_at': now.isoformat(), 'actual_xpm': actual_xpm,
+                  'result': outcome(selection['side'], selection['line'], actual_xpm)}
+    try:
+        create_json(folder/SETTLEMENT, settlement)
+    except FileExistsError:
+        raise TrackingError('ALREADY_SETTLED', f'This {noun} is already settled') from None
+
+
+def correct_selection(folder, selection, state, actual_xpm, now, reason=None, noun='pick'):
+    """Append corrections/NNNN.json; the settlement and earlier corrections are never changed."""
+    _actual(actual_xpm)
+    reason = _reason(reason)
+    if not state['original_settlement']:
+        raise TrackingError('NOT_SETTLED', f'Only a settled {noun} can be corrected')
+    current = state['settlement']
+    if actual_xpm == current['actual_xpm']:
+        raise TrackingError('NO_CHANGE', 'The actual XPM already has this value')
+    sequence = len(state['corrections']) + 1
+    entry = {'sequence': sequence, 'corrected_at': now.isoformat(),
+             'previous_actual_xpm': current['actual_xpm'], 'previous_result': current['result'],
+             'new_actual_xpm': actual_xpm, 'new_result': outcome(selection['side'], selection['line'], actual_xpm),
+             'reason': reason}
+    try:
+        create_json(folder/CORRECTIONS/f'{sequence:04d}.json', entry)
+    except FileExistsError:
+        raise TrackingError('CORRECTION_CONFLICT', 'Another correction was saved first; reload and retry') from None
+
+
+# ---------- single picks ----------
+
+def load(base, tracking_id):
+    """Frozen pick, original settlement, correction history and the effective settlement."""
+    directory = tracked_directory(base, tracking_id)
+    if not (directory/PICK).is_file():
+        raise TrackingError('PICK_NOT_FOUND', 'Tracked pick not found')
+    pick = read_frozen(directory/PICK, directory)
+    state = settlement_state(directory, pick)
+    return {'pick': pick} | state | {'status': 'SETTLED' if state['original_settlement'] else 'OPEN'}
+
+
 def settle(base, tracking_id, actual_xpm, now):
     """Record the actual XPM once, after kickoff; the pick itself is never touched."""
     _actual(actual_xpm)
     record = load(base, tracking_id)
-    pick = record['pick']
-    if record['settlement']:
-        raise TrackingError('ALREADY_SETTLED', 'This pick is already settled')
-    if now < _instant(pick['kickoff']):
-        raise TrackingError('NOT_STARTED', 'A pick can be settled only after kickoff')
-    settlement = {'settled_at': now.isoformat(), 'actual_xpm': actual_xpm,
-                  'result': outcome(pick['side'], pick['line'], actual_xpm)}
-    try:
-        _create(_directory(base, tracking_id)/SETTLEMENT, settlement)
-    except FileExistsError:
-        raise TrackingError('ALREADY_SETTLED', 'This pick is already settled') from None
+    settle_selection(tracked_directory(base, tracking_id), record['pick'], record, actual_xpm, now)
     return load(base, tracking_id)
 
 
 def correct(base, tracking_id, actual_xpm, now, reason=None):
     """Append a correction of a settled result; nothing already written is changed."""
     _actual(actual_xpm)
-    if reason is not None:
-        if not isinstance(reason, str) or len(reason.strip()) > MAX_REASON:
-            raise TrackingError('INVALID_REASON', f'Reason must be text of at most {MAX_REASON} characters')
-        reason = ' '.join(reason.split()) or None
+    _reason(reason)
     record = load(base, tracking_id)
-    if not record['original_settlement']:
-        raise TrackingError('NOT_SETTLED', 'Only a settled pick can be corrected')
-    current, pick = record['settlement'], record['pick']
-    if actual_xpm == current['actual_xpm']:
-        raise TrackingError('NO_CHANGE', 'The actual XPM already has this value')
-    sequence = len(record['corrections']) + 1
-    entry = {'sequence': sequence, 'corrected_at': now.isoformat(),
-             'previous_actual_xpm': current['actual_xpm'], 'previous_result': current['result'],
-             'new_actual_xpm': actual_xpm, 'new_result': outcome(pick['side'], pick['line'], actual_xpm), 'reason': reason}
-    try:
-        _create(_directory(base, tracking_id)/CORRECTIONS/f'{sequence:04d}.json', entry)
-    except FileExistsError:
-        raise TrackingError('CORRECTION_CONFLICT', 'Another correction was saved first; reload and retry') from None
+    correct_selection(tracked_directory(base, tracking_id), record['pick'], record, actual_xpm, now, reason)
     return load(base, tracking_id)
 
 
@@ -233,6 +276,6 @@ def list_tracked(base):
             except (OSError, ValueError, KeyError, TypeError):
                 rejected += 1
     records.sort(key=lambda r: (r['pick']['kickoff'], r['pick']['created_at']), reverse=True)
-    return {'summary': performance(records) | {'unreadable': rejected},
+    return {'summary': performance(records) | {'unreadable': rejected, 'source': 'single'},
             'open': [r for r in records if not r['settlement']],
             'settled': [r for r in records if r['settlement']]}
