@@ -1,8 +1,10 @@
-"""Local official-pick tracker (default directory data/current/tracked): freeze a pregame analysis, settle it by hand later.
+"""Local official-pick tracker (default directory data/current/tracked): freeze a pregame analysis,
+settle it automatically from nflverse or by hand later.
 
 A tracked pick is a copy of what KickEdge said before kickoff. ``pick.json`` is
 created once and never rewritten; ``settlement.json`` is created once after kickoff
-and only adds settled_at, actual_xpm and result. A wrong manual result is fixed by
+and holds settled_at, actual_xpm and result (an automatic settlement also records
+its nflverse source). A wrong result is fixed by
 appending ``corrections/NNNN.json`` (one new file per correction); the original
 settlement and earlier corrections stay untouched, and the latest correction is the
 effective result. Every file is written with exclusive creation, so a second writer
@@ -24,6 +26,7 @@ PICK, SETTLEMENT, CORRECTIONS = 'pick.json', 'settlement.json', 'corrections'
 CORRECTION_FILE = r'^\d{4}\.json$'
 MAX_ACTUAL_XPM = 20
 MAX_REASON = 200
+AUTO_SOURCE = 'auto_nflverse'
 # Summary booleans worth keeping with the frozen pick; warnings are copied verbatim.
 QUALITY_FLAGS = ('model_verified', 'pregame_availability_verified', 'target_game_verified',
                  'kicker_identity_verified', 'kicker_current_team_verified', 'feature_schema_verified',
@@ -167,7 +170,35 @@ def settlement_state(folder, selection):
             latest = history[-1]
             effective |= {'actual_xpm': latest['new_actual_xpm'], 'result': latest['new_result'],
                           'corrected_at': latest['corrected_at']}
-    return {'settlement': effective, 'original_settlement': original, 'corrections': history, 'corrected': bool(history)}
+    return {'settlement': effective, 'original_settlement': original, 'corrections': history, 'corrected': bool(history),
+            'result_source': result_source(original, history)}
+
+
+def result_source(original, history):
+    """Where the effective result came from: an automatic source read, a manual entry or a correction."""
+    if original is None:
+        return None
+    if history:
+        return 'corrected'
+    return AUTO_SOURCE if original.get('settlement_source') == AUTO_SOURCE else 'manual'
+
+
+def record_auto_settlement(folder, selection, actual_xpm, source, now):
+    """Write settlement.json once from the approved source; an existing settlement is never replaced.
+
+    Returns the written settlement, or None when a settlement already exists.
+    """
+    _actual(actual_xpm)
+    settlement = {'settled_at': now.isoformat(), 'actual_xpm': actual_xpm,
+                  'result': outcome(selection['side'], selection['line'], actual_xpm),
+                  'settlement_source': AUTO_SOURCE, 'source_game_id': source['game_id'],
+                  'source_fetched_at': source['fetched_at'], 'source_hash': source['sha256'],
+                  'source_bundle_id': source.get('bundle_id'), 'auto_settled_at': now.isoformat()}
+    try:
+        create_json(folder/SETTLEMENT, settlement)
+    except FileExistsError:
+        return None
+    return settlement
 
 
 def _actual(actual_xpm):
@@ -248,19 +279,31 @@ def correct(base, tracking_id, actual_xpm, now, reason=None):
     return load(base, tracking_id)
 
 
+def probability_summary(pairs):
+    """Average probability, observed frequency and Brier score of (probability, outcome 0/1) pairs."""
+    n = len(pairs)
+    return {'graded': n,
+            'average_probability': sum(p for p, _ in pairs) / n if n else None,
+            'observed_frequency': sum(y for _, y in pairs) / n if n else None,
+            'brier_score': sum((p - y) ** 2 for p, y in pairs) / n if n else None}
+
+
+def graded_pair(selection, settlement):
+    """(no-push probability, 1 for WIN / 0 for LOSS) of a settled selection; None for a push or open one.
+
+    Without a push, the no-push conditional probability is the probability of a win.
+    """
+    if not settlement or settlement['result'] == 'PUSH':
+        return None
+    return selection['kickedge_probability_no_push'], 1. if settlement['result'] == 'WIN' else 0.
+
+
 def performance(records):
     """Probability-quality summary of settled picks (effective result); pushes are excluded from Brier."""
     settled = [r for r in records if r['settlement']]
-    graded = [r for r in settled if r['settlement']['result'] != 'PUSH']
-    # Without a push, the no-push conditional probability is the probability of a win.
-    probabilities = [r['pick']['kickedge_probability_no_push'] for r in graded]
-    outcomes = [1. if r['settlement']['result'] == 'WIN' else 0. for r in graded]
-    n = len(graded)
+    pairs = [pair for r in settled if (pair := graded_pair(r['pick'], r['settlement']))]
     return {'tracked': len(records), 'open': len(records) - len(settled), 'settled': len(settled),
-            'pushes': len(settled) - n, 'graded': n,
-            'average_probability': sum(probabilities) / n if n else None,
-            'observed_frequency': sum(outcomes) / n if n else None,
-            'brier_score': sum((p - y) ** 2 for p, y in zip(probabilities, outcomes)) / n if n else None}
+            'pushes': len(settled) - len(pairs)} | probability_summary(pairs)
 
 
 def list_tracked(base):
