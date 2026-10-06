@@ -154,7 +154,11 @@ kickoff; el archivo se crea una vez y nunca se reescribe (un hash de integridad
 detecta ediciones). Trackear el mismo pick (partido, kicker, lado, línea y cuota)
 devuelve el original. Después del kickoff se introduce a mano el XPM real; KickEdge
 añade una sola vez `settled_at`, `actual_xpm` y `result` (WIN/LOSS/PUSH) en
-`settlement.json`. El panel muestra Open/Settled y, con picks liquidados, la
+`settlement.json`. Si el XPM real se escribió mal, "Correct result" (con confirmación
+y razón opcional) añade `corrections/NNNN.json` con valores previos y nuevos; el
+settlement original y las correcciones anteriores no se tocan, la corrección más
+reciente es el resultado efectivo y el historial se ve en "View correction
+history". El panel muestra Open/Settled y, con picks liquidados, la
 probabilidad media, la frecuencia observada y el Brier score (pushes excluidos;
 con línea entera se usa la probabilidad condicionada a no push). Sin stake, ROI ni
 recomendaciones: solo calidad de las probabilidades. Multi no se trackea todavía.
@@ -177,7 +181,8 @@ CLI equivalente (acepta los mismos aliases; conserva cuotas americanas por compa
 API local: `GET /healthz`, `/readyz`, `/api/model`, `/api/games`,
 `/api/games/{game_id}/kickers`, `/api/analyses`, `/api/analyses/{id}`,
 `/api/multi/{id}`, `/api/tracked`, `/api/tracked/{id}`, `POST /api/analyze`,
-`POST /api/analyze-multi`, `POST /api/tracked` y `POST /api/tracked/{id}/settle` (ver
+`POST /api/analyze-multi`, `POST /api/tracked`, `POST /api/tracked/{id}/settle` y
+`POST /api/tracked/{id}/correct` (ver
 [docs/product_phase7c.md](docs/product_phase7c.md),
 [reports/product_polish.md](reports/product_polish.md) y
 [reports/final_multi_decimal_polish.md](reports/final_multi_decimal_polish.md)).

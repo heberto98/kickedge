@@ -692,13 +692,65 @@ function settleForm(p) {
   return form;
 }
 
+const CORRECT_PROMPT = 'Correct this settled result?\nThe original settlement will remain in the audit history.';
+
+function correctForm(p) {
+  const id = `correct-${p.tracking_id.slice(0, 12)}`;
+  const input = h('input', { id, type: 'number', min: '0', max: '20', step: '1', inputmode: 'numeric', required: true });
+  const reason = h('input', { id: id + '-reason', type: 'text', maxlength: '200', placeholder: 'e.g. Entered wrong result' });
+  const note = h('span', { class: 'ri-sub', role: 'status' });
+  const form = h('form', { class: 'settle-form', hidden: true },
+    h('label', { for: id }, 'Actual XPM corrected to'), input,
+    h('label', { for: id + '-reason' }, 'Reason (optional)'), reason,
+    h('button', { type: 'submit', class: 'secondary' }, 'Apply correction'), note);
+  const toggle = h('button', { type: 'button', class: 'secondary link-button', 'aria-expanded': 'false' }, 'Correct result');
+  toggle.addEventListener('click', () => {
+    form.hidden = !form.hidden;
+    toggle.setAttribute('aria-expanded', String(!form.hidden));
+    if (!form.hidden) input.focus();
+  });
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const value = Number(input.value);
+    if (input.value.trim() === '' || !Number.isInteger(value) || value < 0 || value > 20) {
+      note.textContent = 'Enter a whole number from 0 to 20.';
+      return;
+    }
+    if (!window.confirm(CORRECT_PROMPT)) { note.textContent = 'Correction cancelled; nothing changed.'; return; }
+    const body = { actual_xpm: value, confirm: true };
+    if (reason.value.trim()) body.reason = reason.value.trim();
+    try {
+      const res = await fetch(`/api/tracked/${p.tracking_id}/correct`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                                                         body: JSON.stringify(body) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) { note.textContent = (data && data.error && data.error.message) || `Correction failed (${res.status}).`; return; }
+      loadTracked();
+    } catch (e) {
+      note.textContent = 'The server could not be reached.';
+    }
+  });
+  return [toggle, form];
+}
+
+function correctionHistory(t) {
+  const o = t.original_settlement;
+  const rows = [h('li', {}, `Original: ${o.actual_xpm} XPM — ${o.result} · ${localTime(o.settled_at)}`),
+    ...t.corrections.map((c) => h('li', {}, `Corrected: ${c.new_actual_xpm} XPM — ${c.new_result}`,
+      c.reason ? ` · Reason: ${c.reason}` : '', ` · ${localTime(c.corrected_at)}`))];
+  return h('details', { class: 'history' }, h('summary', {}, 'View correction history'), h('ol', {}, rows));
+}
+
 function trackedItem(t) {
   const p = t.pick, s = t.settlement;
   const children = [
     h('span', { class: 'ri-main' }, p.kicker),
     h('span', { class: 'ri-sub' }, `${p.team} vs ${p.opponent} · ${sideLabel(p.side)} ${p.line} XPM · ${dec(p.decimal_odds)}`),
     h('span', { class: 'ri-sub' }, `KickEdge: ${pct(p.kickedge_probability)} · kickoff ${kickoffLabel(p.kickoff, true)}`)];
-  if (s) children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `SETTLED — ${s.result} (actual ${s.actual_xpm} XPM)`));
+  if (s) {
+    children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `SETTLED — ${s.result}`, t.corrected ? h('span', { class: 'chip warn' }, 'Corrected') : null),
+      h('span', { class: 'ri-sub' }, `Actual XPM: ${s.actual_xpm} · Result: ${s.result}`),
+      t.corrected ? correctionHistory(t) : null, correctForm(p));
+  }
   else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
   else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(p));
   return h('li', { class: 'tracked-item' }, children);

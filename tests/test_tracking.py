@@ -188,3 +188,99 @@ def test_api_rejects_bad_ids_payloads_and_late_tracking(client, tmp_path):
     client.clock['now'] = AFTER
     for body in ({'actual_xpm': 2.5}, {'actual_xpm': -1}, {'actual_xpm': '2'}, {'actual_xpm': 2, 'result': 'WIN'}):
         assert client.post(f'/api/tracked/{tid}/settle', json=body).status_code == 422
+
+
+# ---------- corrections ----------
+
+def settled(tmp_path, actual=1, **kwargs):
+    tid = tracked(tmp_path, **kwargs)['pick']['tracking_id']
+    tracking.settle(tmp_path, tid, actual, AFTER)
+    return tid
+
+
+def test_correction_preserves_original_settlement_and_pick(tmp_path):
+    tid = settled(tmp_path, actual=1)                                        # Over 1.5 with 1 XPM -> LOSS
+    folder = tmp_path/tid
+    pick_bytes, settlement_bytes = (folder/'pick.json').read_bytes(), (folder/'settlement.json').read_bytes()
+    record = tracking.correct(tmp_path, tid, 3, AFTER + timedelta(days=1), '  Entered   wrong result ')
+    assert record['settlement']['actual_xpm'] == 3 and record['settlement']['result'] == 'WIN' and record['corrected'] is True
+    assert record['original_settlement'] == {'settled_at': AFTER.isoformat(), 'actual_xpm': 1, 'result': 'LOSS'}
+    assert record['corrections'] == [{'sequence': 1, 'corrected_at': (AFTER + timedelta(days=1)).isoformat(),
+                                      'previous_actual_xpm': 1, 'previous_result': 'LOSS', 'new_actual_xpm': 3,
+                                      'new_result': 'WIN', 'reason': 'Entered wrong result'}]
+    assert (folder/'pick.json').read_bytes() == pick_bytes and (folder/'settlement.json').read_bytes() == settlement_bytes
+    assert record['pick']['kickedge_probability'] == .7 and record['pick']['decimal_odds'] == 1.5
+
+
+def test_multiple_corrections_are_ordered_and_latest_is_effective(tmp_path):
+    tid = settled(tmp_path, actual=1)
+    for day, actual in ((1, 3), (2, 0), (3, 2)):
+        record = tracking.correct(tmp_path, tid, actual, AFTER + timedelta(days=day))
+    assert [(c['sequence'], c['previous_actual_xpm'], c['new_actual_xpm']) for c in record['corrections']] == [(1, 1, 3), (2, 3, 0), (3, 0, 2)]
+    assert record['settlement']['actual_xpm'] == 2 and record['settlement']['result'] == 'WIN'
+    assert record['settlement']['corrected_at'] == (AFTER + timedelta(days=3)).isoformat()
+    assert sorted(p.name for p in (tmp_path/tid/'corrections').iterdir()) == ['0001.json', '0002.json', '0003.json']
+
+
+def test_metrics_count_only_the_corrected_result(tmp_path):
+    tid = settled(tmp_path, actual=1, p_side=.8)
+    assert tracking.list_tracked(tmp_path)['summary']['observed_frequency'] == 0
+    tracking.correct(tmp_path, tid, 3, AFTER)
+    s = tracking.list_tracked(tmp_path)['summary']
+    assert (s['settled'], s['graded'], s['observed_frequency']) == (1, 1, 1.)
+    assert s['brier_score'] == pytest.approx((.8 - 1) ** 2)
+    tracking.correct(tmp_path, tid, 1, AFTER)                                # corrected back: LOSS again
+    assert tracking.list_tracked(tmp_path)['summary']['brier_score'] == pytest.approx(.8 ** 2)
+
+
+def test_correction_validation(tmp_path):
+    open_tid = tracked(tmp_path)['pick']['tracking_id']
+    with pytest.raises(tracking.TrackingError, match='Only a settled pick'):
+        tracking.correct(tmp_path, open_tid, 2, AFTER)
+    tid = settled(tmp_path, actual=1, odds=1.7)
+    for bad in (-1, 21, 2.5, True, '3', None):
+        with pytest.raises(tracking.TrackingError, match='whole number'):
+            tracking.correct(tmp_path, tid, bad, AFTER)
+    with pytest.raises(tracking.TrackingError, match='already has this value'):
+        tracking.correct(tmp_path, tid, 1, AFTER)
+    with pytest.raises(tracking.TrackingError, match='at most'):
+        tracking.correct(tmp_path, tid, 2, AFTER, 'x' * 201)
+    for bad in ('../' + 'a' * 61, 'A' * 64, 'a' * 63):
+        with pytest.raises(tracking.TrackingError, match='Invalid tracking id'):
+            tracking.correct(tmp_path, bad, 2, AFTER)
+    with pytest.raises(tracking.TrackingError, match='not found'):
+        tracking.correct(tmp_path, 'c' * 64, 2, AFTER)
+    assert not (tmp_path/tid/'corrections').exists()
+
+
+def test_edited_correction_history_is_detected(tmp_path):
+    tid = settled(tmp_path, actual=1)
+    tracking.correct(tmp_path, tid, 3, AFTER)
+    tracking.correct(tmp_path, tid, 2, AFTER)
+    path = tmp_path/tid/'corrections'/'0001.json'
+    path.write_text(json.dumps(json.loads(path.read_text()) | {'new_actual_xpm': 4, 'new_result': 'WIN'}))
+    with pytest.raises(tracking.TrackingError, match='consistency'):
+        tracking.load(tmp_path, tid)
+    assert tracking.list_tracked(tmp_path)['summary']['unreadable'] == 1
+
+
+def test_api_correct_requires_confirmation_and_valid_input(client, tmp_path):
+    stored = tmp_path/'analyses'/('b' * 64)
+    stored.mkdir(parents=True)
+    (stored/'analysis.json').write_text(json.dumps(analysis()))
+    client.clock['now'] = BEFORE
+    tid = client.post('/api/tracked', json={'analysis_id': 'b' * 64}).json()['pick']['tracking_id']
+    client.clock['now'] = AFTER
+    url = f'/api/tracked/{tid}/correct'
+    assert client.post(url, json={'actual_xpm': 3, 'confirm': True}).json()['error']['code'] == 'NOT_SETTLED'
+    client.post(f'/api/tracked/{tid}/settle', json={'actual_xpm': 1})
+    for body in ({'actual_xpm': 3}, {'actual_xpm': 3, 'confirm': False}, {'actual_xpm': 2.5, 'confirm': True},
+                 {'actual_xpm': 21, 'confirm': True}, {'actual_xpm': 3, 'confirm': True, 'reason': 'x' * 201},
+                 {'actual_xpm': 3, 'confirm': True, 'result': 'WIN'}):
+        assert client.post(url, json=body).status_code == 422, body
+    for bad in ('A' * 64, 'a' * 63, '..%2F' + 'a' * 60):
+        assert client.post(f'/api/tracked/{bad}/correct', json={'actual_xpm': 3, 'confirm': True}).status_code in (404, 422)
+    record = client.post(url, json={'actual_xpm': 3, 'confirm': True, 'reason': 'Entered wrong result'}).json()
+    assert record['settlement']['result'] == 'WIN' and record['original_settlement']['result'] == 'LOSS'
+    listing = client.get('/api/tracked').json()
+    assert listing['summary']['observed_frequency'] == 1 and listing['settled'][0]['corrections'][0]['reason'] == 'Entered wrong result'

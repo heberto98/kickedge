@@ -2,8 +2,11 @@
 
 A tracked pick is a copy of what KickEdge said before kickoff. ``pick.json`` is
 created once and never rewritten; ``settlement.json`` is created once after kickoff
-and only adds settled_at, actual_xpm and result. Both files are written with
-exclusive creation, so a second writer fails instead of overwriting.
+and only adds settled_at, actual_xpm and result. A wrong manual result is fixed by
+appending ``corrections/NNNN.json`` (one new file per correction); the original
+settlement and earlier corrections stay untouched, and the latest correction is the
+effective result. Every file is written with exclusive creation, so a second writer
+fails instead of overwriting.
 """
 from __future__ import annotations
 
@@ -17,8 +20,10 @@ from kickedge.current.snapshot import digest
 from kickedge.inference.odds import american_to_decimal
 
 TRACKING_ID = r'^[0-9a-f]{64}$'
-PICK, SETTLEMENT = 'pick.json', 'settlement.json'
+PICK, SETTLEMENT, CORRECTIONS = 'pick.json', 'settlement.json', 'corrections'
+CORRECTION_FILE = r'^\d{4}\.json$'
 MAX_ACTUAL_XPM = 20
+MAX_REASON = 200
 # Summary booleans worth keeping with the frozen pick; warnings are copied verbatim.
 QUALITY_FLAGS = ('model_verified', 'pregame_availability_verified', 'target_game_verified',
                  'kicker_identity_verified', 'kicker_current_team_verified', 'feature_schema_verified',
@@ -117,21 +122,50 @@ def track(base, analysis, analysis_id, now):
     return load(base, pick['tracking_id']) | {'already_tracked': False}
 
 
+def _corrections(directory, pick, original):
+    """Correction history in order; each entry must continue from the previous effective result."""
+    folder = directory/CORRECTIONS
+    names = sorted(p.name for p in folder.iterdir() if re.fullmatch(CORRECTION_FILE, p.name)) if folder.is_dir() else []
+    history, current = [], original
+    for number, name in enumerate(names, start=1):
+        entry = json.loads((folder/name).read_text(encoding='utf-8'))
+        if (name != f'{number:04d}.json' or entry.get('sequence') != number
+                or (entry.get('previous_actual_xpm'), entry.get('previous_result')) != (current['actual_xpm'], current['result'])
+                or entry.get('new_result') != outcome(pick['side'], pick['line'], entry.get('new_actual_xpm'))):
+            raise TrackingError('PICK_TAMPERED', 'Correction history failed its consistency check')
+        history.append(entry)
+        current = {'actual_xpm': entry['new_actual_xpm'], 'result': entry['new_result']}
+    return history
+
+
 def load(base, tracking_id):
+    """Frozen pick, original settlement, correction history and the effective settlement."""
     directory = _directory(base, tracking_id)
     if not (directory/PICK).is_file():
         raise TrackingError('PICK_NOT_FOUND', 'Tracked pick not found')
     pick = _read_pick(directory)
-    settlement = None
+    original, history, effective = None, [], None
     if (directory/SETTLEMENT).is_file():
-        settlement = json.loads((directory/SETTLEMENT).read_text(encoding='utf-8'))
-    return {'pick': pick, 'settlement': settlement, 'status': 'SETTLED' if settlement else 'OPEN'}
+        original = json.loads((directory/SETTLEMENT).read_text(encoding='utf-8'))
+        history = _corrections(directory, pick, original)
+        effective = dict(original)
+        if history:
+            latest = history[-1]
+            effective |= {'actual_xpm': latest['new_actual_xpm'], 'result': latest['new_result'],
+                          'corrected_at': latest['corrected_at']}
+    return {'pick': pick, 'settlement': effective, 'original_settlement': original, 'corrections': history,
+            'corrected': bool(history), 'status': 'SETTLED' if original else 'OPEN'}
+
+
+def _actual(actual_xpm):
+    if isinstance(actual_xpm, bool) or not isinstance(actual_xpm, int) or not 0 <= actual_xpm <= MAX_ACTUAL_XPM:
+        raise TrackingError('INVALID_ACTUAL_XPM', f'Actual XPM must be a whole number from 0 to {MAX_ACTUAL_XPM}')
+    return actual_xpm
 
 
 def settle(base, tracking_id, actual_xpm, now):
     """Record the actual XPM once, after kickoff; the pick itself is never touched."""
-    if isinstance(actual_xpm, bool) or not isinstance(actual_xpm, int) or not 0 <= actual_xpm <= MAX_ACTUAL_XPM:
-        raise TrackingError('INVALID_ACTUAL_XPM', f'Actual XPM must be a whole number from 0 to {MAX_ACTUAL_XPM}')
+    _actual(actual_xpm)
     record = load(base, tracking_id)
     pick = record['pick']
     if record['settlement']:
@@ -147,8 +181,32 @@ def settle(base, tracking_id, actual_xpm, now):
     return load(base, tracking_id)
 
 
+def correct(base, tracking_id, actual_xpm, now, reason=None):
+    """Append a correction of a settled result; nothing already written is changed."""
+    _actual(actual_xpm)
+    if reason is not None:
+        if not isinstance(reason, str) or len(reason.strip()) > MAX_REASON:
+            raise TrackingError('INVALID_REASON', f'Reason must be text of at most {MAX_REASON} characters')
+        reason = ' '.join(reason.split()) or None
+    record = load(base, tracking_id)
+    if not record['original_settlement']:
+        raise TrackingError('NOT_SETTLED', 'Only a settled pick can be corrected')
+    current, pick = record['settlement'], record['pick']
+    if actual_xpm == current['actual_xpm']:
+        raise TrackingError('NO_CHANGE', 'The actual XPM already has this value')
+    sequence = len(record['corrections']) + 1
+    entry = {'sequence': sequence, 'corrected_at': now.isoformat(),
+             'previous_actual_xpm': current['actual_xpm'], 'previous_result': current['result'],
+             'new_actual_xpm': actual_xpm, 'new_result': outcome(pick['side'], pick['line'], actual_xpm), 'reason': reason}
+    try:
+        _create(_directory(base, tracking_id)/CORRECTIONS/f'{sequence:04d}.json', entry)
+    except FileExistsError:
+        raise TrackingError('CORRECTION_CONFLICT', 'Another correction was saved first; reload and retry') from None
+    return load(base, tracking_id)
+
+
 def performance(records):
-    """Probability-quality summary of settled picks; pushes are excluded from Brier."""
+    """Probability-quality summary of settled picks (effective result); pushes are excluded from Brier."""
     settled = [r for r in records if r['settlement']]
     graded = [r for r in settled if r['settlement']['result'] != 'PUSH']
     # Without a push, the no-push conditional probability is the probability of a win.

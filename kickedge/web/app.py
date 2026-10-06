@@ -508,9 +508,17 @@ class SettleRequest(BaseModel):
     actual_xpm: StrictInt = Field(ge=0, le=tracking.MAX_ACTUAL_XPM)
 
 
-_TRACKING_STATUS = {'INVALID_TRACKING_ID': 422, 'INVALID_ACTUAL_XPM': 422, 'PICK_NOT_FOUND': 404,
+class CorrectRequest(BaseModel):
+    """A correction must be confirmed explicitly; the reason is optional."""
+    model_config = ConfigDict(extra='forbid')
+    actual_xpm: StrictInt = Field(ge=0, le=tracking.MAX_ACTUAL_XPM)
+    reason: str | None = Field(default=None, max_length=tracking.MAX_REASON)
+    confirm: Literal[True]
+
+
+_TRACKING_STATUS = {'INVALID_TRACKING_ID': 422, 'INVALID_ACTUAL_XPM': 422, 'INVALID_REASON': 422, 'PICK_NOT_FOUND': 404,
                     'GAME_STARTED': 409, 'NOT_STARTED': 409, 'ALREADY_SETTLED': 409, 'PICK_TAMPERED': 409,
-                    'INVALID_PICK': 422}
+                    'NOT_SETTLED': 409, 'NO_CHANGE': 409, 'CORRECTION_CONFLICT': 409, 'INVALID_PICK': 422}
 _tracking_lock = threading.Lock()
 
 
@@ -556,6 +564,18 @@ def settle_pick(body: SettleRequest, tracking_id: str = PathParam(pattern=tracki
     try:
         with _tracking_lock:
             return tracking.settle(TRACKED_DIR, tracking_id, body.actual_xpm, _now())
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked pick could not be read')
+
+
+@app.post('/api/tracked/{tracking_id}/correct')
+def correct_pick(body: CorrectRequest, tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    """Append an audited correction of a settled result; the original settlement is kept."""
+    try:
+        with _tracking_lock:
+            return tracking.correct(TRACKED_DIR, tracking_id, body.actual_xpm, _now(), body.reason)
     except tracking.TrackingError as exc:
         return _tracking_error(exc)
     except (OSError, ValueError):
