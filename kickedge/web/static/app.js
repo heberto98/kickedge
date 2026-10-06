@@ -629,9 +629,111 @@ function sections(r, prefix) {
   return [storedBanner(r), hero(r, ids), distribution(r, ids), keyData(r, ids), quality(r, ids), market(r, ids), context(r, ids), details(r)].filter(Boolean);
 }
 
+// ---------- official pick tracking ----------
+
+const sideLabel = (side) => side === 'over' ? 'Over' : 'Under';
+
+function trackBar(r) {
+  if (!r.stored || !/^[0-9a-f]{64}$/.test(r.stored.id) || !$('tracked-body')) return null;
+  const started = new Date(r.game.kickoff) <= new Date();
+  const status = h('p', { class: 'muted', role: 'status' }, started
+    ? 'Kickoff has passed: only pregame analyses can be tracked.'
+    : 'Track pick freezes this pregame probability as an official pick, to evaluate later.');
+  const button = h('button', { type: 'button', class: 'secondary', disabled: started }, 'Track pick');
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    status.textContent = 'Tracking…';
+    try {
+      const res = await fetch('/api/tracked', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                               body: JSON.stringify({ analysis_id: r.stored.id }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) {
+        status.textContent = (data && data.error && data.error.message) || `Tracking failed (${res.status}).`;
+        button.disabled = false;
+        return;
+      }
+      const p = data.pick;
+      status.textContent = data.already_tracked
+        ? `Already tracked on ${localTime(p.created_at)}; the original pick is unchanged.`
+        : `Tracked: ${sideLabel(p.side)} ${p.line} XPM frozen at ${pct(p.kickedge_probability)}.`;
+      button.textContent = 'Tracked';
+      loadTracked();
+    } catch (e) {
+      status.textContent = 'The server could not be reached.';
+      button.disabled = false;
+    }
+  });
+  return h('section', { class: 'card track-bar', 'aria-label': 'Track pick' }, button, status);
+}
+
+function settleForm(p) {
+  const id = `settle-${p.tracking_id.slice(0, 12)}`;
+  const input = h('input', { id, type: 'number', min: '0', max: '20', step: '1', inputmode: 'numeric', required: true });
+  const note = h('span', { class: 'ri-sub', role: 'status' });
+  const form = h('form', { class: 'settle-form' }, h('label', { for: id }, 'Actual XPM'), input,
+    h('button', { type: 'submit', class: 'secondary' }, 'Settle'), note);
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const value = Number(input.value);
+    if (input.value.trim() === '' || !Number.isInteger(value) || value < 0 || value > 20) {
+      note.textContent = 'Enter a whole number from 0 to 20.';
+      return;
+    }
+    try {
+      const res = await fetch(`/api/tracked/${p.tracking_id}/settle`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                                                        body: JSON.stringify({ actual_xpm: value }) });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) { note.textContent = (data && data.error && data.error.message) || `Settle failed (${res.status}).`; return; }
+      loadTracked();
+    } catch (e) {
+      note.textContent = 'The server could not be reached.';
+    }
+  });
+  return form;
+}
+
+function trackedItem(t) {
+  const p = t.pick, s = t.settlement;
+  const children = [
+    h('span', { class: 'ri-main' }, p.kicker),
+    h('span', { class: 'ri-sub' }, `${p.team} vs ${p.opponent} · ${sideLabel(p.side)} ${p.line} XPM · ${dec(p.decimal_odds)}`),
+    h('span', { class: 'ri-sub' }, `KickEdge: ${pct(p.kickedge_probability)} · kickoff ${kickoffLabel(p.kickoff, true)}`)];
+  if (s) children.push(h('span', { class: 'status ' + s.result.toLowerCase() }, `SETTLED — ${s.result} (actual ${s.actual_xpm} XPM)`));
+  else if (new Date(p.kickoff) > new Date()) children.push(h('span', { class: 'status' }, 'OPEN — awaiting kickoff'));
+  else children.push(h('span', { class: 'status' }, 'OPEN — enter the result'), settleForm(p));
+  return h('li', { class: 'tracked-item' }, children);
+}
+
+async function loadTracked() {
+  const body = $('tracked-body');
+  if (!body) return;
+  try {
+    const res = await fetch('/api/tracked');
+    const data = await res.json();
+    if (!res.ok) throw new Error();
+    const sm = data.summary;
+    if (!sm.tracked) { body.replaceChildren(h('p', { class: 'hint' }, 'No tracked picks yet.')); return; }
+    const parts = [h('div', { class: 'tracked-summary' }, stat('Tracked', sm.tracked), stat('Settled', sm.settled), stat('Open', sm.open))];
+    if (sm.graded) {
+      const pushes = sm.pushes ? ` (${sm.pushes} push${sm.pushes === 1 ? '' : 'es'} excluded)` : '';
+      parts.push(h('div', { class: 'tracked-summary' }, stat('Avg. probability', pct(sm.average_probability)),
+        stat('Observed freq.', pct(sm.observed_frequency)), stat('Brier score', num(sm.brier_score, 3))),
+        h('p', { class: 'hint' }, `Sample: ${sm.graded} settled pick${sm.graded === 1 ? '' : 's'}${pushes}. Small samples can be noisy; lower Brier is better.`));
+    }
+    for (const [title, items] of [['Open', data.open], ['Settled', data.settled]]) {
+      if (items.length) parts.push(h('h3', {}, title), h('ul', { class: 'recent-list' }, items.map(trackedItem)));
+    }
+    body.replaceChildren(...parts);
+  } catch (e) {
+    body.replaceChildren(h('p', { class: 'hint' }, 'Tracked picks unavailable.'));
+  }
+}
+
 function render(r) {
   const box = $('result');
-  box.replaceChildren(...sections(r, ''));
+  const parts = sections(r, ''), bar = trackBar(r);
+  if (bar) parts.splice(parts.findIndex((el) => el.classList.contains('hero')) + 1, 0, bar);  // right below the pick
+  box.replaceChildren(...parts);
   box.hidden = false;
   const guide = $('guide');
   if (guide) guide.hidden = true;
@@ -1055,4 +1157,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if ($('game') || $('multi')) loadGames();
   if ($('recent-list')) loadRecent();
+  loadTracked();
 });

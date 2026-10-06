@@ -137,6 +137,20 @@ button.secondary:disabled { opacity: .5; cursor: not-allowed; }
 .ri-sub { font-size: 12px; color: var(--muted); }
 .ri-time { font-size: 11px; color: var(--off); }
 
+/* tracked picks */
+.track-bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.track-bar p { margin: 0; flex: 1 1 220px; }
+.tracked-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+.tracked-summary .stat { padding: 8px 10px; }
+.tracked h3 { font-size: 13px; margin: 14px 0 0; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.tracked-item { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.tracked-item .status { font-size: 12px; font-weight: 700; }
+.status.win { color: var(--accent); }
+.status.loss { color: var(--warn); }
+.settle-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; font-size: 13px; }
+.settle-form input { width: 5.5em; min-height: 36px; }
+.settle-form button { min-height: 36px; padding: 6px 12px; font-size: 13px; }
+
 /* errors */
 .error { border-color: var(--bad); }
 .error h2 { color: var(--bad); }

@@ -25,6 +25,7 @@ from kickedge.current.catalog import kicker_candidates, upcoming_games
 from kickedge.current.engine import analyze_current_prop, current_season
 from kickedge.current.multi import MAX_SELECTIONS, MIN_SELECTIONS, analyze_selections
 from kickedge.current.optional import collect_context
+from kickedge.current import tracking
 from kickedge.current.snapshot import digest
 from kickedge.current.sources import CurrentSourceError, load_current_sources
 from kickedge.inference.odds import american_to_decimal
@@ -35,6 +36,7 @@ from .artifact import ensure_model
 ROOT = Path(os.environ.get('KICKEDGE_ROOT', '.')).resolve()
 STATIC = Path(__file__).with_name('static')
 ANALYSES_DIR = ROOT/'data/current/analyses'
+TRACKED_DIR = ROOT/'data/current/tracked'
 GAME_ID = r'^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$'
 ANALYSIS_ID = r'^[0-9a-f]{64}$'
 MAX_BODY_BYTES = 4096
@@ -319,12 +321,15 @@ def analyze(body: AnalyzeRequest, request: Request):
         return _error(status, code, message, **_error_extra(exc))
     except OSError:
         return _error(503, 'NFL_SOURCE_UNAVAILABLE', 'Required data could not be read or downloaded')
+    # The engine stored this exact result under its content digest; expose that id
+    # (before web-only notes are added) so the pick can be tracked from the saved copy.
+    stored = {'id': digest(result), 'saved_at': result['provenance']['analysis_generated_at'], 'fresh': True}
     quality = result['data_quality']
     quality['warnings'] = quality['warnings']+notes
     quality['market_requested'] = body.include_market
     quality['weather_requested'] = body.include_weather
     result['input_notes'] = input_notes
-    return result
+    return result | {'stored': stored}
 
 
 @app.post('/api/analyze-multi')
@@ -491,6 +496,70 @@ def stored_multi(analysis_id: str = PathParam(pattern=ANALYSIS_ID)):
         return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis could not be read')
     saved = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
     return record | {'stored': {'id': analysis_id, 'saved_at': saved}}
+
+
+class TrackRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    analysis_id: str = Field(pattern=ANALYSIS_ID)
+
+
+class SettleRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    actual_xpm: StrictInt = Field(ge=0, le=tracking.MAX_ACTUAL_XPM)
+
+
+_TRACKING_STATUS = {'INVALID_TRACKING_ID': 422, 'INVALID_ACTUAL_XPM': 422, 'PICK_NOT_FOUND': 404,
+                    'GAME_STARTED': 409, 'NOT_STARTED': 409, 'ALREADY_SETTLED': 409, 'PICK_TAMPERED': 409,
+                    'INVALID_PICK': 422}
+_tracking_lock = threading.Lock()
+
+
+def _tracking_error(exc):
+    return _error(_TRACKING_STATUS.get(getattr(exc, 'code', ''), 422), getattr(exc, 'code', 'INVALID_PICK'), str(exc))
+
+
+@app.post('/api/tracked')
+def track_pick(body: TrackRequest):
+    """Freeze a saved pregame single analysis as an official pick; the client sends only its id."""
+    path = _stored(body.analysis_id)
+    if path is None:
+        return _error(404, 'ANALYSIS_NOT_FOUND', 'Stored analysis not found')
+    try:
+        analysis = json.loads(path.read_text(encoding='utf-8'))
+        with _tracking_lock:
+            return tracking.track(TRACKED_DIR, analysis, body.analysis_id, _now())
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError, KeyError, TypeError):
+        return _error(422, 'INVALID_PICK', 'This saved analysis cannot be tracked')
+
+
+@app.get('/api/tracked')
+def tracked_picks():
+    """Tracked picks (open and settled) with a probability-quality summary; read only."""
+    return tracking.list_tracked(TRACKED_DIR)
+
+
+@app.get('/api/tracked/{tracking_id}')
+def tracked_pick(tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    try:
+        return tracking.load(TRACKED_DIR, tracking_id)
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked pick could not be read')
+
+
+@app.post('/api/tracked/{tracking_id}/settle')
+def settle_pick(body: SettleRequest, tracking_id: str = PathParam(pattern=tracking.TRACKING_ID)):
+    """Add the actual XPM once, after kickoff; the frozen pick is never modified."""
+    try:
+        with _tracking_lock:
+            return tracking.settle(TRACKED_DIR, tracking_id, body.actual_xpm, _now())
+    except tracking.TrackingError as exc:
+        return _tracking_error(exc)
+    except (OSError, ValueError):
+        return _error(404, 'PICK_NOT_FOUND', 'Tracked pick could not be read')
 
 
 @app.get('/')

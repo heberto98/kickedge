@@ -146,6 +146,19 @@ clima exterior. El clima es solo contexto y **no** entra al modelo.
 `data/current/analyses/<sha256>/` (ignorado por Git). El panel "Recent analyses"
 los lista y los reabre tal como se guardaron, sin volver a consultar proveedores.
 
+**Tracked picks (oficiales):** después de un análisis Single, "Track pick" congela
+lo que KickEdge decía antes del partido (probabilidad, P(Over/Under/Push), expected
+XPM, cuota decimal, versión de modelo, hash del snapshot y avisos) en
+`data/current/tracked/<id>/pick.json` (ignorado por Git). Solo se permite antes del
+kickoff; el archivo se crea una vez y nunca se reescribe (un hash de integridad
+detecta ediciones). Trackear el mismo pick (partido, kicker, lado, línea y cuota)
+devuelve el original. Después del kickoff se introduce a mano el XPM real; KickEdge
+añade una sola vez `settled_at`, `actual_xpm` y `result` (WIN/LOSS/PUSH) en
+`settlement.json`. El panel muestra Open/Settled y, con picks liquidados, la
+probabilidad media, la frecuencia observada y el Brier score (pushes excluidos;
+con línea entera se usa la probabilidad condicionada a no push). Sin stake, ROI ni
+recomendaciones: solo calidad de las probabilidades. Multi no se trackea todavía.
+
 Variables de entorno (todas opcionales):
 
 | Variable | Uso |
@@ -163,7 +176,8 @@ CLI equivalente (acepta los mismos aliases; conserva cuotas americanas por compa
 
 API local: `GET /healthz`, `/readyz`, `/api/model`, `/api/games`,
 `/api/games/{game_id}/kickers`, `/api/analyses`, `/api/analyses/{id}`,
-`/api/multi/{id}`, `POST /api/analyze` y `POST /api/analyze-multi` (ver
+`/api/multi/{id}`, `/api/tracked`, `/api/tracked/{id}`, `POST /api/analyze`,
+`POST /api/analyze-multi`, `POST /api/tracked` y `POST /api/tracked/{id}/settle` (ver
 [docs/product_phase7c.md](docs/product_phase7c.md),
 [reports/product_polish.md](reports/product_polish.md) y
 [reports/final_multi_decimal_polish.md](reports/final_multi_decimal_polish.md)).
